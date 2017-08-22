@@ -1002,6 +1002,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property WOF_CAR() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("WOF_CAR", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         '''</summary>
         Friend ReadOnly Property wof_chant() As System.IO.UnmanagedMemoryStream
