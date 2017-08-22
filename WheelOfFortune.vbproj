@@ -1,0 +1,514 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{ED289CAE-EA4E-4266-A5C2-085ECCD39488}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>WheelOfFortune.My.MyApplication</StartupObject>
+    <RootNamespace>WheelOfFortune</RootNamespace>
+    <AssemblyName>WheelOfFortune</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsForms</MyType>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>WheelOfFortune.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>WheelOfFortune.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>wof-logo.png.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ShadowLabel">
+      <HintPath>..\..\..\..\..\Downloads\ShadowLabel\ShadowLabel\bin\Debug\ShadowLabel.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BonusCardEnvelope.Designer.vb">
+      <DependentUpon>BonusCardEnvelope.vb</DependentUpon>
+    </Compile>
+    <Compile Include="BonusCardEnvelope.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="dlgSelectPack.Designer.vb">
+      <DependentUpon>dlgSelectPack.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgSelectPack.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAudio.Designer.vb">
+      <DependentUpon>frmAudio.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmAudio.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCustomizer.Designer.vb">
+      <DependentUpon>frmCustomizer.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCustomizer.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmFinalSpin.Designer.vb">
+      <DependentUpon>frmFinalSpin.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmFinalSpin.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmHelp.Designer.vb">
+      <DependentUpon>frmHelp.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmHelp.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSettings.Designer.vb">
+      <DependentUpon>frmSettings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmSettings.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.Designer.vb">
+      <DependentUpon>frmMain.vb</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPuzzleBoard.Designer.vb">
+      <DependentUpon>frmPuzzleBoard.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmPuzzleBoard.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmScore.Designer.vb">
+      <DependentUpon>frmScore.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmScore.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IntroScreen.Designer.vb">
+      <DependentUpon>IntroScreen.vb</DependentUpon>
+    </Compile>
+    <Compile Include="IntroScreen.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources1.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="ExpressDialog.Designer.vb">
+      <DependentUpon>ExpressDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ExpressDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MysteryDialog.Designer.vb">
+      <DependentUpon>MysteryDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="MysteryDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NameTag.Designer.vb">
+      <DependentUpon>NameTag.vb</DependentUpon>
+    </Compile>
+    <Compile Include="NameTag.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Player.vb" />
+    <Compile Include="PuzzleBoardLetter.Designer.vb">
+      <DependentUpon>PuzzleBoardLetter.vb</DependentUpon>
+    </Compile>
+    <Compile Include="PuzzleBoardLetter.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="puzzleDisplay.Designer.vb">
+      <DependentUpon>puzzleDisplay.vb</DependentUpon>
+    </Compile>
+    <Compile Include="puzzleDisplay.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Resources\WheelControl.Designer.vb">
+      <DependentUpon>WheelControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\WheelControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Settings.vb" />
+    <Compile Include="Sound.vb" />
+    <Compile Include="WheelControl.Designer.vb">
+      <DependentUpon>WheelControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="WheelControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WheelController.vb" />
+    <Compile Include="WheelSpinnerTest.Designer.vb">
+      <DependentUpon>WheelSpinnerTest.vb</DependentUpon>
+    </Compile>
+    <Compile Include="WheelSpinnerTest.vb">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="BonusCardEnvelope.resx">
+      <DependentUpon>BonusCardEnvelope.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgSelectPack.resx">
+      <DependentUpon>dlgSelectPack.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAudio.resx">
+      <DependentUpon>frmAudio.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCustomizer.resx">
+      <DependentUpon>frmCustomizer.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmFinalSpin.resx">
+      <DependentUpon>frmFinalSpin.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmHelp.resx">
+      <DependentUpon>frmHelp.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSettings.resx">
+      <DependentUpon>frmSettings.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMain.resx">
+      <DependentUpon>frmMain.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPuzzleBoard.resx">
+      <DependentUpon>frmPuzzleBoard.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmScore.resx">
+      <DependentUpon>frmScore.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IntroScreen.resx">
+      <DependentUpon>IntroScreen.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources1.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExpressDialog.resx">
+      <DependentUpon>ExpressDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MysteryDialog.resx">
+      <DependentUpon>MysteryDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NameTag.resx">
+      <DependentUpon>NameTag.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PuzzleBoardLetter.resx">
+      <DependentUpon>PuzzleBoardLetter.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="puzzleDisplay.resx">
+      <DependentUpon>puzzleDisplay.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WheelControl.resx">
+      <DependentUpon>WheelControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WheelControl.resx">
+      <DependentUpon>WheelControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WheelSpinnerTest.resx">
+      <DependentUpon>WheelSpinnerTest.vb</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Gotham Book Regular.otf" />
+    <None Include="Resources\helvetica-condensed-black-se-58e411b234d2c.ttf" />
+    <None Include="Resources\ufonts.com_gotham-bold.ttf" />
+    <None Include="Resources\WheelLogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Wheel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="AxWMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>aximp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="WMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wof.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bankrupt.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\clock.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\double_buzz.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\puzzle_reveal.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\toss_up.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\toss_win_eq.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wheel_spin.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wof_chant.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Bonus Wheel Music.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Buzzer.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Choose letters.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ding.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\R S T L N E.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Speedup.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WheelBoard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WheelSonyTVCity.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wof_twitter_skin_2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Delete.ico" />
+    <None Include="Resources\mystery.wav" />
+    <None Include="Resources\WheelCover.png" />
+    <None Include="Resources\puzzle_solved.wav" />
+    <None Include="Resources\WheelPuzzleBoard.png" />
+    <None Include="Resources\Wild_Card.png" />
+    <None Include="Resources\CurrentPlayerLeftSide.png" />
+    <None Include="Resources\CurrentPlayerRightSide.png" />
+    <None Include="Resources\wheelspinlong.wav" />
+    <None Include="Resources\bonuswheel.wav" />
+    <None Include="Resources\Express.png" />
+    <None Include="Resources\Gift_Tag.png" />
+    <None Include="Resources\Half_Car.png" />
+    <None Include="Resources\MDW_Back.png" />
+    <None Include="Resources\Mystery_2014.png" />
+    <None Include="Resources\Mystery_2014_Bankrupt.png" />
+    <None Include="Resources\Mystery_10000_2014.png" />
+    <None Include="Resources\Prize.png" />
+    <None Include="Resources\snd_fireworks.wav" />
+    <None Include="Resources\snd_mystery_wedge.wav" />
+    <None Include="Resources\snd_no_more_vowels.wav" />
+    <None Include="Resources\snd_vowels_only.wav" />
+    <None Include="Resources\nomorevowels.png" />
+    <None Include="Resources\BlueArrow.png" />
+    <None Include="Resources\music_bonus_win_vamp_intro.wav" />
+    <None Include="Resources\CategoryBar.gif" />
+    <None Include="Resources\ExpressLogo.png" />
+    <None Include="Resources\BonusWheel.png" />
+    <None Include="Resources\WheelTilted.png" />
+    <None Include="Resources\WheelTiltedSmall.png" />
+    <None Include="Resources\wheelCoverHD.png" />
+    <None Include="Resources\wheelCoverHDR2.png" />
+    <None Include="Resources\wheelCoverHDR3.png" />
+    <None Include="Resources\wheelCoverHDR4.png" />
+    <None Include="Resources\WheelTiltedSmallR2.png" />
+    <None Include="Resources\WheelTiltedSmallR3.png" />
+    <None Include="Resources\WheelTiltedSmallR4.png" />
+    <None Include="Resources\toss_up_new.wav" />
+    <None Include="Resources\toss_win_eq_new.wav" />
+    <None Include="Resources\puzzle_solved_new.wav" />
+    <None Include="Resources\clock_new.wav" />
+    <None Include="Resources\Toss_Up_1000.png" />
+    <None Include="Resources\Toss_Up_2000.png" />
+    <None Include="Resources\Toss_Up_3000.png" />
+    <None Include="Resources\toss_up_reveal.wav" />
+    <None Include="Resources\halfcar.wav" />
+    <None Include="Resources\prize_puzzle_reveal.wav" />
+    <None Include="Resources\finalspin.wav" />
+    <None Include="Resources\NameTag.png" />
+    <None Include="Resources\MDW_Front.png" />
+    <None Include="Resources\WOF_34,000.png" />
+    <None Include="Resources\WOF_35,000.png" />
+    <None Include="Resources\WOF_40,000.png" />
+    <None Include="Resources\WOF_50,000.png" />
+    <None Include="Resources\WOF_100,000.png" />
+    <None Include="Resources\WOF_One_Million_2.png" />
+    <None Include="Resources\WOF_RearFolded.png" />
+    <EmbeddedResource Include="Resources\WheelSpin.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WheelSpinR2.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WheelSpinR3.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WheelSpinR4.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Include="Resources\DownChevron.png" />
+    <None Include="Resources\WOF_45,000.png" />
+    <None Include="Resources\WheelTiltedSmallBonus.png" />
+    <None Include="Resources\WheelTiltedSmallBonusCards.png" />
+    <None Include="Resources\wheelCoverHDBonus.png" />
+    <None Include="Resources\WheelMainMenu.png" />
+    <None Include="Resources\WheelCustomizerPackSelect.png" />
+    <None Include="Resources\WheelCustomizerScreen.png" />
+    <None Include="Resources\WheelNameCustomizer.png" />
+    <None Include="Resources\WheelPackSelect.PNG" />
+    <None Include="Resources\WheelTossUp.png" />
+    <None Include="Resources\WheelTossUp1.png" />
+    <None Include="Resources\WheelSpinMeter.png" />
+    <None Include="Resources\WheelLetterReveal.png" />
+    <None Include="Resources\FreePlay.png" />
+    <None Include="Resources\Screenshot %28190%29.png" />
+    <None Include="Resources\FinalSpin.png" />
+    <None Include="Resources\WheelBonusBeforeReveal.png" />
+    <None Include="Resources\WheelBonusRSTLNE.png" />
+    <None Include="Resources\WheelBonusChooseLetters.png" />
+    <None Include="Resources\WheelBonusPrizeReveal.png" />
+    <None Include="Resources\wof-logo.png" />
+    <None Include="Resources\editOptions.ico" />
+    <None Include="Resources\express.wav" />
+    <None Include="Resources\CLUE.png" />
+    <Content Include="WheelPuzzles.mdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WheelPuzzles_log.ldf">
+      <DependentUpon>WheelPuzzles.mdf</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="wof-logo.png.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
