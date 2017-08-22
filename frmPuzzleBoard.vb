@@ -131,6 +131,7 @@
     End Sub
     Dim puzzleSolved = False
     Public Sub solvePuzzle(preview As Boolean)
+        frmScore.btnBonusTimerStart.Hide()
         btnWild.Enabled = True
         puzzleSolved = True
         frmScore.lstMessages.Items.Clear()
@@ -183,7 +184,7 @@
                             frmScore.bonusRoundPlayer.total += 25000
                         End If
                     End If
-                        Else
+                Else
                     If round = WheelController.PuzzleType.R3 Then
                         If WheelController.currentPlayer = 1 Then
                             frmScore.player1.total += 10000
@@ -484,7 +485,6 @@
                         pnlCategory.Hide()
                         lblChosenLetters.Hide()
                         lblRSTLNE.Hide()
-                        frmScore.btnBonusTimerStart.Hide()
                         frmScore.BonusCardEnvelope1.Hide()
                         frmScore.usedLetterBoard.Enabled = False
                         btnSolve.Enabled = False
