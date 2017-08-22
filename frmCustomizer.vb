@@ -187,7 +187,7 @@ Public Class frmCustomizer
             If Trim(rdr("Type")) = 0 Then
                 If Trim(rdr("RoundNumber")) = 1 Then
                     puzzleControl.round = "TOSS-UP 1"
-                ElseIf Trim(rdr("RoundNumber")) = 1 Then
+                ElseIf Trim(rdr("RoundNumber")) = 2 Then
                     puzzleControl.round = "TOSS-UP 2"
                 ElseIf Trim(rdr("RoundNumber")) = 3 Then
                     puzzleControl.round = "TOSS-UP 3"
