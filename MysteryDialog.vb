@@ -59,13 +59,13 @@ Public Class MysteryDialog
             End If
         End If
         If frmScore.lblCurrentValue.Text = "Mystery 1" Then
+            WheelController.wheelWedges(58) = 600
             WheelController.wheelWedges(59) = 600
             WheelController.wheelWedges(60) = 600
-            WheelController.wheelWedges(61) = 600
         ElseIf frmScore.lblCurrentValue.Text = "Mystery 2" Then
+            WheelController.wheelWedges(22) = 700
             WheelController.wheelWedges(23) = 700
             WheelController.wheelWedges(24) = 700
-            WheelController.wheelWedges(25) = 700
         End If
         WheelController.mysteryStatus = True
         Me.Close()

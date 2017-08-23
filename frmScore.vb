@@ -772,6 +772,13 @@
     Public Sub bonusTimer()
         My.Computer.Audio.Play(My.Resources.clock_new, AudioPlayMode.Background)
         frmPuzzleBoard.tmrBonus.Start()
+        For Each control In Controls
+            If TypeOf (control) Is PuzzleBoardLetter Then
+                If CType(control, PuzzleBoardLetter).btnLetter.Text = "" Then
+                    WheelController.letterControlList.Add(CType(control, PuzzleBoardLetter).Name.Replace("PuzzleBoardLetter", ""))
+                End If
+            End If
+        Next
         'timeStart = DateTime.Now.Second
         'For Each lettersControls As Control In frmPuzzleBoard.Instance.Controls
         '    If lettersControls.GetType() Is GetType(PuzzleBoardLetter) Then
@@ -785,13 +792,6 @@
         frmPuzzleBoard.bonusTimeStart = DateTime.Now.Second
         bonusTimer()
         'tmrBonusTimer.Start()
-        'For Each control In frmPuzzleBoard.Controls
-        '    If TypeOf (control) Is PuzzleBoardLetter Then
-        '        If CType(control, PuzzleBoardLetter).btnLetter.Text = "" Then
-        '            WheelController.letterControlList.Add(CType(control, PuzzleBoardLetter).Name.Replace("PuzzleBoardLetter", ""))
-        '        End If
-        '    End If
-        'Next
     End Sub
     Private Sub tmrBonusTimer_Tick(sender As Object, e As EventArgs) Handles tmrBonusTimer.Tick
         If DateTime.Now.Second = WheelController.convertTime(timeStart + 9) Then
@@ -842,6 +842,7 @@
         Next
         If WheelController.letterControlList.Count = 0 Then
             tmrSolveFailed.Stop()
+            BonusCardEnvelope1.Show()
         End If
     End Sub
 

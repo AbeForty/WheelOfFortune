@@ -624,6 +624,8 @@
             bonusSolved = False
             solvePuzzle(True)
             frmScore.BonusCardEnvelope1.Show()
+            'frmScore.timeStart = DateTime.Now.Second
+            'frmScore.tmrSolveFailed.Start()
             tmrBonus.Stop()
         End If
     End Sub

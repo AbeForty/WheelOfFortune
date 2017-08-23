@@ -20,20 +20,20 @@ Public Class WheelSpinControl
         tmrSpinTest.Start()
     End Sub
     Private Sub trkWheel_ValueChanged(sender As Object, e As EventArgs) Handles trkWheel.ValueChanged
-        If wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR1.mp4" Or wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR2.mp4" Or wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR3.mp4" Or wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR4.mp4" Then
-            wmpWheel.Ctlcontrols.currentPosition = trkWheel.Value - 2
-        Else
-            wmpWheel.Ctlcontrols.currentPosition = trkWheel.Value
-        End If
+        'If wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR1.mp4" Or wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR2.mp4" Or wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR3.mp4" Or wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR4.mp4" Then
+        '    wmpWheel.Ctlcontrols.currentPosition = trkWheel.Value
+        'Else
+        wmpWheel.Ctlcontrols.currentPosition = trkWheel.Value - 1
+        'End If
         lblWMPTime.Text = trkWheel.Value
         If trkWheel.Value = trkWheel.Maximum Then
-            trkWheel.Value = 1
+            trkWheel.Value = 0
         End If
     End Sub
     Private Sub trkBonusWheel_ValueChanged(sender As Object, e As EventArgs) Handles trkBonusWheel.ValueChanged
         wmpWheel.Ctlcontrols.currentPosition = trkBonusWheel.Value
         If trkBonusWheel.Value = trkBonusWheel.Maximum Then
-            trkBonusWheel.Value = 1
+            trkBonusWheel.Value = 0
         End If
     End Sub
 
@@ -102,60 +102,60 @@ Public Class WheelSpinControl
                     spinResult = WheelController.wheelWedges.Item(trkWheel.Value)
                     frmScore.lblCurrentValue.Text = spinResult
                     If WheelController.wheelWedges.Item(trkWheel.Value) = "1/2 Car" Then
-                        If trkWheel.Value = 8 Or trkWheel.Value = 9 Or trkWheel.Value = 10 Then
+                        If trkWheel.Value = 7 Or trkWheel.Value = 8 Or trkWheel.Value = 9 Then
                             If WheelController.halfCar1Status = True Then
+                                WheelController.wheelWedges(7) = "500"
                                 WheelController.wheelWedges(8) = "500"
                                 WheelController.wheelWedges(9) = "500"
-                                WheelController.wheelWedges(10) = "500"
                             Else
                                 'halfCar2Box.Show()
                             End If
-                        ElseIf trkWheel.Value = 38 Or trkWheel.Value = 39 Or trkWheel.Value = 40 Then
+                        ElseIf trkWheel.Value = 37 Or trkWheel.Value = 38 Or trkWheel.Value = 39 Then
                             If WheelController.halfCar2Status = True Then
+                                WheelController.wheelWedges(37) = "500"
                                 WheelController.wheelWedges(38) = "500"
                                 WheelController.wheelWedges(39) = "500"
-                                WheelController.wheelWedges(40) = "500"
                             Else
                                 'halfCar2Box.Show()
                             End If
                         End If
                     ElseIf WheelController.wheelWedges.Item(trkWheel.Value) = "Gift" Then
-                        If trkWheel.Value = 53 Or trkWheel.Value = 54 Or trkWheel.Value = 55 Then
+                        If trkWheel.Value = 52 Or trkWheel.Value = 53 Or trkWheel.Value = 54 Then
                             If WheelController.giftStatus = True Then
+                                WheelController.wheelWedges(52) = "500"
                                 WheelController.wheelWedges(53) = "500"
                                 WheelController.wheelWedges(54) = "500"
-                                WheelController.wheelWedges(55) = "500"
                             Else
                                 'halfCar2Box.Show()
                             End If
                         End If
                     ElseIf WheelController.wheelWedges.Item(trkWheel.Value) = "Prize" Then
-                        If trkWheel.Value = 14 Or trkWheel.Value = 15 Or trkWheel.Value = 16 Then
+                        If trkWheel.Value = 13 Or trkWheel.Value = 14 Or trkWheel.Value = 15 Then
                             If WheelController.prizeStatus = True Then
+                                WheelController.wheelWedges(13) = "500"
                                 WheelController.wheelWedges(14) = "500"
                                 WheelController.wheelWedges(15) = "500"
-                                WheelController.wheelWedges(16) = "500"
                             Else
                                 'halfCar2Box.Show()
                             End If
                         End If
                     ElseIf WheelController.wheelWedges.Item(trkWheel.Value) = "Million" Then
-                        If trkWheel.Value = 48 Then
+                        If trkWheel.Value = 47 Then
                             If WheelController.millionStatus = True Then
+                                WheelController.wheelWedges(46) = "500"
                                 WheelController.wheelWedges(47) = "500"
                                 WheelController.wheelWedges(48) = "500"
-                                WheelController.wheelWedges(49) = "500"
                             Else
                                 'halfCar2Box.Show()
                             End If
 
                         End If
                     ElseIf WheelController.wheelWedges.Item(trkWheel.Value) = "WIld" Then
-                        If trkWheel.Value = 68 Or trkWheel.Value = 69 Or trkWheel.Value = 70 Then
+                        If trkWheel.Value = 67 Or trkWheel.Value = 68 Or trkWheel.Value = 69 Then
                             If WheelController.wildCardStatus = True Then
+                                WheelController.wheelWedges(67) = "500"
                                 WheelController.wheelWedges(68) = "500"
                                 WheelController.wheelWedges(69) = "500"
-                                WheelController.wheelWedges(70) = "500"
                             Else
                                 'halfCar2Box.Show()
                             End If
@@ -297,6 +297,6 @@ Public Class WheelSpinControl
         tmrFinalSpinDisable.Start()
     End Sub
     Public Sub resetWheel()
-        trkWheel.Value = 1
+        trkWheel.Value = 0
     End Sub
 End Class
