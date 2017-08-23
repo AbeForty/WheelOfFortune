@@ -116,7 +116,6 @@ Partial Class frmPuzzleBoard
         Me.PuzzleBoardLetter52 = New WheelOfFortune.PuzzleBoardLetter()
         Me.btnSpinner = New System.Windows.Forms.Button()
         Me.WheelSpinControl1 = New WheelOfFortune.WheelSpinControl()
-        Me.lblTime = New System.Windows.Forms.Label()
         Me.tmrCheckTurns = New System.Windows.Forms.Timer(Me.components)
         Me.logoCrossword = New System.Windows.Forms.PictureBox()
         Me.pnlCategory.SuspendLayout()
@@ -974,19 +973,6 @@ Partial Class frmPuzzleBoard
         Me.WheelSpinControl1.TabIndex = 204
         Me.WheelSpinControl1.Visible = False
         '
-        'lblTime
-        '
-        Me.lblTime.AutoSize = True
-        Me.lblTime.BackColor = System.Drawing.Color.Transparent
-        Me.lblTime.Font = New System.Drawing.Font("Gotham Bold", 13.0!)
-        Me.lblTime.ForeColor = System.Drawing.Color.White
-        Me.lblTime.Location = New System.Drawing.Point(494, 289)
-        Me.lblTime.Name = "lblTime"
-        Me.lblTime.Size = New System.Drawing.Size(67, 25)
-        Me.lblTime.TabIndex = 205
-        Me.lblTime.Text = "Time"
-        Me.lblTime.Visible = False
-        '
         'tmrCheckTurns
         '
         '
@@ -1009,7 +995,6 @@ Partial Class frmPuzzleBoard
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(1902, 1092)
-        Me.Controls.Add(Me.lblTime)
         Me.Controls.Add(Me.pboxTossUp)
         Me.Controls.Add(Me.WheelSpinControl1)
         Me.Controls.Add(Me.ListBox4)
@@ -1204,7 +1189,6 @@ Partial Class frmPuzzleBoard
     Friend WithEvents tmrCheckFinalSpin As Timer
     Friend WithEvents btnSpinner As Button
     Friend WithEvents WheelSpinControl1 As WheelSpinControl
-    Friend WithEvents lblTime As Label
     Friend WithEvents tmrCheckTurns As Timer
     Friend WithEvents logoCrossword As PictureBox
     'Friend WithEvents PuzzleBoardLetter53 As PuzzleBoardLetter

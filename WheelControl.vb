@@ -25,7 +25,6 @@ Public Class WheelSpinControl
         'Else
         wmpWheel.Ctlcontrols.currentPosition = trkWheel.Value - 1
         'End If
-        lblWMPTime.Text = trkWheel.Value
         If trkWheel.Value = trkWheel.Maximum Then
             trkWheel.Value = 0
         End If
@@ -48,7 +47,6 @@ Public Class WheelSpinControl
                     ElseIf frmPuzzleBoard.round = WheelController.PuzzleType.R3 Then
                         wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR3.mp4"
                     ElseIf frmPuzzleBoard.round = WheelController.PuzzleType.BR Then
-
                     Else
                         wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR4.mp4"
                     End If
@@ -287,7 +285,6 @@ Public Class WheelSpinControl
     End Sub
 
     Private Sub tmrFinalSpinDisable_Tick(sender As Object, e As EventArgs) Handles tmrFinalSpinDisable.Tick
-        frmPuzzleBoard.lblTime.Text = DateTime.Now.Second
         If WheelController.finalSpinSpun = True Then
             frmPuzzleBoard.wheelTilt.Enabled = False
         End If
