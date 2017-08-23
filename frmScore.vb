@@ -238,12 +238,11 @@
     End Sub
     Dim isVowel As Boolean = False
     Private Sub btnLetter_Click(sender As Object, e As EventArgs) Handles btnA.Click, btnB.Click, btnC.Click, btnD.Click, btnE.Click, btnF.Click, btnG.Click, btnH.Click, btnI.Click, btnJ.Click, btnK.Click, btnL.Click, btnM.Click, btnN.Click, btnO.Click, btnP.Click, btnQ.Click, btnR.Click, btnS.Click, btnT.Click, btnU.Click, btnV.Click, btnW.Click, btnX.Click, btnY.Click, btnZ.Click
-        usedLetterBoard.Enabled = False
         frmPuzzleBoard.btnSolve.Enabled = True
         turnTaken = False
-        If WheelController.finalSpin = True Then
-            WheelController.previousValue = ""
-        End If
+        'If WheelController.finalSpin = True Then
+        '    WheelController.previousValue = ""
+        'End If
         If WheelController.previousValue = "Bankrupt" Or WheelController.previousValue = "Lose A Turn" Then
 
         Else
@@ -587,9 +586,11 @@
                         WheelController.wheelWedges(68) = "500"
                         WheelController.wheelWedges(69) = "500"
                     Else
-                        'halfCar2Box.Show()
                     End If
                 End If
+            End If
+            If WheelController.finalSpin = True Then
+                WheelController.previousValue = "Lose A Turn"
             End If
             If WheelController.finalSpin = False Or WheelController.expressStatus = False Then
                     lblCurrentValue.Text = 0
@@ -829,6 +830,7 @@
         End If
     End Sub
     Public Sub bonusTimer()
+        WheelController.previousValue = "Lose A Turn"
         My.Computer.Audio.Play(My.Resources.clock_new, AudioPlayMode.Background)
         frmPuzzleBoard.tmrBonus.Start()
         For Each control In Controls
@@ -847,6 +849,7 @@
     End Sub
 
     Private Sub btnBonusTimerStart_Click(sender As Object, e As EventArgs) Handles btnBonusTimerStart.Click
+        usedLetterBoard.Enabled = True
         frmPuzzleBoard.btnSolve.Enabled = True
         frmPuzzleBoard.bonusTimeStart = DateTime.Now.Second
         bonusTimer()
@@ -885,6 +888,7 @@
         If DateTime.Now.Second = WheelController.convertTime(timeStart + 3) And WheelController.finalSpin = True Then
             tmrFinalSpin.Stop()
             WheelController.LoseATurn()
+            WheelController.previousValue = ""
             My.Computer.Audio.Play(My.Resources.Buzzer, AudioPlayMode.Background)
             usedLetterBoard.Enabled = True
         End If

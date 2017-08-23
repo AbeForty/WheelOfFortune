@@ -32,13 +32,16 @@ Public Class PuzzleBoardLetter
             revealLetter()
             WheelController.letterControlTappedList.Remove(Name.Replace("PuzzleBoardLetter", ""))
             If WheelController.letterControlTappedList.Count = 0 Then
+                'If WheelController.finalSpin = True Then
+                'Else
                 frmScore.usedLetterBoard.Enabled = True
+                'End If
                 If WheelController.finalSpinSpun = True Then
-                    frmScore.timeStart = DateTime.Now.Second
-                    frmScore.tmrFinalSpin.Start()
+                        frmScore.timeStart = DateTime.Now.Second
+                        frmScore.tmrFinalSpin.Start()
+                    End If
                 End If
-            End If
-            If WheelController.roundType = WheelController.PuzzleType.BR Then
+                If WheelController.roundType = WheelController.PuzzleType.BR Then
                 frmScore.numberOfUntappedLetters -= 1
             End If
         ElseIf frmPuzzleBoard.round = WheelController.PuzzleType.TU1 Or frmPuzzleBoard.round = WheelController.PuzzleType.TU2 Or frmPuzzleBoard.round = WheelController.PuzzleType.TU3 Or frmPuzzleBoard.round = WheelController.PuzzleType.TBTU Then

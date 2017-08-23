@@ -57,13 +57,14 @@ Public Class WheelSpinControl
                 End If
 
                 spinTimer += 1
-                    trkWheel.Value += 1
-                Else
-                    'If spinTimer = spinStrength - 1 Then
-                    'wmpWheel.Ctlcontrols.pause()
-                    'Else
-                    'End If
-                    spinTimer = spinStrength
+                trkWheel.Value += 1
+            Else
+                frmScore.usedLetterBoard.Enabled = True
+                'If spinTimer = spinStrength - 1 Then
+                'wmpWheel.Ctlcontrols.pause()
+                'Else
+                'End If
+                spinTimer = spinStrength
                 spinPaused = False
                 tmrSpinTest.Stop()
                 wmpWheel.Ctlcontrols.pause()
@@ -102,16 +103,16 @@ Public Class WheelSpinControl
                     spinResult = WheelController.wheelWedges.Item(trkWheel.Value)
                     frmScore.lblCurrentValue.Text = spinResult
                 ElseIf WheelController.finalSpin = True Then
-                    If WheelController.wheelWedges.Item(trkWheel.Value) = "Bankrupt" Or WheelController.wheelWedges.Item(trkWheel.Value) = "Lose a Turn" Or WheelController.wheelWedges.Item(trkWheel.Value) = "Free Play" Then
-                            Spin()
-                        Else
-                            WheelController.finalSpinSpun = True
-                            spinResult = WheelController.wheelWedges.Item(trkWheel.Value) + 1000
-                            WheelController.spinResult = spinResult
-                            frmScore.lblCurrentValue.Text = spinResult
-                            frmPuzzleBoard.wheelTilt.Enabled = False
-                        End If
+                    If Not IsNumeric(WheelController.wheelWedges.Item(trkWheel.Value)) Then
+                        Spin()
+                    Else
+                        WheelController.finalSpinSpun = True
+                        spinResult = WheelController.wheelWedges.Item(trkWheel.Value) + 1000
+                        WheelController.spinResult = spinResult
+                        frmScore.lblCurrentValue.Text = spinResult
+                        frmPuzzleBoard.wheelTilt.Enabled = False
                     End If
+                End If
                 End If
                 ElseIf frmPuzzleBoard.round = WheelController.PuzzleType.BR Then
             If spinTimer < spinStrength Then
@@ -166,6 +167,7 @@ Public Class WheelSpinControl
     End Sub
     Public Sub Spin()
         Me.Show()
+        frmScore.usedLetterBoard.Enabled = False
         frmPuzzleBoard.wheelTilt.Enabled = False
         WheelController.previousValue = ""
         If firstSpin = True Then
