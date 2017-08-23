@@ -152,7 +152,7 @@
                 player1.addCardsOrWedges(Player.Wedges.HalfCar2, True)
             End If
             If player1.getWedges(Player.Wedges.HalfCar1) = True And player1.getWedges(Player.Wedges.HalfCar2) = True Then
-                player1.total += 19000
+                player1.total += 24000
             End If
             'If prizePuzzleStatus = True Then
             '    player1.total += 10000
@@ -177,7 +177,7 @@
                 player2.addCardsOrWedges(Player.Wedges.HalfCar2, True)
             End If
             If player2.getWedges(Player.Wedges.HalfCar1) = True And player2.getWedges(Player.Wedges.HalfCar2) = True Then
-                player2.total += 19000
+                player2.total += 24000
             End If
             'If prizePuzzleStatus = True Then
             '    player2.total += 10000
@@ -202,7 +202,7 @@
                 player3.addCardsOrWedges(Player.Wedges.HalfCar2, True)
             End If
             If player3.getWedges(Player.Wedges.HalfCar1) = True And player3.getWedges(Player.Wedges.HalfCar2) = True Then
-                player3.total += 19000
+                player3.total += 24000
             End If
             'If prizePuzzleStatus = True Then
             '    player3.total += 10000
@@ -238,8 +238,12 @@
     End Sub
     Dim isVowel As Boolean = False
     Private Sub btnLetter_Click(sender As Object, e As EventArgs) Handles btnA.Click, btnB.Click, btnC.Click, btnD.Click, btnE.Click, btnF.Click, btnG.Click, btnH.Click, btnI.Click, btnJ.Click, btnK.Click, btnL.Click, btnM.Click, btnN.Click, btnO.Click, btnP.Click, btnQ.Click, btnR.Click, btnS.Click, btnT.Click, btnU.Click, btnV.Click, btnW.Click, btnX.Click, btnY.Click, btnZ.Click
+        usedLetterBoard.Enabled = False
         frmPuzzleBoard.btnSolve.Enabled = True
         turnTaken = False
+        If WheelController.finalSpin = True Then
+            WheelController.previousValue = ""
+        End If
         If WheelController.previousValue = "Bankrupt" Or WheelController.previousValue = "Lose A Turn" Then
 
         Else
@@ -309,16 +313,16 @@
                             End If
                         End If
                     Next
-                    If lblCurrentValue.Text = "Mystery 1" And WheelController.mysteryStatus = False Or lblCurrentValue.Text = "Mystery 2" And WheelController.mysteryStatus = False Then
-                        MysteryDialog.ShowDialog()
-                    End If
-                    If lblCurrentValue.Text = "Express" Then
-                        ExpressDialog.ShowDialog()
-                    End If
                 End If
                 notifyBar.Text = WheelController.revealNumberOfLetters()
                     timeStart = DateTime.Now.Second
                 tmrLetterReveal.Start()
+                If lblCurrentValue.Text = "Mystery 1" And WheelController.mysteryStatus = False Or lblCurrentValue.Text = "Mystery 2" And WheelController.mysteryStatus = False Then
+                    MysteryDialog.ShowDialog()
+                End If
+                If lblCurrentValue.Text = "Express" Then
+                    ExpressDialog.ShowDialog()
+                End If
                 If WheelController.currentPlayer = 1 Then
                         If isVowel = False And Not lblCurrentValue.Text = "Mystery 1" AndAlso isVowel = False And Not lblCurrentValue.Text = "Mystery 2" Then
                             Dim currentPlayerValue = CInt(lblPlayer1.Text.Replace("$", ""))
@@ -532,6 +536,61 @@
                 End If
             Dim letterSelected = CType(sender, Button).Text
             puzzleString = puzzleString.Replace(letterSelected, "")
+            If WheelController.wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkWheel.Value) = "1/2 Car" Then
+                If frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 7 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 8 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 9 Then
+                    If WheelController.halfCar1Status = True Then
+                        WheelController.wheelWedges(7) = "500"
+                        WheelController.wheelWedges(8) = "500"
+                        WheelController.wheelWedges(9) = "500"
+                    Else
+                    End If
+                ElseIf frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 37 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 38 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 39 Then
+                    If WheelController.halfCar2Status = True Then
+                        WheelController.wheelWedges(37) = "500"
+                        WheelController.wheelWedges(38) = "500"
+                        WheelController.wheelWedges(39) = "500"
+                    Else
+                    End If
+                End If
+            ElseIf WheelController.wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkWheel.Value) = "Gift" Then
+                If frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 52 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 53 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 54 Then
+                    If WheelController.giftStatus = True Then
+                        WheelController.wheelWedges(52) = "500"
+                        WheelController.wheelWedges(53) = "500"
+                        WheelController.wheelWedges(54) = "500"
+                    Else
+                    End If
+                End If
+            ElseIf WheelController.wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkWheel.Value) = "Prize" Then
+                If frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 13 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 14 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 15 Then
+                    If WheelController.prizeStatus = True Then
+                        WheelController.wheelWedges(13) = "500"
+                        WheelController.wheelWedges(14) = "500"
+                        WheelController.wheelWedges(15) = "500"
+                    Else
+                    End If
+                End If
+            ElseIf WheelController.wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkWheel.Value) = "Million" Then
+                If frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 47 Then
+                    If WheelController.millionStatus = True Then
+                        WheelController.wheelWedges(46) = "500"
+                        WheelController.wheelWedges(47) = "500"
+                        WheelController.wheelWedges(48) = "500"
+                    Else
+                    End If
+
+                End If
+            ElseIf WheelController.wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkWheel.Value) = "Wild" Then
+                If frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 67 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 68 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 69 Then
+                    If WheelController.wildCardStatus = True Then
+                        WheelController.wheelWedges(67) = "500"
+                        WheelController.wheelWedges(68) = "500"
+                        WheelController.wheelWedges(69) = "500"
+                    Else
+                        'halfCar2Box.Show()
+                    End If
+                End If
+            End If
             If WheelController.finalSpin = False Or WheelController.expressStatus = False Then
                     lblCurrentValue.Text = 0
                 Else

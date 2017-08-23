@@ -742,6 +742,7 @@
         If DateTime.Now.Minute = WheelController.convertTime(WheelController.startTime + 19) And round <> WheelController.PuzzleType.TU1 And round <> WheelController.PuzzleType.TU2 And round <> WheelController.PuzzleType.TU3 Then
             If puzzleSolved = False And frmScore.turnTaken = False Then
                 frmFinalSpin.Show()
+                WheelController.previousValue = ""
                 WheelController.finalSpin = True
                 tmrCheckFinalSpin.Stop()
             Else
@@ -750,6 +751,7 @@
         ElseIf WheelController.finalSpinQueued = True And puzzleSolved = False And frmScore.turnTaken = False Then
             frmFinalSpin.Show()
             WheelController.finalSpin = True
+            WheelController.previousValue = ""
             tmrCheckFinalSpin.Stop()
         End If
     End Sub

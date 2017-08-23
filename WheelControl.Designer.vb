@@ -33,6 +33,8 @@ Partial Class WheelSpinControl
         Me.trkBonusWheel = New System.Windows.Forms.TrackBar()
         Me.wheelCover = New System.Windows.Forms.Panel()
         Me.tmrFinalSpinDisable = New System.Windows.Forms.Timer(Me.components)
+        Me.lblWMPTime = New System.Windows.Forms.Label()
+        Me.lblRandomNumber = New System.Windows.Forms.Label()
         CType(Me.wmpWheel, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.trkWheel, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.trkBonusWheel, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -87,11 +89,9 @@ Partial Class WheelSpinControl
         '
         Me.trkBonusWheel.Location = New System.Drawing.Point(18, 860)
         Me.trkBonusWheel.Maximum = 48
-        Me.trkBonusWheel.Minimum = 1
         Me.trkBonusWheel.Name = "trkBonusWheel"
         Me.trkBonusWheel.Size = New System.Drawing.Size(505, 56)
         Me.trkBonusWheel.TabIndex = 212
-        Me.trkBonusWheel.Value = 1
         Me.trkBonusWheel.Visible = False
         '
         'wheelCover
@@ -107,6 +107,32 @@ Partial Class WheelSpinControl
         'tmrFinalSpinDisable
         '
         '
+        'lblWMPTime
+        '
+        Me.lblWMPTime.AutoSize = True
+        Me.lblWMPTime.BackColor = System.Drawing.Color.Black
+        Me.lblWMPTime.Font = New System.Drawing.Font("Gotham Book", 18.0!)
+        Me.lblWMPTime.ForeColor = System.Drawing.Color.Transparent
+        Me.lblWMPTime.Location = New System.Drawing.Point(180, 781)
+        Me.lblWMPTime.Name = "lblWMPTime"
+        Me.lblWMPTime.Size = New System.Drawing.Size(89, 32)
+        Me.lblWMPTime.TabIndex = 213
+        Me.lblWMPTime.Text = "Time"
+        Me.lblWMPTime.Visible = False
+        '
+        'lblRandomNumber
+        '
+        Me.lblRandomNumber.AutoSize = True
+        Me.lblRandomNumber.BackColor = System.Drawing.Color.Black
+        Me.lblRandomNumber.Font = New System.Drawing.Font("Gotham Book", 18.0!)
+        Me.lblRandomNumber.ForeColor = System.Drawing.Color.Transparent
+        Me.lblRandomNumber.Location = New System.Drawing.Point(102, 813)
+        Me.lblRandomNumber.Name = "lblRandomNumber"
+        Me.lblRandomNumber.Size = New System.Drawing.Size(261, 32)
+        Me.lblRandomNumber.TabIndex = 214
+        Me.lblRandomNumber.Text = "RandomNumber"
+        Me.lblRandomNumber.Visible = False
+        '
         'WheelSpinControl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
@@ -116,6 +142,8 @@ Partial Class WheelSpinControl
         Me.Controls.Add(Me.trkWheel)
         Me.Controls.Add(Me.btnStopSpin)
         Me.Controls.Add(Me.pbarWheel)
+        Me.Controls.Add(Me.lblWMPTime)
+        Me.Controls.Add(Me.lblRandomNumber)
         Me.Controls.Add(Me.wheelCover)
         Me.Controls.Add(Me.wmpWheel)
         Me.Name = "WheelSpinControl"
@@ -136,4 +164,6 @@ Partial Class WheelSpinControl
     Friend WithEvents trkBonusWheel As TrackBar
     Friend WithEvents wheelCover As Panel
     Friend WithEvents tmrFinalSpinDisable As Timer
+    Friend WithEvents lblWMPTime As Label
+    Friend WithEvents lblRandomNumber As Label
 End Class

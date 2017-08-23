@@ -32,6 +32,7 @@ Public Class PuzzleBoardLetter
             revealLetter()
             WheelController.letterControlTappedList.Remove(Name.Replace("PuzzleBoardLetter", ""))
             If WheelController.letterControlTappedList.Count = 0 Then
+                frmScore.usedLetterBoard.Enabled = True
                 If WheelController.finalSpinSpun = True Then
                     frmScore.timeStart = DateTime.Now.Second
                     frmScore.tmrFinalSpin.Start()

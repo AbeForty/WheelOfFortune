@@ -39,7 +39,7 @@ Public Class BonusCardEnvelope
                     BackgroundImage = My.Resources.WOF_100_000
                 ElseIf frmScore.lblControllerSpinResult.Text = 100000 Then
                     BackgroundImage = My.Resources.WOF_One_Million_2
-                ElseIf frmScore.lblControllerSpinResult.Text = "Car" Then
+                ElseIf frmScore.lblCurrentValue.Text = "Car" Then
                     BackgroundImage = My.Resources.WOF_CAR
                 End If
             End If
@@ -64,7 +64,7 @@ Public Class BonusCardEnvelope
                     BackgroundImage = My.Resources.WOF_100_000
                 ElseIf frmScore.lblControllerSpinResult.Text = 100000 Then
                     BackgroundImage = My.Resources.WOF_One_Million_2
-                ElseIf frmScore.lblControllerSpinResult.Text = "Car" Then
+                ElseIf frmScore.lblCurrentValue.Text = "Car" Then
                     BackgroundImage = My.Resources.WOF_CAR
                 End If
             ElseIf revealedValue = False Then
