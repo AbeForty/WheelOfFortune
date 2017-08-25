@@ -44,6 +44,8 @@ Public Class frmCustomizer
             ElseIf cboRound.SelectedItem.ToString = "BONUS ROUND" Then
                 currentRound = WheelController.PuzzleType.BR
                 WheelController.loadPuzzle(WheelController.PuzzleType.BR, True)
+            ElseIf cboRound.SelectedItem.ToString = Nothing Then
+                MsgBox("Please select the round number.", vbCritical, "Wheel of Fortune")
             End If
         Else
             If cboRound.SelectedItem.ToString = "ROUND 1" Then
@@ -58,6 +60,8 @@ Public Class frmCustomizer
                 currentRound = WheelController.PuzzleType.R3
                 WheelController.crosswordStatus = 1
                 WheelController.loadPuzzle(WheelController.PuzzleType.R3, True)
+            ElseIf cboRound.SelectedItem.ToString = Nothing Then
+                MsgBox("Please select the round number.", vbCritical, "Wheel of Fortune")
             End If
         End If
         frmPuzzleBoard.round = currentRound
@@ -215,8 +219,13 @@ Public Class frmCustomizer
             categoryParam = New SqlParameter("@Category", cboCategory.SelectedItem.ToString)
             crosswordParam = New SqlParameter("@CrosswordStatus", 0)
         Else
-            categoryParam = New SqlParameter("@Category", txtCrosswordClue.Text)
-            crosswordParam = New SqlParameter("@CrosswordStatus", 1)
+            If cboRound.SelectedItem = "ROUND 1" Or cboRound.SelectedItem = "ROUND 2" Or cboRound.SelectedItem = "ROUND 3" Then
+                categoryParam = New SqlParameter("@Category", txtCrosswordClue.Text)
+                crosswordParam = New SqlParameter("@CrosswordStatus", 1)
+            Else
+                MsgBox("Crosswords are only allowed on rounds 1, 2, and 3.", vbCritical, "Wheel of Fortune")
+                Exit Sub
+            End If
         End If
         Dim puzzleParam As SqlParameter = New SqlParameter("@Puzzle", txtPuzzle.Text)
         Dim typeParam As SqlParameter
@@ -295,10 +304,15 @@ Public Class frmCustomizer
                 categoryParam = New SqlParameter("@Category", cboCategory.SelectedItem.ToString)
                 crosswordParam = New SqlParameter("@CrosswordStatus", 0)
             Else
-                categoryParam = New SqlParameter("@Category", txtCrosswordClue.Text)
-                crosswordParam = New SqlParameter("@CrosswordStatus", 1)
+                If cboRound.SelectedItem = "ROUND 1" Or cboRound.SelectedItem = "ROUND 2" Or cboRound.SelectedItem = "ROUND 3" Then
+                    categoryParam = New SqlParameter("@Category", txtCrosswordClue.Text)
+                    crosswordParam = New SqlParameter("@CrosswordStatus", 1)
+                Else
+                    MsgBox("Crosswords are only allowed on rounds 1, 2, and 3.", vbCritical, "Wheel of Fortune")
+                    Exit Sub
+                End If
             End If
-            Dim puzzleParam As SqlParameter = New SqlParameter("@Puzzle", txtPuzzle.Text)
+                Dim puzzleParam As SqlParameter = New SqlParameter("@Puzzle", txtPuzzle.Text)
             Dim typeParam As SqlParameter
             Dim roundNumberParam As SqlParameter
             If cboRound.SelectedItem.ToString = "TOSS-UP 1" Then
