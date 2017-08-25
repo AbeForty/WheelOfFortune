@@ -29,6 +29,8 @@ Public Class BonusCardEnvelope
                 Height = 272
                 If frmScore.lblControllerSpinResult.Text = 34000 Then
                     BackgroundImage = My.Resources.WOF_34_000
+                ElseIf frmScore.lblControllerSpinResult.Text = 35000 Then
+                    BackgroundImage = My.Resources.WOF_35_000
                 ElseIf frmScore.lblControllerSpinResult.Text = 40000 Then
                     BackgroundImage = My.Resources.WOF_40_000
                 ElseIf frmScore.lblControllerSpinResult.Text = 45000 Then
@@ -39,7 +41,7 @@ Public Class BonusCardEnvelope
                     BackgroundImage = My.Resources.WOF_100_000
                 ElseIf frmScore.lblControllerSpinResult.Text = 100000 Then
                     BackgroundImage = My.Resources.WOF_One_Million_2
-                ElseIf frmScore.lblCurrentValue.Text = "Car" Then
+                ElseIf frmScore.lblControllerSpinResult.Text = 25000 Then
                     BackgroundImage = My.Resources.WOF_CAR
                 End If
             End If
@@ -54,6 +56,8 @@ Public Class BonusCardEnvelope
             If revealedValue = True Then
                 If frmScore.lblControllerSpinResult.Text = 34000 Then
                     BackgroundImage = My.Resources.WOF_34_000
+                ElseIf frmScore.lblControllerSpinResult.Text = 35000 Then
+                    BackgroundImage = My.Resources.WOF_35_000
                 ElseIf frmScore.lblControllerSpinResult.Text = 40000 Then
                     BackgroundImage = My.Resources.WOF_40_000
                 ElseIf frmScore.lblControllerSpinResult.Text = 45000 Then
@@ -64,7 +68,7 @@ Public Class BonusCardEnvelope
                     BackgroundImage = My.Resources.WOF_100_000
                 ElseIf frmScore.lblControllerSpinResult.Text = 100000 Then
                     BackgroundImage = My.Resources.WOF_One_Million_2
-                ElseIf frmScore.lblCurrentValue.Text = "Car" Then
+                ElseIf frmScore.lblControllerSpinResult.Text = 25000 Then
                     BackgroundImage = My.Resources.WOF_CAR
                 End If
             ElseIf revealedValue = False Then
