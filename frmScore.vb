@@ -246,6 +246,7 @@
         If WheelController.previousValue = "Bankrupt" Or WheelController.previousValue = "Lose A Turn" Then
 
         Else
+            usedLetterBoard.Enabled = False
             currentLetter = CType(sender, Button).Text
             If WheelController.finalSpin = False Then
                 spun = False
@@ -299,6 +300,7 @@
                     End If
                 Else
                     If lblCurrentValue.Text = "0" And wildUsed = False And WheelController.expressStatus = False And WheelController.finalSpin = False Then
+                        usedLetterBoard.Enabled = True
                         Exit Sub
                     Else
                     End If
