@@ -263,7 +263,47 @@ Public MustInherit Class WheelController
         Dim row4 As Boolean = False
         Dim wordLengths As New List(Of Integer)
         If crosswordStatus = 0 Then
-            If puzzle.Length <= 28 Then
+            If puzzle.Length < 14 Then
+                For Each word As String In myWords
+                    If word.Replace(" ", "").Length <= 8 - numberOfLengths And row2 = False Then
+                        row1 = True
+                        For myLetter = 0 To word.Length - 1
+                            If word.Chars(myLetter).ToString() <> " " Then
+                                CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & (numberOfLengths + 14)), PuzzleBoardLetter).Show()
+                                CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & (numberOfLengths + 14)), PuzzleBoardLetter).letterBehind = word.Chars(myLetter).ToString()
+                                frmPuzzleBoard.ListBox1.Items.Add(word.Chars(myLetter).ToString())
+                                frmPuzzleBoard.ListBox2.Items.Add("PuzzleBoardLetter" & (numberOfLengths + 14))
+                                If word.Chars(myLetter).ToString() = "'" Or word.Chars(myLetter).ToString() = "?" Or word.Chars(myLetter).ToString() = "." Or word.Chars(myLetter).ToString() = "!" Or word.Chars(myLetter).ToString() = "-" Or word.Chars(myLetter).ToString() = "/" Or word.Chars(myLetter).ToString() = ":" Or word.Chars(myLetter).ToString() = "\" Or word.Chars(myLetter).ToString() = "&" Then
+                                    CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & (numberOfLengths + 14)), PuzzleBoardLetter).revealLetter()
+                                End If
+                                numberOfLengths += 1
+                                frmPuzzleBoard.ListBox3.Items.Add(numberOfLengths)
+                            ElseIf word.Chars(myLetter).ToString() = " " Then
+                                CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((numberOfLengths + 14))), PuzzleBoardLetter).Hide()
+                                numberOfLengths += 1
+                            End If
+                        Next
+                    ElseIf (word.Replace(" ", "").Length >= 8 - numberOfLengths And row1 = True And row2 = False) Or (word.Replace(" ", "").Length <= 13 - numberOfLengths2 And row2 = True And row3 = False) Then
+                        row2 = True
+                        For myLetter = 0 To word.Length - 1
+                            If word.Chars(myLetter).ToString() <> " " Then
+                                CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((27 + (numberOfLengths2 + 1)))), PuzzleBoardLetter).Show()
+                                CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((27 + (numberOfLengths2 + 1)))), PuzzleBoardLetter).letterBehind = word.Chars(myLetter).ToString()
+                                frmPuzzleBoard.ListBox1.Items.Add(word.Chars(myLetter).ToString())
+                                frmPuzzleBoard.ListBox2.Items.Add("PuzzleBoardLetter" & (27 + (numberOfLengths2 + 1)))
+                                If word.Chars(myLetter).ToString() = "'" Or word.Chars(myLetter).ToString() = "?" Or word.Chars(myLetter).ToString() = "." Or word.Chars(myLetter).ToString() = "!" Or word.Chars(myLetter).ToString() = "-" Or word.Chars(myLetter).ToString() = "/" Or word.Chars(myLetter).ToString() = ":" Or word.Chars(myLetter).ToString() = "\" Or word.Chars(myLetter).ToString() = "&" Then
+                                    CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((27 + (numberOfLengths2 + 1)))), PuzzleBoardLetter).revealLetter()
+                                End If
+                                numberOfLengths2 += 1
+                                frmPuzzleBoard.ListBox3.Items.Add(numberOfLengths2)
+                            ElseIf word.Chars(myLetter).ToString() = " " Then
+                                CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((27 + (numberOfLengths2 + 1)))), PuzzleBoardLetter).Hide()
+                                numberOfLengths2 += 1
+                            End If
+                        Next
+                    End If
+                Next
+            ElseIf puzzle.Length <= 28 Then
                 For Each word As String In myWords
                     If word.Replace(" ", "").Length <= 12 - numberOfLengths And row2 = False Then
                         row1 = True
@@ -305,39 +345,39 @@ Public MustInherit Class WheelController
                         row3 = True
                         For myLetter = 0 To word.Length - 1
                             If word.Chars(myLetter).ToString() <> " " Then
-                                CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((41 + (numberOfLengths3 + 1)))), PuzzleBoardLetter).Show()
-                                CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((41 + (numberOfLengths3 + 1)))), PuzzleBoardLetter).letterBehind = word.Chars(myLetter).ToString()
+                                CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((40 + (numberOfLengths3 + 1)))), PuzzleBoardLetter).Show()
+                                CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((40 + (numberOfLengths3 + 1)))), PuzzleBoardLetter).letterBehind = word.Chars(myLetter).ToString()
                                 frmPuzzleBoard.ListBox1.Items.Add(word.Chars(myLetter).ToString())
-                                frmPuzzleBoard.ListBox2.Items.Add("PuzzleBoardLetter" & (41 + (numberOfLengths3 + 1)))
+                                frmPuzzleBoard.ListBox2.Items.Add("PuzzleBoardLetter" & (40 + (numberOfLengths3 + 1)))
                                 If word.Chars(myLetter).ToString() = "'" Or word.Chars(myLetter).ToString() = "?" Or word.Chars(myLetter).ToString() = "." Or word.Chars(myLetter).ToString() = "!" Or word.Chars(myLetter).ToString() = "-" Or word.Chars(myLetter).ToString() = "/" Or word.Chars(myLetter).ToString() = ":" Or word.Chars(myLetter).ToString() = "\" Or word.Chars(myLetter).ToString() = "&" Then
-                                    CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((41 + (numberOfLengths3 + 1)))), PuzzleBoardLetter).revealLetter()
+                                    CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((40 + (numberOfLengths3 + 1)))), PuzzleBoardLetter).revealLetter()
                                 End If
                                 numberOfLengths3 += 1
                                 frmPuzzleBoard.ListBox3.Items.Add(numberOfLengths3)
                             ElseIf word.Chars(myLetter).ToString() = " " Then
-                                CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((41 + (numberOfLengths3 + 1)))), PuzzleBoardLetter).Hide()
+                                CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((40 + (numberOfLengths3 + 1)))), PuzzleBoardLetter).Hide()
                                 numberOfLengths3 += 1
                             End If
                         Next
-                    ElseIf word.Replace(" ", "").Length >= 13 - numberOfLengths3 And row3 = True And row4 = False Or (word.Replace(" ", "").Length <= 13 - numberOfLengths4 And row4 = True) Then
-                        row4 = True
-                        For myLetter = 0 To word.Length - 1
-                            If word.Chars(myLetter).ToString() <> " " Then
-                                CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((40 + (numberOfLengths4 + 1)))), PuzzleBoardLetter).Show()
-                                CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((40 + (numberOfLengths4 + 1)))), PuzzleBoardLetter).letterBehind = word.Chars(myLetter).ToString()
-                                'CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((40 + (numberOfLengths4 + 1)))), PuzzleBoardLetter).revealLetter()
-                                frmPuzzleBoard.ListBox1.Items.Add(word.Chars(myLetter).ToString())
-                                frmPuzzleBoard.ListBox2.Items.Add("PuzzleBoardLetter" & (numberOfLengths4 + (41 - (12 - numberOfLengths4))))
-                                If word.Chars(myLetter).ToString() = "'" Or word.Chars(myLetter).ToString() = "?" Or word.Chars(myLetter).ToString() = "." Or word.Chars(myLetter).ToString() = "!" Or word.Chars(myLetter).ToString() = "-" Or word.Chars(myLetter).ToString() = "/" Or word.Chars(myLetter).ToString() = ":" Or word.Chars(myLetter).ToString() = "\" Or word.Chars(myLetter).ToString() = "&" Then
-                                    CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((40 + (numberOfLengths4 + 1)))), PuzzleBoardLetter).revealLetter()
-                                End If
-                                numberOfLengths4 += 1
-                                frmPuzzleBoard.ListBox3.Items.Add(numberOfLengths4)
-                            ElseIf word.Chars(myLetter).ToString() = " " Then
-                                CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((40 + (numberOfLengths4 + 1)))), PuzzleBoardLetter).Hide()
-                                numberOfLengths4 += 1
-                            End If
-                        Next
+                        'ElseIf word.Replace(" ", "").Length >= 13 - numberOfLengths3 And row3 = True And row4 = False Or (word.Replace(" ", "").Length <= 13 - numberOfLengths4 And row4 = True) Then
+                        '    row4 = True
+                        '    For myLetter = 0 To word.Length - 1
+                        '        If word.Chars(myLetter).ToString() <> " " Then
+                        '            CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((40 + (numberOfLengths4 + 1)))), PuzzleBoardLetter).Show()
+                        '            CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((40 + (numberOfLengths4 + 1)))), PuzzleBoardLetter).letterBehind = word.Chars(myLetter).ToString()
+                        '            'CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((40 + (numberOfLengths4 + 1)))), PuzzleBoardLetter).revealLetter()
+                        '            frmPuzzleBoard.ListBox1.Items.Add(word.Chars(myLetter).ToString())
+                        '            frmPuzzleBoard.ListBox2.Items.Add("PuzzleBoardLetter" & (numberOfLengths4 + (41 - (12 - numberOfLengths4))))
+                        '            If word.Chars(myLetter).ToString() = "'" Or word.Chars(myLetter).ToString() = "?" Or word.Chars(myLetter).ToString() = "." Or word.Chars(myLetter).ToString() = "!" Or word.Chars(myLetter).ToString() = "-" Or word.Chars(myLetter).ToString() = "/" Or word.Chars(myLetter).ToString() = ":" Or word.Chars(myLetter).ToString() = "\" Or word.Chars(myLetter).ToString() = "&" Then
+                        '                CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((40 + (numberOfLengths4 + 1)))), PuzzleBoardLetter).revealLetter()
+                        '            End If
+                        '            numberOfLengths4 += 1
+                        '            frmPuzzleBoard.ListBox3.Items.Add(numberOfLengths4)
+                        '        ElseIf word.Chars(myLetter).ToString() = " " Then
+                        '            CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & ((40 + (numberOfLengths4 + 1)))), PuzzleBoardLetter).Hide()
+                        '            numberOfLengths4 += 1
+                        '        End If
+                        '    Next
                         'For myLetter = 0 To word.Length - 1
                         '    If word.Chars(myLetter).ToString() <> " " Then
                         '        CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & (numberOfLengths4 + (41 - (12 - numberOfLengths3)))), PuzzleBoardLetter).Show()
@@ -531,6 +571,22 @@ Public MustInherit Class WheelController
         ' between calls '
         Static Generator As Random = New System.Random()
         Return Generator.Next(letterControlList.Count)
+    End Function
+#End Region
+#Region "Random Number Generator Wheel"
+    Public Shared Function GetRandomWheel() As Integer
+        ' by making Generator static, we preserve the same instance '
+        ' (i.e., do not create new instances with the same seed over and over) '
+        ' between calls '
+        Static Generator As Random = New System.Random()
+        Return Generator.Next(1, 4)
+    End Function
+    Public Shared Function GetRandomBonusWheel() As Integer
+        ' by making Generator static, we preserve the same instance '
+        ' (i.e., do not create new instances with the same seed over and over) '
+        ' between calls '
+        Static Generator As Random = New System.Random()
+        Return Generator.Next(4)
     End Function
 #End Region
 #Region "Random Number Generator Player"
