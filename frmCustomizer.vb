@@ -3,9 +3,11 @@
 Public Class frmCustomizer
     Public currentRound As WheelController.PuzzleType
     Private Sub btnPreview_Click(sender As Object, e As EventArgs) Handles btnPreview.Click
-        frmPuzzleBoard.Show()
         If cboCategory.SelectedItem.ToString() <> "CROSSWORD" Then
-            If cboRound.SelectedItem.ToString = "TOSS-UP 1" Then
+            If cboRound.SelectedItem = Nothing Then
+                MsgBox("Please select the round number.", vbCritical, "Wheel of Fortune")
+                Exit Sub
+            ElseIf cboRound.SelectedItem.ToString = "TOSS-UP 1" Then
                 currentRound = WheelController.PuzzleType.TU1
                 WheelController.loadPuzzle(WheelController.PuzzleType.TU1, True)
             ElseIf cboRound.SelectedItem.ToString = "TOSS-UP 2" Then
@@ -44,32 +46,37 @@ Public Class frmCustomizer
             ElseIf cboRound.SelectedItem.ToString = "BONUS ROUND" Then
                 currentRound = WheelController.PuzzleType.BR
                 WheelController.loadPuzzle(WheelController.PuzzleType.BR, True)
-            ElseIf cboRound.SelectedItem.ToString = Nothing Then
-                MsgBox("Please select the round number.", vbCritical, "Wheel of Fortune")
             End If
         Else
-            If cboRound.SelectedItem.ToString = "ROUND 1" Then
-                currentRound = WheelController.PuzzleType.R1
-                WheelController.crosswordStatus = 1
-                WheelController.loadPuzzle(WheelController.PuzzleType.R1, True)
-            ElseIf cboRound.SelectedItem.ToString = "ROUND 2" Then
-                currentRound = WheelController.PuzzleType.R2
-                WheelController.crosswordStatus = 1
-                WheelController.loadPuzzle(WheelController.PuzzleType.R2, True)
-            ElseIf cboRound.SelectedItem.ToString = "ROUND 3" Then
-                currentRound = WheelController.PuzzleType.R3
-                WheelController.crosswordStatus = 1
-                WheelController.loadPuzzle(WheelController.PuzzleType.R3, True)
-            ElseIf cboRound.SelectedItem.ToString = Nothing Then
+            If cboRound.SelectedItem = Nothing Then
                 MsgBox("Please select the round number.", vbCritical, "Wheel of Fortune")
+                Exit Sub
+            ElseIf cboRound.SelectedItem.ToString = "ROUND 1" Then
+                currentRound = WheelController.PuzzleType.R1
+                    WheelController.crosswordStatus = 1
+                    WheelController.loadPuzzle(WheelController.PuzzleType.R1, True)
+                ElseIf cboRound.SelectedItem.ToString = "ROUND 2" Then
+                    currentRound = WheelController.PuzzleType.R2
+                    WheelController.crosswordStatus = 1
+                    WheelController.loadPuzzle(WheelController.PuzzleType.R2, True)
+                ElseIf cboRound.SelectedItem.ToString = "ROUND 3" Then
+                    currentRound = WheelController.PuzzleType.R3
+                    WheelController.crosswordStatus = 1
+                WheelController.loadPuzzle(WheelController.PuzzleType.R3, True)
             End If
         End If
-        frmPuzzleBoard.round = currentRound
-        frmPuzzleBoard.previewMode = True
-        frmPuzzleBoard.btnPreview.Show()
-        frmPuzzleBoard.pnlCategory.Show()
-        frmPuzzleBoard.btnSolve.Hide()
-        frmPuzzleBoard.wheelTilt.Hide()
+        If cboRound.SelectedItem = Nothing Then
+            MsgBox("Please select the round number.", vbCritical, "Wheel of Fortune")
+            Exit Sub
+        Else
+            frmPuzzleBoard.Show()
+            frmPuzzleBoard.round = currentRound
+            frmPuzzleBoard.previewMode = True
+            frmPuzzleBoard.btnPreview.Show()
+            frmPuzzleBoard.pnlCategory.Show()
+            frmPuzzleBoard.btnSolve.Hide()
+            frmPuzzleBoard.wheelTilt.Hide()
+        End If
     End Sub
 
     Private Sub cboPack_KeyPress(sender As Object, e As KeyPressEventArgs) Handles cboPack.KeyPress

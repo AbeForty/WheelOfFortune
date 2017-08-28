@@ -53,21 +53,21 @@ Public Class WheelSpinControl
                     End If
                 End If
                 If spinTimer = spinStrength - 15 Then
-                    tmrSpinTest.Interval = 300
-                End If
+                tmrSpinTest.Interval = 300
+            End If
 
-                spinTimer += 1
-                trkWheel.Value += 1
-            Else
-                frmScore.usedLetterBoard.Enabled = True
-                'If spinTimer = spinStrength - 1 Then
-                'wmpWheel.Ctlcontrols.pause()
-                'Else
-                'End If
-                spinTimer = spinStrength
-                spinPaused = False
-                tmrSpinTest.Stop()
-                wmpWheel.Ctlcontrols.pause()
+            spinTimer += 1
+            trkWheel.Value += 1
+        Else
+            frmScore.usedLetterBoard.Enabled = True
+            'If spinTimer = spinStrength - 1 Then
+            'wmpWheel.Ctlcontrols.pause()
+            'Else
+            'End If
+            spinTimer = spinStrength
+            spinPaused = False
+            tmrSpinTest.Stop()
+            wmpWheel.Ctlcontrols.pause()
                 If WheelController.finalSpin = False Then
                     If WheelController.wheelWedges.Item(trkWheel.Value) = "Bankrupt" Then
                         WheelController.bankrupt()
@@ -113,27 +113,28 @@ Public Class WheelSpinControl
                         frmPuzzleBoard.wheelTilt.Enabled = False
                     End If
                 End If
-                End If
-                ElseIf frmPuzzleBoard.round = WheelController.PuzzleType.BR Then
-            If spinTimer < spinStrength Then
-                spinTimer += 1
-                trkBonusWheel.Value += 1
-            Else
-                spinTimer = spinStrength
-                spinPaused = False
-                wmpWheel.Ctlcontrols.pause()
-                If WheelController.wheelWedges.Item(trkBonusWheel.Value) <> "Car" Then
-                    WheelController.spinResult = WheelController.wheelWedges.Item(trkBonusWheel.Value)
-                    spinResult = WheelController.wheelWedges.Item(trkBonusWheel.Value)
-                Else
-                    WheelController.spinResult = 25000
-                    spinResult = 25000
-                End If
-                frmScore.lblCurrentValue.Text = spinResult
-                tmrSpinTest.Stop()
             End If
-            frmPuzzleBoard.wheelTilt.Enabled = False
-        End If
+        ElseIf frmPuzzleBoard.round = WheelController.PuzzleType.BR Then
+            If spinTimer < spinStrength Then
+                    spinTimer += 1
+                    trkBonusWheel.Value += 1
+                Else
+                    spinTimer = spinStrength
+                    spinPaused = False
+                    wmpWheel.Ctlcontrols.pause()
+                    If WheelController.wheelWedges.Item(trkBonusWheel.Value) <> "Car" Then
+                        WheelController.spinResult = WheelController.wheelWedges.Item(trkBonusWheel.Value)
+                        spinResult = WheelController.wheelWedges.Item(trkBonusWheel.Value)
+                    Else
+                        WheelController.spinResult = 25000
+                        spinResult = 25000
+                    End If
+                    frmScore.lblCurrentValue.Text = spinResult
+                    tmrSpinTest.Stop()
+                End If
+                frmPuzzleBoard.wheelTilt.Enabled = False
+            End If
+        'End If
     End Sub
     Private Sub btnStopSpin_Click(sender As Object, e As EventArgs)
         stopSpin()
@@ -178,6 +179,7 @@ Public Class WheelSpinControl
         spinPaused = True
         frmScore.spun = True
         wmpWheel.Show()
+        wmpWheel.Ctlcontrols.pause()
         pbarWheel.Show()
         spinTimer = 0
         If pbarWheel.Value = 0 Then

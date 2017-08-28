@@ -79,7 +79,7 @@ Partial Class WheelSpinControl
         'trkWheel
         '
         Me.trkWheel.Location = New System.Drawing.Point(18, 922)
-        Me.trkWheel.Maximum = 72
+        Me.trkWheel.Maximum = 71
         Me.trkWheel.Name = "trkWheel"
         Me.trkWheel.Size = New System.Drawing.Size(505, 56)
         Me.trkWheel.TabIndex = 202
@@ -88,7 +88,7 @@ Partial Class WheelSpinControl
         'trkBonusWheel
         '
         Me.trkBonusWheel.Location = New System.Drawing.Point(18, 860)
-        Me.trkBonusWheel.Maximum = 48
+        Me.trkBonusWheel.Maximum = 47
         Me.trkBonusWheel.Name = "trkBonusWheel"
         Me.trkBonusWheel.Size = New System.Drawing.Size(505, 56)
         Me.trkBonusWheel.TabIndex = 212

@@ -241,7 +241,7 @@ Public MustInherit Class WheelController
             End If
             puzzle = frmCustomizer.txtPuzzle.Text.ToUpper
             End If
-            TheseAreYourWords = puzzle.Split(" ")
+        TheseAreYourWords = puzzle.Split(" ")
         For Each item As String In TheseAreYourWords
             If Not item = TheseAreYourWords.Last Then
                 myWords.Add(item & " ")
@@ -581,12 +581,12 @@ Public MustInherit Class WheelController
         Static Generator As Random = New System.Random()
         Return Generator.Next(1, 4)
     End Function
-    Public Shared Function GetRandomBonusWheel() As Integer
+    Public Shared Function GetRandomBonusWheel(Min As Integer, Max As Integer) As Integer
         ' by making Generator static, we preserve the same instance '
         ' (i.e., do not create new instances with the same seed over and over) '
         ' between calls '
         Static Generator As Random = New System.Random()
-        Return Generator.Next(4)
+        Return Generator.Next(Min, Max)
     End Function
 #End Region
 #Region "Random Number Generator Player"
@@ -1163,8 +1163,10 @@ Public MustInherit Class WheelController
         ElseIf round = PuzzleType.BR Then
             wheelWedges.Clear()
             Dim wedgeRandom As New Random
-            Dim currentWedge = wedgeRandom.Next(bonusWheel.Count)
+            Dim bonusWheelCount = bonusWheel.Count
+            'Dim currentWedge = wedgeRandom.Next(bonusWheelCount)
             For i As Integer = 0 To 47 Step 2
+                Dim currentWedge = GetRandomBonusWheel(0, bonusWheel.IndexOf(bonusWheel.Last))
                 If currentWedge = "100000" Then
                     If frmScore.player1.getWedges(Player.Wedges.Million) Or frmScore.player2.getWedges(Player.Wedges.Million) Or frmScore.player3.getWedges(Player.Wedges.Million) Then
                         wheelWedges.Add(i, "1000000")
@@ -1177,6 +1179,7 @@ Public MustInherit Class WheelController
                     wheelWedges.Add(i, bonusWheel(currentWedge))
                     wheelWedges.Add(i + 1, bonusWheel(currentWedge))
                 End If
+                bonusWheel.RemoveAt(currentWedge)
             Next
             '            wheelWedges.Add(1, "34000")
             '            wheelWedges.Add(2, "34000")
