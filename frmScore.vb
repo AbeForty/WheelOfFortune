@@ -256,76 +256,102 @@
                 usedLetterBoard.Enabled = False
             End If
             currentLetter = CType(sender, Button).Text
-                If WheelController.finalSpin = False Then
-                    spun = False
-                    frmPuzzleBoard.wheelTilt.Enabled = True
-                Else
-                    usedLetterBoard.Enabled = False
-                    frmPuzzleBoard.wheelTilt.Enabled = False
-                End If
-                If WheelController.roundType <> WheelController.PuzzleType.BR Then
-                    If CType(sender, Button).Text = "A" Or CType(sender, Button).Text = "E" Or CType(sender, Button).Text = "I" Or CType(sender, Button).Text = "O" Or CType(sender, Button).Text = "U" Then
-                        If CType(sender, Button).Text = "A" Then
-                            WheelController.aEnabled = False
-                        ElseIf CType(sender, Button).Text = "E" Then
-                            WheelController.eEnabled = False
-                        ElseIf CType(sender, Button).Text = "I" Then
-                            WheelController.iEnabled = False
-                        ElseIf CType(sender, Button).Text = "O" Then
-                            WheelController.oEnabled = False
-                        ElseIf CType(sender, Button).Text = "U" Then
-                            WheelController.uEnabled = False
-                        End If
-                        isVowel = True
-                        If WheelController.currentPlayer = 1 Then
-                            If lblCurrentValue.Text = "Free Play" Or WheelController.finalSpin = True Then
-                            ElseIf CInt(lblPlayer1.Text.Replace("$", "")) > 250 Then
-                                Dim currentPlayerValue = CInt(lblPlayer1.Text.Replace("$", ""))
-                                currentPlayerValue -= 250
-                                lblPlayer1.Text = FormatCurrency(currentPlayerValue, 0)
-                            Else
-
-                                Exit Sub
-                            End If
-                        ElseIf WheelController.currentPlayer = 2 Then
-                            If lblCurrentValue.Text = "Free Play" Or WheelController.finalSpin = True Then
-                            ElseIf CInt(lblPlayer2.Text.Replace("$", "")) > 250 Then
-                                Dim currentPlayerValue = CInt(lblPlayer2.Text.Replace("$", ""))
-                                currentPlayerValue -= 250
-                                lblPlayer2.Text = FormatCurrency(currentPlayerValue, 0)
-                            Else
-                                Exit Sub
-                            End If
-                        ElseIf WheelController.currentPlayer = 3 Then
-                            If lblCurrentValue.Text = "Free Play" Or WheelController.finalSpin = True Then
-                            ElseIf CInt(lblPlayer3.Text.Replace("$", "")) > 250 Then
-                                Dim currentPlayerValue = CInt(lblPlayer3.Text.Replace("$", ""))
-                                currentPlayerValue -= 250
-                                lblPlayer3.Text = FormatCurrency(currentPlayerValue, 0)
-                            Else
-                                Exit Sub
-                            End If
-                        End If
-                    Else
-                        If lblCurrentValue.Text = "0" And wildUsed = False And WheelController.expressStatus = False And WheelController.finalSpin = False Then
+            If WheelController.finalSpin = False Then
+                spun = False
+                frmPuzzleBoard.wheelTilt.Enabled = True
+            ElseIf frmPuzzleBoard.round = WheelController.PuzzleType.BR Then
+                usedLetterBoard.Enabled = True
+                WheelController.previousValue = "Lose A Turn"
+            Else
+                usedLetterBoard.Enabled = False
+                frmPuzzleBoard.wheelTilt.Enabled = False
+            End If
+            If WheelController.roundType <> WheelController.PuzzleType.BR Then
+                If CType(sender, Button).Text = "A" Or CType(sender, Button).Text = "E" Or CType(sender, Button).Text = "I" Or CType(sender, Button).Text = "O" Or CType(sender, Button).Text = "U" Then
+                    If CType(sender, Button).Text = "A" Then
+                        WheelController.aEnabled = False
+                    ElseIf CType(sender, Button).Text = "E" Then
+                        WheelController.eEnabled = False
+                    ElseIf CType(sender, Button).Text = "I" Then
+                        WheelController.iEnabled = False
+                    ElseIf CType(sender, Button).Text = "O" Then
+                        WheelController.oEnabled = False
+                    ElseIf CType(sender, Button).Text = "U" Then
+                        WheelController.uEnabled = False
+                    End If
+                    isVowel = True
+                    If WheelController.currentPlayer = 1 Then
+                        If lblCurrentValue.Text = "Free Play" Or WheelController.finalSpin = True Then
+                        ElseIf CInt(lblPlayer1.Text.Replace("$", "")) > 250 Then
+                            Dim currentPlayerValue = CInt(lblPlayer1.Text.Replace("$", ""))
+                            currentPlayerValue -= 250
+                            lblPlayer1.Text = FormatCurrency(currentPlayerValue, 0)
+                        Else
                             usedLetterBoard.Enabled = True
                             Exit Sub
+                        End If
+                    ElseIf WheelController.currentPlayer = 2 Then
+                        If lblCurrentValue.Text = "Free Play" Or WheelController.finalSpin = True Then
+                        ElseIf CInt(lblPlayer2.Text.Replace("$", "")) > 250 Then
+                            Dim currentPlayerValue = CInt(lblPlayer2.Text.Replace("$", ""))
+                            currentPlayerValue -= 250
+                            lblPlayer2.Text = FormatCurrency(currentPlayerValue, 0)
                         Else
+                            usedLetterBoard.Enabled = True
+                            Exit Sub
+                        End If
+                    ElseIf WheelController.currentPlayer = 3 Then
+                        If lblCurrentValue.Text = "Free Play" Or WheelController.finalSpin = True Then
+                        ElseIf CInt(lblPlayer3.Text.Replace("$", "")) > 250 Then
+                            Dim currentPlayerValue = CInt(lblPlayer3.Text.Replace("$", ""))
+                            currentPlayerValue -= 250
+                            lblPlayer3.Text = FormatCurrency(currentPlayerValue, 0)
+                        Else
+                            usedLetterBoard.Enabled = True
+                            Exit Sub
                         End If
                     End If
-                    If WheelController.puzzle.Contains(currentLetter) Then
-                        For Each letterControl As Control In frmPuzzleBoard.Controls
-                            If letterControl.GetType() Is GetType(PuzzleBoardLetter) Then
-                                If CType(letterControl, PuzzleBoardLetter).letterBehind = currentLetter Then
-                                    WheelController.letterControlList.Add(letterControl.Name.Replace("PuzzleBoardLetter", ""))
-                                    WheelController.letterControlTappedList.Add(letterControl.Name.Replace("PuzzleBoardLetter", ""))
-                                End If
-                            End If
-                        Next
+                Else
+                    If lblCurrentValue.Text = "0" And wildUsed = False And WheelController.expressStatus = False And WheelController.finalSpin = False Then
+                        usedLetterBoard.Enabled = True
+                        Exit Sub
+                    Else
                     End If
-                    notifyBar.Text = WheelController.revealNumberOfLetters()
-                    timeStart = DateTime.Now.Second
-                    tmrLetterReveal.Start()
+                End If
+                If WheelController.puzzle.Contains(currentLetter) Then
+                    For Each letterControl As Control In frmPuzzleBoard.Controls
+                        If letterControl.GetType() Is GetType(PuzzleBoardLetter) Then
+                            If CType(letterControl, PuzzleBoardLetter).letterBehind = currentLetter Then
+                                WheelController.letterControlList.Add(letterControl.Name.Replace("PuzzleBoardLetter", ""))
+                                WheelController.letterControlTappedList.Add(letterControl.Name.Replace("PuzzleBoardLetter", ""))
+                            End If
+                        End If
+                    Next
+                ElseIf Not WheelController.puzzle.Contains(currentLetter) Then
+                    If lblCurrentValue.Text <> "Free Play" Then
+                        WheelController.LoseATurn()
+                        usedLetterBoard.Enabled = True
+                    Else
+                    End If
+                    If WheelController.expressStatus = False Or WheelController.finalSpin = False Then
+                        My.Computer.Audio.Play(My.Resources.Buzzer, AudioPlayMode.Background)
+                        WheelController.spinResult = 0
+                        CType(sender, Button).Enabled = False
+                    ElseIf WheelController.expressStatus = True Then
+                        WheelController.spinResult = 0
+                        WheelController.bankrupt()
+                        CType(sender, Button).Enabled = False
+                        frmPuzzleBoard.logoExpress.Hide()
+                        frmPuzzleBoard.wheelTilt.Enabled = True
+                        WheelController.expressStatus = False
+                    ElseIf WheelController.finalSpin = True Then
+                        My.Computer.Audio.Play(My.Resources.Buzzer, AudioPlayMode.Background)
+                        CType(sender, Button).Enabled = False
+                    End If
+                End If
+                notifyBar.Text = WheelController.revealNumberOfLetters()
+                timeStart = DateTime.Now.Second
+                tmrLetterReveal.Start()
                 If lblCurrentValue.Text = "Mystery 1" And WheelController.mysteryStatus = False Or lblCurrentValue.Text = "Mystery 2" And WheelController.mysteryStatus = False Then
                     If WheelController.letterControlList.Count > 0 Then
                         MysteryDialog.ShowDialog()
@@ -333,302 +359,280 @@
                     End If
                 End If
                 If lblCurrentValue.Text = "Express" Then
-                        ExpressDialog.ShowDialog()
-                    End If
-                    If WheelController.currentPlayer = 1 Then
-                        If isVowel = False And Not lblCurrentValue.Text = "Mystery 1" AndAlso isVowel = False And Not lblCurrentValue.Text = "Mystery 2" Then
-                            Dim currentPlayerValue = CInt(lblPlayer1.Text.Replace("$", ""))
-                            currentPlayerValue += WheelController.spinResult * WheelController.letterControlList.Count
-                            lblPlayer1.Text = FormatCurrency(currentPlayerValue, 0)
-                            If currentLetter = WheelController.sameLetter And WheelController.category = "SAME LETTER" Then
-                                Dim currentPlayer1Value = CInt(lblPlayer1.Text.Replace("$", ""))
-                                currentPlayer1Value += 1000
-                                lblPlayer1.Text = FormatCurrency(currentPlayer1Value, 0)
-                            End If
-                        Else
-                            CType(sender, Button).Enabled = False
-                        End If
-                    ElseIf WheelController.currentPlayer = 2 Then
-                        If isVowel = False And Not lblCurrentValue.Text = "Mystery 1" AndAlso isVowel = False And Not lblCurrentValue.Text = "Mystery 2" Then
-                            Dim currentPlayerValue = CInt(lblPlayer2.Text.Replace("$", ""))
-                            currentPlayerValue += WheelController.spinResult * WheelController.letterControlList.Count
-                            lblPlayer2.Text = FormatCurrency(currentPlayerValue, 0)
-                            If currentLetter = WheelController.sameLetter And WheelController.category = "SAME LETTER" Then
-                                Dim currentPlayer2Value = CInt(lblPlayer2.Text.Replace("$", ""))
-                                currentPlayer2Value += 1000
-                                lblPlayer2.Text = FormatCurrency(currentPlayer2Value, 0)
-                            End If
-                        Else
-                            CType(sender, Button).Enabled = False
-                        End If
-                    ElseIf WheelController.currentPlayer = 3 Then
-                        If isVowel = False And Not lblCurrentValue.Text = "Mystery 1" AndAlso isVowel = False And Not lblCurrentValue.Text = "Mystery 2" Then
-                            Dim currentPlayerValue = CInt(lblPlayer3.Text.Replace("$", ""))
-                            currentPlayerValue += WheelController.spinResult * WheelController.letterControlList.Count
-                            lblPlayer3.Text = FormatCurrency(currentPlayerValue, 0)
-                            If currentLetter = WheelController.sameLetter And WheelController.category = "SAME LETTER" Then
-                                Dim currentPlayer3Value = CInt(lblPlayer3.Text.Replace("$", ""))
-                                currentPlayer3Value += 1000
-                                lblPlayer3.Text = FormatCurrency(currentPlayer3Value, 0)
-                            End If
-                        Else
-                            CType(sender, Button).Enabled = False
-                        End If
-                    End If
-                    If WheelController.currentPlayer = 1 And WheelController.puzzle.Contains(CType(sender, Button).Text) Then
-                        If lblCurrentValue.Text = "1/2 Car" And WheelController.halfCar1Status = False Or lblCurrentValue.Text = "1/2 Car" And WheelController.halfCar2Status = False Then
-                            If halfcar1.Visible = False And halfcar2.Visible = False Or halfcar2.Visible = True Then
-                                player1.addCardsOrWedges(Player.Wedges.HalfCar1, True)
-                            WheelController.halfCar1Status = True
-                            WheelController.wheelWedges(7) = 500
-                            WheelController.wheelWedges(8) = 500
-                            WheelController.wheelWedges(9) = 500
-                            halfcar1.Show()
-                            lblCurrentValue.Text = 0
-                                WheelController.spinResult = 0
-                                isVowel = False
-                            ElseIf halfcar1.Visible = True And halfcar2.Visible = False Then
-                                player1.addCardsOrWedges(Player.Wedges.HalfCar2, True)
-                            WheelController.halfCar2Status = True
-                            WheelController.wheelWedges(37) = 500
-                            WheelController.wheelWedges(38) = 500
-                            WheelController.wheelWedges(39) = 500
-                            halfcar2.Show()
-                                lblCurrentValue.Text = 0
-                                WheelController.spinResult = 0
-                                isVowel = False
-                            End If
-                        End If
-                        If lblCurrentValue.Text = "Million" And WheelController.millionStatus = False Then
-                            player1.addCardsOrWedges(Player.Wedges.Million, True)
-                            WheelController.millionStatus = True
-                            Million.Show()
-                        End If
-                        If lblCurrentValue.Text = "Wild" And WheelController.wildCardStatus = False Then
-                            player1.addCardsOrWedges(Player.Wedges.Wild, True)
-                            frmPuzzleBoard.btnWild.Show()
-                            WheelController.wildCardStatus = True
-                            Wild.Show()
-                        End If
-                        If lblCurrentValue.Text = "Gift" And WheelController.giftStatus = False Then
-                            player1.addCardsOrWedges(Player.Wedges.Gift, True)
-                            WheelController.giftStatus = True
-                            Gift.Show()
-                        End If
-                        If lblCurrentValue.Text = "Prize" And WheelController.prizeStatus = False Then
-                            player1.addCardsOrWedges(Player.Wedges.Prize, True)
-                            WheelController.prizeStatus = True
-                            Prize.Show()
-                        End If
-                    ElseIf WheelController.currentPlayer = 2 And WheelController.puzzle.Contains(CType(sender, Button).Text) Then
-                        If lblCurrentValue.Text = "1/2 Car" And WheelController.halfCar1Status = False Or lblCurrentValue.Text = "1/2 Car" And WheelController.halfCar2Status = False Then
-                            If halfcar1.Visible = False And halfcar2.Visible = False Or halfcar2.Visible = True Then
-                                player2.addCardsOrWedges(Player.Wedges.HalfCar1, True)
-                            WheelController.halfCar1Status = True
-                            WheelController.wheelWedges(7) = 500
-                            WheelController.wheelWedges(8) = 500
-                            WheelController.wheelWedges(9) = 500
-                            halfcar1.Show()
-                                lblCurrentValue.Text = 0
-                                WheelController.spinResult = 0
-                                isVowel = False
-                            ElseIf halfcar1.Visible = True And halfcar2.Visible = False Then
-                                player2.addCardsOrWedges(Player.Wedges.HalfCar2, True)
-                            WheelController.halfCar2Status = True
-                            WheelController.wheelWedges(37) = 500
-                            WheelController.wheelWedges(38) = 500
-                            WheelController.wheelWedges(39) = 500
-                            halfcar2.Show()
-                                lblCurrentValue.Text = 0
-                                WheelController.spinResult = 0
-                                isVowel = False
-                            End If
-                        End If
-                        If lblCurrentValue.Text = "Million" And WheelController.millionStatus = False Then
-                            player2.addCardsOrWedges(Player.Wedges.Million, True)
-                            WheelController.millionStatus = True
-                            Million.Show()
-                        End If
-                        If lblCurrentValue.Text = "Wild" And WheelController.wildCardStatus = False Then
-                            player2.addCardsOrWedges(Player.Wedges.Wild, True)
-                            WheelController.wildCardStatus = True
-                            frmPuzzleBoard.btnWild.Show()
-                            Wild.Show()
-                        End If
-                        If lblCurrentValue.Text = "Gift" And WheelController.giftStatus = False Then
-                            player2.addCardsOrWedges(Player.Wedges.Gift, True)
-                            WheelController.giftStatus = True
-                            Gift.Show()
-                        End If
-                        If lblCurrentValue.Text = "Prize" And WheelController.prizeStatus = False Then
-                            player2.addCardsOrWedges(Player.Wedges.Prize, True)
-                            WheelController.prizeStatus = True
-                            Prize.Show()
-                        End If
-                    ElseIf WheelController.currentPlayer = 3 And WheelController.puzzle.Contains(CType(sender, Button).Text) Then
-                        If lblCurrentValue.Text = "1/2 Car" And WheelController.halfCar1Status = False Or lblCurrentValue.Text = "1/2 Car" And WheelController.halfCar2Status = False Then
-                            If halfcar1.Visible = False And halfcar2.Visible = False Or halfcar2.Visible = True Then
-                                player3.addCardsOrWedges(Player.Wedges.HalfCar1, True)
-                            WheelController.halfCar1Status = True
-                            WheelController.wheelWedges(7) = 500
-                            WheelController.wheelWedges(8) = 500
-                            WheelController.wheelWedges(9) = 500
-                            halfcar1.Show()
-                                lblCurrentValue.Text = 0
-                                WheelController.spinResult = 0
-                                isVowel = False
-                            ElseIf halfcar1.Visible = True And halfcar2.Visible = False Then
-                                player3.addCardsOrWedges(Player.Wedges.HalfCar2, True)
-                            WheelController.halfCar2Status = True
-                            WheelController.wheelWedges(37) = 500
-                            WheelController.wheelWedges(38) = 500
-                            WheelController.wheelWedges(39) = 500
-                            halfcar2.Show()
-                            lblCurrentValue.Text = 0
-                                WheelController.spinResult = 0
-                                isVowel = False
-                            End If
-                        End If
-                        If lblCurrentValue.Text = "Million" And WheelController.millionStatus = False Then
-                            player3.addCardsOrWedges(Player.Wedges.Million, True)
-                            WheelController.millionStatus = True
-                            Million.Show()
-                        End If
-                        If lblCurrentValue.Text = "Wild" And WheelController.wildCardStatus = False Then
-                            player3.addCardsOrWedges(Player.Wedges.Wild, True)
-                            WheelController.wildCardStatus = True
-                            frmPuzzleBoard.btnWild.Show()
-                            Wild.Show()
-                        End If
-                        If lblCurrentValue.Text = "Gift" And WheelController.giftStatus = False Then
-                            player3.addCardsOrWedges(Player.Wedges.Gift, True)
-                            WheelController.giftStatus = True
-                            Gift.Show()
-                        End If
-                        If lblCurrentValue.Text = "Prize" And WheelController.prizeStatus = False Then
-                            player3.addCardsOrWedges(Player.Wedges.Prize, True)
-                            WheelController.prizeStatus = True
-                            Prize.Show()
-                        End If
-                    End If
-                    If Not WheelController.puzzle.Contains(currentLetter) Then
-                        If lblCurrentValue.Text <> "Free Play" Then
-                            WheelController.LoseATurn()
-                            usedLetterBoard.Enabled = True
-                        Else
-                        End If
-                        If WheelController.expressStatus = False Or WheelController.finalSpin = False Then
-                            My.Computer.Audio.Play(My.Resources.Buzzer, AudioPlayMode.Background)
-                            WheelController.spinResult = 0
-                            CType(sender, Button).Enabled = False
-                        ElseIf WheelController.expressStatus = True Then
-                            WheelController.spinResult = 0
-                            WheelController.bankrupt()
-                            CType(sender, Button).Enabled = False
-                            frmPuzzleBoard.logoExpress.Hide()
-                            frmPuzzleBoard.wheelTilt.Enabled = True
-                            WheelController.expressStatus = False
-                        ElseIf WheelController.finalSpin = True Then
-                            My.Computer.Audio.Play(My.Resources.Buzzer, AudioPlayMode.Background)
-                            CType(sender, Button).Enabled = False
-                        End If
-                    End If
-                    CType(sender, Button).Enabled = False
-                Else
-                    frmPuzzleBoard.lblChosenLetters.Text &= " " & CType(sender, Button).Text
-                    If WheelController.selectedBonusLetters.Count <= 4 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = False OrElse WheelController.selectedBonusLetters.Count <= 5 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = True Then
-                        WheelController.selectedBonusLetters.Add(CType(sender, Button).Text)
-                        CType(sender, Button).Enabled = False
-                    ElseIf WheelController.selectedBonusLetters.Count = 4 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = False OrElse WheelController.selectedBonusLetters.Count = 5 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = True Then
-                        CType(sender, Button).Enabled = False
-                        btnBonusTimerStart.Show()
-                    Else
-                    End If
+                    ExpressDialog.ShowDialog()
                 End If
                 If WheelController.currentPlayer = 1 Then
-                    If CInt(lblPlayer1.Text.Replace("$", "")) >= 250 Or WheelController.finalSpinSpun = True Then
-                        enableVowels(True)
+                    If isVowel = False And Not lblCurrentValue.Text = "Mystery 1" AndAlso isVowel = False And Not lblCurrentValue.Text = "Mystery 2" Then
+                        Dim currentPlayerValue = CInt(lblPlayer1.Text.Replace("$", ""))
+                        currentPlayerValue += WheelController.spinResult * WheelController.letterControlList.Count
+                        lblPlayer1.Text = FormatCurrency(currentPlayerValue, 0)
+                        If currentLetter = WheelController.sameLetter And WheelController.category = "SAME LETTER" Then
+                            Dim currentPlayer1Value = CInt(lblPlayer1.Text.Replace("$", ""))
+                            currentPlayer1Value += 1000
+                            lblPlayer1.Text = FormatCurrency(currentPlayer1Value, 0)
+                        End If
                     Else
-                        enableVowels(False)
+                        CType(sender, Button).Enabled = False
                     End If
                 ElseIf WheelController.currentPlayer = 2 Then
-                    If CInt(lblPlayer2.Text.Replace("$", "")) >= 250 Or WheelController.finalSpinSpun = True Then
-                        enableVowels(True)
+                    If isVowel = False And Not lblCurrentValue.Text = "Mystery 1" AndAlso isVowel = False And Not lblCurrentValue.Text = "Mystery 2" Then
+                        Dim currentPlayerValue = CInt(lblPlayer2.Text.Replace("$", ""))
+                        currentPlayerValue += WheelController.spinResult * WheelController.letterControlList.Count
+                        lblPlayer2.Text = FormatCurrency(currentPlayerValue, 0)
+                        If currentLetter = WheelController.sameLetter And WheelController.category = "SAME LETTER" Then
+                            Dim currentPlayer2Value = CInt(lblPlayer2.Text.Replace("$", ""))
+                            currentPlayer2Value += 1000
+                            lblPlayer2.Text = FormatCurrency(currentPlayer2Value, 0)
+                        End If
                     Else
-                        enableVowels(False)
+                        CType(sender, Button).Enabled = False
                     End If
                 ElseIf WheelController.currentPlayer = 3 Then
-                    If CInt(lblPlayer3.Text.Replace("$", "")) >= 250 Or WheelController.finalSpinSpun = True Then
-                        enableVowels(True)
+                    If isVowel = False And Not lblCurrentValue.Text = "Mystery 1" AndAlso isVowel = False And Not lblCurrentValue.Text = "Mystery 2" Then
+                        Dim currentPlayerValue = CInt(lblPlayer3.Text.Replace("$", ""))
+                        currentPlayerValue += WheelController.spinResult * WheelController.letterControlList.Count
+                        lblPlayer3.Text = FormatCurrency(currentPlayerValue, 0)
+                        If currentLetter = WheelController.sameLetter And WheelController.category = "SAME LETTER" Then
+                            Dim currentPlayer3Value = CInt(lblPlayer3.Text.Replace("$", ""))
+                            currentPlayer3Value += 1000
+                            lblPlayer3.Text = FormatCurrency(currentPlayer3Value, 0)
+                        End If
                     Else
-                        enableVowels(False)
+                        CType(sender, Button).Enabled = False
                     End If
                 End If
-                Dim letterSelected = CType(sender, Button).Text
-                puzzleString = puzzleString.Replace(letterSelected, "")
-                If WheelController.wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkWheel.Value) = "1/2 Car" Then
-                    If frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 7 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 8 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 9 Then
-                        If WheelController.halfCar1Status = True Then
-                            WheelController.wheelWedges(7) = "500"
-                            WheelController.wheelWedges(8) = "500"
-                            WheelController.wheelWedges(9) = "500"
-                        Else
-                        End If
-                    ElseIf frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 37 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 38 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 39 Then
-                        If WheelController.halfCar2Status = True Then
-                            WheelController.wheelWedges(37) = "500"
-                            WheelController.wheelWedges(38) = "500"
-                            WheelController.wheelWedges(39) = "500"
-                        Else
-                        End If
-                    End If
-                ElseIf WheelController.wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkWheel.Value) = "Gift" Then
-                    If frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 52 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 53 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 54 Then
-                        If WheelController.giftStatus = True Then
-                            WheelController.wheelWedges(52) = "500"
-                            WheelController.wheelWedges(53) = "500"
-                            WheelController.wheelWedges(54) = "500"
-                        Else
+                If WheelController.currentPlayer = 1 And WheelController.puzzle.Contains(CType(sender, Button).Text) Then
+                    If lblCurrentValue.Text = "1/2 Car" And WheelController.halfCar1Status = False Or lblCurrentValue.Text = "1/2 Car" And WheelController.halfCar2Status = False Then
+                        If halfcar1.Visible = False And halfcar2.Visible = False Or halfcar2.Visible = True Then
+                            player1.addCardsOrWedges(Player.Wedges.HalfCar1, True)
+                            WheelController.halfCar1Status = True
+                            WheelController.wheelWedges(7) = 500
+                            WheelController.wheelWedges(8) = 500
+                            WheelController.wheelWedges(9) = 500
+                            halfcar1.Show()
+                            lblCurrentValue.Text = 0
+                            WheelController.spinResult = 0
+                            isVowel = False
+                        ElseIf halfcar1.Visible = True And halfcar2.Visible = False Then
+                            player1.addCardsOrWedges(Player.Wedges.HalfCar2, True)
+                            WheelController.halfCar2Status = True
+                            WheelController.wheelWedges(37) = 500
+                            WheelController.wheelWedges(38) = 500
+                            WheelController.wheelWedges(39) = 500
+                            halfcar2.Show()
+                            lblCurrentValue.Text = 0
+                            WheelController.spinResult = 0
+                            isVowel = False
                         End If
                     End If
-                ElseIf WheelController.wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkWheel.Value) = "Prize" Then
-                    If frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 13 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 14 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 15 Then
-                        If WheelController.prizeStatus = True Then
-                            WheelController.wheelWedges(13) = "500"
-                            WheelController.wheelWedges(14) = "500"
-                            WheelController.wheelWedges(15) = "500"
-                        Else
+                    If lblCurrentValue.Text = "Million" And WheelController.millionStatus = False Then
+                        player1.addCardsOrWedges(Player.Wedges.Million, True)
+                        WheelController.millionStatus = True
+                        Million.Show()
+                    End If
+                    If lblCurrentValue.Text = "Wild" And WheelController.wildCardStatus = False Then
+                        player1.addCardsOrWedges(Player.Wedges.Wild, True)
+                        frmPuzzleBoard.btnWild.Show()
+                        WheelController.wildCardStatus = True
+                        Wild.Show()
+                    End If
+                    If lblCurrentValue.Text = "Gift" And WheelController.giftStatus = False Then
+                        player1.addCardsOrWedges(Player.Wedges.Gift, True)
+                        WheelController.giftStatus = True
+                        Gift.Show()
+                    End If
+                    If lblCurrentValue.Text = "Prize" And WheelController.prizeStatus = False Then
+                        player1.addCardsOrWedges(Player.Wedges.Prize, True)
+                        WheelController.prizeStatus = True
+                        Prize.Show()
+                    End If
+                ElseIf WheelController.currentPlayer = 2 And WheelController.puzzle.Contains(CType(sender, Button).Text) Then
+                    If lblCurrentValue.Text = "1/2 Car" And WheelController.halfCar1Status = False Or lblCurrentValue.Text = "1/2 Car" And WheelController.halfCar2Status = False Then
+                        If halfcar1.Visible = False And halfcar2.Visible = False Or halfcar2.Visible = True Then
+                            player2.addCardsOrWedges(Player.Wedges.HalfCar1, True)
+                            WheelController.halfCar1Status = True
+                            WheelController.wheelWedges(7) = 500
+                            WheelController.wheelWedges(8) = 500
+                            WheelController.wheelWedges(9) = 500
+                            halfcar1.Show()
+                            lblCurrentValue.Text = 0
+                            WheelController.spinResult = 0
+                            isVowel = False
+                        ElseIf halfcar1.Visible = True And halfcar2.Visible = False Then
+                            player2.addCardsOrWedges(Player.Wedges.HalfCar2, True)
+                            WheelController.halfCar2Status = True
+                            WheelController.wheelWedges(37) = 500
+                            WheelController.wheelWedges(38) = 500
+                            WheelController.wheelWedges(39) = 500
+                            halfcar2.Show()
+                            lblCurrentValue.Text = 0
+                            WheelController.spinResult = 0
+                            isVowel = False
                         End If
                     End If
-                ElseIf WheelController.wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkWheel.Value) = "Million" Then
-                    If frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 47 Then
-                        If WheelController.millionStatus = True Then
-                            WheelController.wheelWedges(46) = "500"
-                            WheelController.wheelWedges(47) = "500"
-                            WheelController.wheelWedges(48) = "500"
-                        Else
-                        End If
-
+                    If lblCurrentValue.Text = "Million" And WheelController.millionStatus = False Then
+                        player2.addCardsOrWedges(Player.Wedges.Million, True)
+                        WheelController.millionStatus = True
+                        Million.Show()
                     End If
-                ElseIf WheelController.wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkWheel.Value) = "Wild" Then
-                    If frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 67 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 68 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 69 Then
-                        If WheelController.wildCardStatus = True Then
-                            WheelController.wheelWedges(67) = "500"
-                            WheelController.wheelWedges(68) = "500"
-                            WheelController.wheelWedges(69) = "500"
-                        Else
+                    If lblCurrentValue.Text = "Wild" And WheelController.wildCardStatus = False Then
+                        player2.addCardsOrWedges(Player.Wedges.Wild, True)
+                        WheelController.wildCardStatus = True
+                        frmPuzzleBoard.btnWild.Show()
+                        Wild.Show()
+                    End If
+                    If lblCurrentValue.Text = "Gift" And WheelController.giftStatus = False Then
+                        player2.addCardsOrWedges(Player.Wedges.Gift, True)
+                        WheelController.giftStatus = True
+                        Gift.Show()
+                    End If
+                    If lblCurrentValue.Text = "Prize" And WheelController.prizeStatus = False Then
+                        player2.addCardsOrWedges(Player.Wedges.Prize, True)
+                        WheelController.prizeStatus = True
+                        Prize.Show()
+                    End If
+                ElseIf WheelController.currentPlayer = 3 And WheelController.puzzle.Contains(CType(sender, Button).Text) Then
+                    If lblCurrentValue.Text = "1/2 Car" And WheelController.halfCar1Status = False Or lblCurrentValue.Text = "1/2 Car" And WheelController.halfCar2Status = False Then
+                        If halfcar1.Visible = False And halfcar2.Visible = False Or halfcar2.Visible = True Then
+                            player3.addCardsOrWedges(Player.Wedges.HalfCar1, True)
+                            WheelController.halfCar1Status = True
+                            WheelController.wheelWedges(7) = 500
+                            WheelController.wheelWedges(8) = 500
+                            WheelController.wheelWedges(9) = 500
+                            halfcar1.Show()
+                            lblCurrentValue.Text = 0
+                            WheelController.spinResult = 0
+                            isVowel = False
+                        ElseIf halfcar1.Visible = True And halfcar2.Visible = False Then
+                            player3.addCardsOrWedges(Player.Wedges.HalfCar2, True)
+                            WheelController.halfCar2Status = True
+                            WheelController.wheelWedges(37) = 500
+                            WheelController.wheelWedges(38) = 500
+                            WheelController.wheelWedges(39) = 500
+                            halfcar2.Show()
+                            lblCurrentValue.Text = 0
+                            WheelController.spinResult = 0
+                            isVowel = False
                         End If
+                    End If
+                    If lblCurrentValue.Text = "Million" And WheelController.millionStatus = False Then
+                        player3.addCardsOrWedges(Player.Wedges.Million, True)
+                        WheelController.millionStatus = True
+                        Million.Show()
+                    End If
+                    If lblCurrentValue.Text = "Wild" And WheelController.wildCardStatus = False Then
+                        player3.addCardsOrWedges(Player.Wedges.Wild, True)
+                        WheelController.wildCardStatus = True
+                        frmPuzzleBoard.btnWild.Show()
+                        Wild.Show()
+                    End If
+                    If lblCurrentValue.Text = "Gift" And WheelController.giftStatus = False Then
+                        player3.addCardsOrWedges(Player.Wedges.Gift, True)
+                        WheelController.giftStatus = True
+                        Gift.Show()
+                    End If
+                    If lblCurrentValue.Text = "Prize" And WheelController.prizeStatus = False Then
+                        player3.addCardsOrWedges(Player.Wedges.Prize, True)
+                        WheelController.prizeStatus = True
+                        Prize.Show()
                     End If
                 End If
-                If WheelController.finalSpin = True Then
-                    WheelController.previousValue = "Lose A Turn"
-                End If
-                If WheelController.finalSpin = False Or WheelController.expressStatus = False Then
-                    lblCurrentValue.Text = 0
+                CType(sender, Button).Enabled = False
+            Else
+                frmPuzzleBoard.lblChosenLetters.Text &= " " & CType(sender, Button).Text
+                If WheelController.selectedBonusLetters.Count <= 4 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = False OrElse WheelController.selectedBonusLetters.Count <= 5 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = True Then
+                    WheelController.selectedBonusLetters.Add(CType(sender, Button).Text)
+                    CType(sender, Button).Enabled = False
+                ElseIf WheelController.selectedBonusLetters.Count = 4 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = False OrElse WheelController.selectedBonusLetters.Count = 5 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = True Then
+                    CType(sender, Button).Enabled = False
+                    btnBonusTimerStart.Show()
                 Else
                 End If
-                isVowel = False
             End If
+            If WheelController.currentPlayer = 1 Then
+                If CInt(lblPlayer1.Text.Replace("$", "")) >= 250 Or WheelController.finalSpinSpun = True Then
+                    enableVowels(True)
+                Else
+                    enableVowels(False)
+                End If
+            ElseIf WheelController.currentPlayer = 2 Then
+                If CInt(lblPlayer2.Text.Replace("$", "")) >= 250 Or WheelController.finalSpinSpun = True Then
+                    enableVowels(True)
+                Else
+                    enableVowels(False)
+                End If
+            ElseIf WheelController.currentPlayer = 3 Then
+                If CInt(lblPlayer3.Text.Replace("$", "")) >= 250 Or WheelController.finalSpinSpun = True Then
+                    enableVowels(True)
+                Else
+                    enableVowels(False)
+                End If
+            End If
+            Dim letterSelected = CType(sender, Button).Text
+            puzzleString = puzzleString.Replace(letterSelected, "")
+            If WheelController.wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkWheel.Value) = "1/2 Car" Then
+                If frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 7 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 8 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 9 Then
+                    If WheelController.halfCar1Status = True Then
+                        WheelController.wheelWedges(7) = "500"
+                        WheelController.wheelWedges(8) = "500"
+                        WheelController.wheelWedges(9) = "500"
+                    Else
+                    End If
+                ElseIf frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 37 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 38 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 39 Then
+                    If WheelController.halfCar2Status = True Then
+                        WheelController.wheelWedges(37) = "500"
+                        WheelController.wheelWedges(38) = "500"
+                        WheelController.wheelWedges(39) = "500"
+                    Else
+                    End If
+                End If
+            ElseIf WheelController.wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkWheel.Value) = "Gift" Then
+                If frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 52 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 53 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 54 Then
+                    If WheelController.giftStatus = True Then
+                        WheelController.wheelWedges(52) = "500"
+                        WheelController.wheelWedges(53) = "500"
+                        WheelController.wheelWedges(54) = "500"
+                    Else
+                    End If
+                End If
+            ElseIf WheelController.wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkWheel.Value) = "Prize" Then
+                If frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 13 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 14 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 15 Then
+                    If WheelController.prizeStatus = True Then
+                        WheelController.wheelWedges(13) = "500"
+                        WheelController.wheelWedges(14) = "500"
+                        WheelController.wheelWedges(15) = "500"
+                    Else
+                    End If
+                End If
+            ElseIf WheelController.wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkWheel.Value) = "Million" Then
+                If frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 47 Then
+                    If WheelController.millionStatus = True Then
+                        WheelController.wheelWedges(46) = "500"
+                        WheelController.wheelWedges(47) = "500"
+                        WheelController.wheelWedges(48) = "500"
+                    Else
+                    End If
+
+                End If
+            ElseIf WheelController.wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkWheel.Value) = "Wild" Then
+                If frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 67 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 68 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 69 Then
+                    If WheelController.wildCardStatus = True Then
+                        WheelController.wheelWedges(67) = "500"
+                        WheelController.wheelWedges(68) = "500"
+                        WheelController.wheelWedges(69) = "500"
+                    Else
+                    End If
+                End If
+            End If
+            If WheelController.finalSpin = True Then
+                WheelController.previousValue = "Lose A Turn"
+            End If
+            If WheelController.finalSpin = False Or WheelController.expressStatus = False Then
+                lblCurrentValue.Text = 0
+            Else
+            End If
+            isVowel = False
+        End If
     End Sub
     Public Sub enableConsonants(value As Boolean)
         If value = False Then
