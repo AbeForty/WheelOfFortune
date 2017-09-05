@@ -118,6 +118,7 @@ Partial Class frmPuzzleBoard
         Me.WheelSpinControl1 = New WheelOfFortune.WheelSpinControl()
         Me.tmrCheckTurns = New System.Windows.Forms.Timer(Me.components)
         Me.logoCrossword = New System.Windows.Forms.PictureBox()
+        Me.pboxWild = New System.Windows.Forms.PictureBox()
         Me.pnlCategory.SuspendLayout()
         CType(Me.bkgCategory, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.wheelMenu.SuspendLayout()
@@ -127,6 +128,7 @@ Partial Class frmPuzzleBoard
         CType(Me.wheelTilt, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pboxTossUp, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.logoCrossword, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pboxWild, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pnlCategory
@@ -988,6 +990,18 @@ Partial Class frmPuzzleBoard
         Me.logoCrossword.TabStop = False
         Me.logoCrossword.Visible = False
         '
+        'pboxWild
+        '
+        Me.pboxWild.BackColor = System.Drawing.Color.Transparent
+        Me.pboxWild.Image = Global.WheelOfFortune.My.Resources.Resources.Wild_Card
+        Me.pboxWild.Location = New System.Drawing.Point(1443, 664)
+        Me.pboxWild.Name = "pboxWild"
+        Me.pboxWild.Size = New System.Drawing.Size(55, 65)
+        Me.pboxWild.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pboxWild.TabIndex = 207
+        Me.pboxWild.TabStop = False
+        Me.pboxWild.Visible = False
+        '
         'frmPuzzleBoard
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
@@ -995,6 +1009,7 @@ Partial Class frmPuzzleBoard
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(1902, 1092)
+        Me.Controls.Add(Me.pboxWild)
         Me.Controls.Add(Me.pboxTossUp)
         Me.Controls.Add(Me.WheelSpinControl1)
         Me.Controls.Add(Me.ListBox4)
@@ -1089,6 +1104,7 @@ Partial Class frmPuzzleBoard
         CType(Me.wheelTilt, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pboxTossUp, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.logoCrossword, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pboxWild, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1191,6 +1207,7 @@ Partial Class frmPuzzleBoard
     Friend WithEvents WheelSpinControl1 As WheelSpinControl
     Friend WithEvents tmrCheckTurns As Timer
     Friend WithEvents logoCrossword As PictureBox
+    Friend WithEvents pboxWild As PictureBox
     'Friend WithEvents PuzzleBoardLetter53 As PuzzleBoardLetter
     'Friend WithEvents PuzzleBoardLetter54 As PuzzleBoardLetter
     'Friend WithEvents PuzzleBoardLetter55 As PuzzleBoardLetter

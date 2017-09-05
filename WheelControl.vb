@@ -24,7 +24,6 @@ Public Class WheelSpinControl
         '    wmpWheel.Ctlcontrols.currentPosition = trkWheel.Value
         'Else
         wmpWheel.Ctlcontrols.currentPosition = trkWheel.Value
-        lblWMPTime.Text = trkWheel.Value
         'End If
         If trkWheel.Value = trkWheel.Maximum Then
             trkWheel.Value = 0
@@ -129,8 +128,9 @@ Public Class WheelSpinControl
                         WheelController.spinResult = 25000
                         spinResult = 25000
                     End If
-                    frmScore.lblCurrentValue.Text = spinResult
-                    tmrSpinTest.Stop()
+                frmScore.lblCurrentValue.Text = spinResult
+                frmScore.disableRSTLNE()
+                tmrSpinTest.Stop()
                 End If
                 frmPuzzleBoard.wheelTilt.Enabled = False
             End If
@@ -143,7 +143,7 @@ Public Class WheelSpinControl
         If frmPuzzleBoard.round <> WheelController.PuzzleType.BR Then
             spinStrength = pbarWheel.Value * 4
         Else
-            spinStrength = pbarWheel.Value * 2
+            spinStrength = pbarWheel.Value * 1.5
         End If
         spinWheel(spinStrength)
         tmrSpinner.Stop()

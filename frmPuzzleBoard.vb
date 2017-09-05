@@ -521,6 +521,7 @@
             btnYellowRingIn.Enabled = True
             btnBlueRingIn.Enabled = True
             wheelTilt.Enabled = False
+            btnWild.Hide()
             frmScore.usedLetterBoard.Enabled = False
             WheelController.tossUpLetterControlList.Clear()
             tmrTossUpRingIn.Stop()
@@ -739,7 +740,7 @@
     End Sub
 
     Private Sub tmrCheckFinalSpin_Tick(sender As Object, e As EventArgs) Handles tmrCheckFinalSpin.Tick
-        If DateTime.Now.Minute = WheelController.convertTime(WheelController.startTime + 19) And round <> WheelController.PuzzleType.TU1 And round <> WheelController.PuzzleType.TU2 And round <> WheelController.PuzzleType.TU3 Then
+        If DateTime.Now.Minute = WheelController.convertTime(WheelController.startTime + 14) And round <> WheelController.PuzzleType.TU1 And round <> WheelController.PuzzleType.TU2 And round <> WheelController.PuzzleType.TU3 And round <> WheelController.PuzzleType.R1 And round <> WheelController.PuzzleType.R2 And round <> WheelController.PuzzleType.R3 Then
             If puzzleSolved = False And frmScore.turnTaken = False Then
                 frmFinalSpin.Show()
                 WheelController.previousValue = ""

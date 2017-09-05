@@ -20,6 +20,7 @@ Public MustInherit Class WheelController
     Public Shared giftStatus As Boolean = False
     Public Shared halfCar1Status As Boolean = False
     Public Shared halfCar2Status As Boolean = False
+    Public Shared carAwarded As Boolean = False
     Public Shared mysteryStatus As Boolean = False
     Public Shared expressStatus As Boolean = False
     Public Shared mystery2value As Boolean
@@ -858,7 +859,7 @@ Public MustInherit Class WheelController
     End Function
 #End Region
 #Region "Load Wedges onto the Wheel"
-    Private Shared bonusWheel As New List(Of String) From {"34000", "34000", "34000", "34000", "34000", "34000", "34000", "34000", "34000", "34000", "34000", "34000", "34000", "34000", "40000", "45000", "50000", "100000", "Car", "Car", "Car", "Car", "Car", "Car"}
+    Private Shared bonusWheel As New List(Of String) From {"34000", "34000", "Car", "34000", "34000", "45000", "34000", "Car", "34000", "34000", "Car", "34000", "34000", "40000", "34000", "Car", "34000", "34000", "34000", "100000", "34000", "Car", "50000", "Car"}
     Public Shared Sub wheelLoad(round As PuzzleType)
         halfCar1Status = False
         halfCar2Status = False
@@ -955,7 +956,7 @@ Public MustInherit Class WheelController
             wheelWedges.Add(4, "900")
             wheelWedges.Add(5, "900")
             wheelWedges.Add(6, "900")
-            If halfCar1Status = True And halfCar2Status = True Then
+            If carAwarded = True Then
                 wheelWedges.Add(7, "500")
                 wheelWedges.Add(8, "500")
                 wheelWedges.Add(9, "500")
@@ -997,7 +998,7 @@ Public MustInherit Class WheelController
             wheelWedges.Add(34, "900")
             wheelWedges.Add(35, "900")
             wheelWedges.Add(36, "900")
-            If halfCar1Status = True And halfCar2Status = True Then
+            If carAwarded = True Then
                 wheelWedges.Add(37, "1/2 Car")
                 wheelWedges.Add(38, "1/2 Car")
                 wheelWedges.Add(39, "1/2 Car")
@@ -1065,7 +1066,7 @@ Public MustInherit Class WheelController
             wheelWedges.Add(4, "900")
             wheelWedges.Add(5, "900")
             wheelWedges.Add(6, "900")
-            If halfCar1Status = True And halfCar2Status = True Then
+            If carAwarded = True Then
                 wheelWedges.Add(7, "500")
                 wheelWedges.Add(8, "500")
                 wheelWedges.Add(9, "500")
@@ -1101,7 +1102,7 @@ Public MustInherit Class WheelController
             wheelWedges.Add(34, "900")
             wheelWedges.Add(35, "900")
             wheelWedges.Add(36, "900")
-            If halfCar1Status = True And halfCar2Status = True Then
+            If carAwarded = True Then
                 wheelWedges.Add(37, "1/2 Car")
                 wheelWedges.Add(38, "1/2 Car")
                 wheelWedges.Add(39, "1/2 Car")

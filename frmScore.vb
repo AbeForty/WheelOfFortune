@@ -110,6 +110,42 @@
             btnU.Enabled = False
         End If
     End Sub
+    Public Sub showUsedLettersInBonus()
+        btnB.Enabled = True
+        btnC.Enabled = True
+        btnD.Enabled = True
+        btnE.Enabled = True
+        btnF.Enabled = True
+        btnG.Enabled = True
+        btnH.Enabled = True
+        btnJ.Enabled = True
+        btnK.Enabled = True
+        btnM.Enabled = True
+        btnP.Enabled = True
+        btnQ.Enabled = True
+        btnV.Enabled = True
+        btnW.Enabled = True
+        btnX.Enabled = True
+        btnY.Enabled = True
+        btnZ.Enabled = True
+        disableRSTLNE()
+        For Each letter As String In WheelController.selectedBonusLetters
+            usedLetterBoard.Controls("btn" + letter).Enabled = False
+        Next
+        If WheelController.selectedBonusLetters.Count = 4 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = True Then
+
+        Else
+            enableVowels(True)
+        End If
+    End Sub
+    Public Sub disableRSTLNE()
+        btnR.Enabled = False
+        btnS.Enabled = False
+        btnT.Enabled = False
+        btnL.Enabled = False
+        btnN.Enabled = False
+        btnE.Enabled = False
+    End Sub
     Public Sub resetPuzzle()
         noMoreVowelsShown = False
         noMoreConsonantsShown = False
@@ -155,6 +191,7 @@
                 player1.total += 24000
                 WheelController.halfCar1Status = True
                 WheelController.halfCar2Status = True
+                WheelController.carAwarded = True
             End If
             'If prizePuzzleStatus = True Then
             '    player1.total += 10000
@@ -182,6 +219,7 @@
                 player2.total += 24000
                 WheelController.halfCar1Status = True
                 WheelController.halfCar2Status = True
+                WheelController.carAwarded = True
             End If
             'If prizePuzzleStatus = True Then
             '    player2.total += 10000
@@ -209,6 +247,7 @@
                 player3.total += 24000
                 WheelController.halfCar1Status = True
                 WheelController.halfCar2Status = True
+                WheelController.carAwarded = True
             End If
             'If prizePuzzleStatus = True Then
             '    player3.total += 10000
@@ -679,6 +718,11 @@
             btnX.Enabled = True
             btnY.Enabled = True
             btnZ.Enabled = True
+            If frmPuzzleBoard.round <> WheelController.PuzzleType.BR Then
+
+            Else
+                disableRSTLNE()
+            End If
         End If
     End Sub
     Private Function GetConsonants(ByVal input As String) As Integer
@@ -719,7 +763,11 @@
             End If
             If player1.getWedges(Player.Wedges.Wild) = True Then
                 Wild.Show()
-                frmPuzzleBoard.btnWild.Show()
+                If frmPuzzleBoard.round <> WheelController.PuzzleType.BR Then
+                    frmPuzzleBoard.btnWild.Show()
+                Else
+                    frmPuzzleBoard.btnWild.Hide()
+                End If
             ElseIf player1.getWedges(Player.Wedges.Wild) = False Then
                 Wild.Hide()
                 frmPuzzleBoard.btnWild.Hide()
@@ -769,9 +817,13 @@
             End If
             If player2.getWedges(Player.Wedges.Wild) = True Then
                 Wild.Show()
-                frmPuzzleBoard.btnWild.Show()
+                If frmPuzzleBoard.round <> WheelController.PuzzleType.BR Then
+                    frmPuzzleBoard.btnWild.Show()
+                Else
+                    frmPuzzleBoard.btnWild.Hide()
+                End If
             ElseIf player2.getWedges(Player.Wedges.Wild) = False Then
-                Wild.Hide()
+                    Wild.Hide()
                 frmPuzzleBoard.btnWild.Hide()
             End If
             If player2.getWedges(Player.Wedges.Gift) = True Then
@@ -819,7 +871,11 @@
             End If
             If player3.getWedges(Player.Wedges.Wild) = True Then
                 Wild.Show()
-                frmPuzzleBoard.btnWild.Show()
+                If frmPuzzleBoard.round <> WheelController.PuzzleType.BR Then
+                    frmPuzzleBoard.btnWild.Show()
+                Else
+                    frmPuzzleBoard.btnWild.Hide()
+                End If
             ElseIf player3.getWedges(Player.Wedges.Wild) = False Then
                 Wild.Hide()
                 frmPuzzleBoard.btnWild.Hide()
@@ -851,13 +907,18 @@
             If WheelController.selectedBonusLetters.Count = 3 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = False Then
                 enableBonusVowels(True)
             ElseIf WheelController.selectedBonusLetters.Count = 3 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = True Then
-                enableBonusVowels(False)
-            ElseIf WheelController.selectedBonusLetters.Count = 4 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = True Then
                 enableBonusVowels(True)
+            ElseIf WheelController.selectedBonusLetters.Count = 4 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = True Then
+                frmPuzzleBoard.pboxWild.Show()
+                showUsedLettersInBonus()
+                enableBonusVowels(False)
             ElseIf WheelController.selectedBonusLetters.Count < 3 Then
                 enableBonusVowels(False)
             ElseIf WheelController.selectedBonusLetters.Count = 4 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = False Or WheelController.selectedBonusLetters.Count = 5 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = True Then
                 WheelController.loadBonusLetters()
+                showUsedLettersInBonus()
+                frmPuzzleBoard.pboxWild.Hide()
+                WheelController.previousValue = "Lose A Turn"
                 btnBonusTimerStart.Show()
                 WheelController.selectedBonusLetters.Clear()
                 enableBonusVowels(False)
