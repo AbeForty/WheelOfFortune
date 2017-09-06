@@ -516,7 +516,7 @@ Public MustInherit Class WheelController
 #End Region
 #Region "Load RSTLNE in Puzzle"
     Public Shared Sub loadRSTLNE()
-        For Each letterControl As Control In frmPuzzleBoard.Controls
+        For Each letterControl As Control In frmPuzzleBoard.PuzzleBoard1.Controls
             If letterControl.GetType() Is GetType(PuzzleBoardLetter) Then
                 If CType(letterControl, PuzzleBoardLetter).letterBehind = "R" Or CType(letterControl, PuzzleBoardLetter).letterBehind = "S" Or CType(letterControl, PuzzleBoardLetter).letterBehind = "T" Or CType(letterControl, PuzzleBoardLetter).letterBehind = "L" Or CType(letterControl, PuzzleBoardLetter).letterBehind = "N" Or CType(letterControl, PuzzleBoardLetter).letterBehind = "E" Then
                     letterControlList.Add(letterControl.Name.Replace("PuzzleBoardLetter", ""))
@@ -537,7 +537,7 @@ Public MustInherit Class WheelController
 #End Region
 #Region "Load Letters in Bonus Round"
     Public Shared Sub loadBonusLetters()
-        For Each letterControl As Control In frmPuzzleBoard.Controls
+        For Each letterControl As Control In frmPuzzleBoard.PuzzleBoard1.Controls
             If letterControl.GetType() Is GetType(PuzzleBoardLetter) Then
                 'If selectedBonusLetters.Contains(CType(letterControl, PuzzleBoardLetter).letterBehind) Then
                 For Each letter As String In selectedBonusLetters
