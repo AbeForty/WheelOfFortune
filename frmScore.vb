@@ -358,7 +358,7 @@
                     End If
                 End If
                 If WheelController.puzzle.Contains(currentLetter) Then
-                    For Each letterControl As Control In frmPuzzleBoard.Controls
+                    For Each letterControl As Control In frmPuzzleBoard.PuzzleBoard1.Controls
                         If letterControl.GetType() Is GetType(PuzzleBoardLetter) Then
                             If CType(letterControl, PuzzleBoardLetter).letterBehind = currentLetter Then
                                 WheelController.letterControlList.Add(letterControl.Name.Replace("PuzzleBoardLetter", ""))
@@ -965,7 +965,7 @@
                 Dim randomNumber = WheelController.GetRandomRegular()
                 CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & WheelController.letterControlList(randomNumber)), PuzzleBoardLetter).displayBlueBKG()
                 CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & WheelController.letterControlList(randomNumber)), PuzzleBoardLetter).playDing()
-                frmPuzzleBoard.ListBox4.Items.Add(randomNumber & CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & WheelController.letterControlList(randomNumber)), PuzzleBoardLetter).letterBehind)
+                frmPuzzleBoard.ListBox4.Items.Add(randomNumber & CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & WheelController.letterControlList(randomNumber)), PuzzleBoardLetter).letterBehind)
                 WheelController.letterControlList.Remove(WheelController.letterControlList(randomNumber))
                 timeStart = DateTime.Now.Second
             End If
@@ -994,7 +994,7 @@
             If DateTime.Now.Second = WheelController.convertTime(timeStart) Then
                 Dim randomNumber = WheelController.GetRandomRegular()
                 CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & WheelController.letterControlList(randomNumber)), PuzzleBoardLetter).revealLetter()
-                frmPuzzleBoard.ListBox4.Items.Add(randomNumber & CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & WheelController.letterControlList(randomNumber)), PuzzleBoardLetter).letterBehind)
+                frmPuzzleBoard.ListBox4.Items.Add(randomNumber & CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & WheelController.letterControlList(randomNumber)), PuzzleBoardLetter).letterBehind)
                 WheelController.letterControlList.Remove(WheelController.letterControlList(randomNumber))
                 timeStart = DateTime.Now.Second
             End If
