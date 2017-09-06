@@ -3,12 +3,21 @@
 Public Class PuzzleBoardLetter
     Dim letter As String
     Public letterRevealed As Boolean = False
+    Dim isTossUpButton As Boolean = False
     Public Property letterBehind As String
         Get
             Return letter
         End Get
         Set(value As String)
             letter = value
+        End Set
+    End Property
+    Public Property tossUpStatus As Boolean
+        Get
+            Return isTossUpButton
+        End Get
+        Set(value As Boolean)
+            isTossUpButton = value
         End Set
     End Property
     Public Sub displayBlueBKG()
@@ -37,14 +46,14 @@ Public Class PuzzleBoardLetter
                 frmScore.usedLetterBoard.Enabled = True
                 'End If
                 If WheelController.finalSpinSpun = True Then
-                        frmScore.timeStart = DateTime.Now.Second
-                        frmScore.tmrFinalSpin.Start()
-                    End If
+                    frmScore.timeStart = DateTime.Now.Second
+                    frmScore.tmrFinalSpin.Start()
                 End If
-                If WheelController.roundType = WheelController.PuzzleType.BR Then
+            End If
+            If WheelController.roundType = WheelController.PuzzleType.BR Then
                 frmScore.numberOfUntappedLetters -= 1
             End If
-        ElseIf frmPuzzleBoard.round = WheelController.PuzzleType.TU1 Or frmPuzzleBoard.round = WheelController.PuzzleType.TU2 Or frmPuzzleBoard.round = WheelController.PuzzleType.TU3 Or frmPuzzleBoard.round = WheelController.PuzzleType.TBTU Then
+        ElseIf frmPuzzleBoard.round = WheelController.PuzzleType.TU1 And isTossUpButton = True Or frmPuzzleBoard.round = WheelController.PuzzleType.TU2 And isTossUpButton = True Or frmPuzzleBoard.round = WheelController.PuzzleType.TU3 And isTossUpButton = True Or frmPuzzleBoard.round = WheelController.PuzzleType.TBTU And isTossUpButton = True Then
             If frmPuzzleBoard.round = WheelController.PuzzleType.TU1 Then
                 WheelController.startTime = DateTime.Now.Minute
                 frmPuzzleBoard.tmrCheckFinalSpin.Start()

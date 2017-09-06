@@ -11,7 +11,7 @@
     Dim player3RingIn As Boolean = False
     Dim allRungIn As Boolean = False
     Private Sub frmPuzzleBoard_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
-        For Each letterController As Control In Controls
+        For Each letterController As Control In PuzzleBoard1.Controls
             If letterController.GetType() Is GetType(PuzzleBoardLetter) Then
                 CType(letterController, PuzzleBoardLetter).Hide()
             End If
@@ -66,7 +66,7 @@
         Else
         End If
     End Sub
-    Private Sub frmPuzzleBoard_Click(sender As Object, e As EventArgs) Handles MyBase.Click
+    Private Sub PuzzleBoard1_Click(sender As Object, e As EventArgs) Handles PuzzleBoard1.Click
         If round = WheelController.PuzzleType.BR And bonusRevealed = False And bonusRSTLNERevealed = False Then
             revealBonus()
             bonusRevealed = True
@@ -96,7 +96,7 @@
     End Sub
 
     Private Sub BonusRoundSolveToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BonusRoundSolveToolStripMenuItem.Click
-        For Each lettersControls As Control In Controls
+        For Each lettersControls As Control In PuzzleBoard1.Controls
             If lettersControls.GetType() Is GetType(PuzzleBoardLetter) Then
                 CType(lettersControls, PuzzleBoardLetter).revealLetter()
             End If
@@ -131,6 +131,9 @@
     End Sub
     Dim puzzleSolved = False
     Public Sub solvePuzzle(preview As Boolean)
+        WheelController.puzzleLoaded = False
+        PuzzleBoard1.clearLetterList()
+        PuzzleBoard1.rightControlDetermined = False
         frmScore.btnBonusTimerStart.Hide()
         btnWild.Enabled = True
         puzzleSolved = True
@@ -142,9 +145,10 @@
             frmScore.resetPuzzle()
             btnSpinner.Enabled = True
             If revealed = False Then
-                For Each lettersControls As Control In Controls
+                For Each lettersControls As Control In PuzzleBoard1.Controls
                     If lettersControls.GetType() Is GetType(PuzzleBoardLetter) Then
                         CType(lettersControls, PuzzleBoardLetter).revealLetter()
+                        'CType(lettersControls, PuzzleBoardLetter).tossUpStatus = False
                     End If
                 Next
                 If round = WheelController.PuzzleType.TU1 Or round = WheelController.PuzzleType.TBTU Then
@@ -288,9 +292,10 @@
                     frmScore.lblPlayer1Total.Hide()
                     frmScore.lblPlayer2Total.Hide()
                     frmScore.lblPlayer3Total.Hide()
-                    For Each lettersControls As Control In Controls
+                    For Each lettersControls As Control In PuzzleBoard1.Controls
                         If lettersControls.GetType() Is GetType(PuzzleBoardLetter) Then
                             CType(lettersControls, PuzzleBoardLetter).letterBehind = ""
+                            CType(lettersControls, PuzzleBoardLetter).Hide()
                         End If
                     Next
                     If round = WheelController.PuzzleType.TU1 Then
@@ -469,7 +474,7 @@
                     ElseIf round = WheelController.PuzzleType.TBTU Then
                         loadBonusRound()
                     End If
-                    For Each lettersControls As Control In Controls
+                    For Each lettersControls As Control In PuzzleBoard1.Controls
                         If lettersControls.GetType() Is GetType(PuzzleBoardLetter) Then
                             If CType(lettersControls, PuzzleBoardLetter).letterBehind = "'" Or CType(lettersControls, PuzzleBoardLetter).letterBehind = "?" Or CType(lettersControls, PuzzleBoardLetter).letterBehind = "." Or CType(lettersControls, PuzzleBoardLetter).letterBehind = "!" Or CType(lettersControls, PuzzleBoardLetter).letterBehind = "-" Or CType(lettersControls, PuzzleBoardLetter).letterBehind = "/" Or CType(lettersControls, PuzzleBoardLetter).letterBehind = ":" Or CType(lettersControls, PuzzleBoardLetter).letterBehind = "\" Or CType(lettersControls, PuzzleBoardLetter).letterBehind = "&" Then
                                 CType(lettersControls, PuzzleBoardLetter).revealLetter()
@@ -488,7 +493,7 @@
                         frmScore.BonusCardEnvelope1.Hide()
                         frmScore.usedLetterBoard.Enabled = False
                         btnSolve.Enabled = False
-                        For Each letterController As Control In Controls
+                        For Each letterController As Control In PuzzleBoard1.Controls
                             If letterController.GetType() Is GetType(PuzzleBoardLetter) Then
                                 CType(letterController, PuzzleBoardLetter).Hide()
                             End If
@@ -499,7 +504,7 @@
             End If
         ElseIf preview = True Then
             btnSpinner.Enabled = False
-            For Each lettersControls As Control In Controls
+            For Each lettersControls As Control In PuzzleBoard1.Controls
                 If lettersControls.GetType() Is GetType(PuzzleBoardLetter) Then
                     CType(lettersControls, PuzzleBoardLetter).revealLetter()
                 End If
@@ -517,26 +522,29 @@
             WheelController.currentPlayer = 3
             frmScore.bonusRoundPlayer = frmScore.player3
         Else
-            btnRedRingIn.Enabled = True
-            btnYellowRingIn.Enabled = True
-            btnBlueRingIn.Enabled = True
-            wheelTilt.Enabled = False
-            btnWild.Hide()
-            frmScore.usedLetterBoard.Enabled = False
-            WheelController.tossUpLetterControlList.Clear()
-            tmrTossUpRingIn.Stop()
-            round = WheelController.PuzzleType.TBTU
-            pnlCategory.Hide()
-            loadTossUp()
-            tmrTossUpReveal.Start()
-            My.Computer.Audio.Play(My.Resources.puzzle_reveal, AudioPlayMode.Background)
-            puzzleSolved = False
-            WheelController.wheelLoad(WheelController.PuzzleType.TBTU)
-            WheelController.loadPuzzle(WheelController.PuzzleType.TBTU, False)
-            WheelController.tossUpStarted = False
-            WheelController.currentPlayer = Nothing
-            frmScore.tmrCheckVowels.Stop()
-            Exit Sub
+            If frmScore.spun = True Then
+                btnRedRingIn.Enabled = True
+                btnYellowRingIn.Enabled = True
+                btnBlueRingIn.Enabled = True
+                wheelTilt.Enabled = False
+                btnWild.Hide()
+                frmScore.usedLetterBoard.Enabled = False
+                WheelController.tossUpLetterControlList.Clear()
+                tmrTossUpRingIn.Stop()
+                round = WheelController.PuzzleType.TBTU
+                pnlCategory.Hide()
+                loadTossUp()
+                tmrTossUpReveal.Start()
+                My.Computer.Audio.Play(My.Resources.puzzle_reveal, AudioPlayMode.Background)
+                puzzleSolved = False
+                WheelController.wheelLoad(WheelController.PuzzleType.TBTU)
+                WheelController.loadPuzzle(WheelController.PuzzleType.TBTU, False)
+                WheelController.tossUpStarted = False
+                WheelController.currentPlayer = Nothing
+                frmScore.tmrCheckVowels.Stop()
+                Exit Sub
+            Else
+            End If
         End If
         frmScore.lblNumberOfTurns.Hide()
         wheelTilt.Enabled = True
@@ -600,8 +608,8 @@
         For my2i As Integer = 1 To WheelController.tossUpLetterControlList.Count
             If DateTime.Now.Second = WheelController.convertTime(timeStart) Then
                 Dim randomNumber = WheelController.GetRandom()
-                CType(Controls("PuzzleBoardLetter" & WheelController.tossUpLetterControlList(randomNumber)), PuzzleBoardLetter).revealLetter()
-                ListBox4.Items.Add(randomNumber & CType(Controls("PuzzleBoardLetter" & WheelController.tossUpLetterControlList(randomNumber)), PuzzleBoardLetter).letterBehind)
+                CType(PuzzleBoard1.Controls("PuzzleBoardLetter" & WheelController.tossUpLetterControlList(randomNumber)), PuzzleBoardLetter).revealLetter()
+                ListBox4.Items.Add(randomNumber & CType(PuzzleBoard1.Controls("PuzzleBoardLetter" & WheelController.tossUpLetterControlList(randomNumber)), PuzzleBoardLetter).letterBehind)
                 WheelController.tossUpLetterControlList.Remove(WheelController.tossUpLetterControlList(randomNumber))
                 timeStart = DateTime.Now.Second
             End If
@@ -659,7 +667,7 @@
         End If
         If player1RingIn = True And player2RingIn = True And player3RingIn = True And Not WheelController.numberOfPlayers = 1 Then
             allRungIn = True
-            For Each lettersControls As Control In Controls
+            For Each lettersControls As Control In PuzzleBoard1.Controls
                 If lettersControls.GetType() Is GetType(PuzzleBoardLetter) Then
                     CType(lettersControls, PuzzleBoardLetter).revealLetter()
                 End If
@@ -680,7 +688,7 @@
                 btnBlueRingIn.Enabled = True
             Else
                 allRungIn = True
-                For Each lettersControls As Control In Controls
+                For Each lettersControls As Control In PuzzleBoard1.Controls
                     If lettersControls.GetType() Is GetType(PuzzleBoardLetter) Then
                         CType(lettersControls, PuzzleBoardLetter).revealLetter()
                     End If

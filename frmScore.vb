@@ -963,8 +963,8 @@
         For my2i As Integer = 1 To WheelController.letterControlList.Count
             If DateTime.Now.Second = WheelController.convertTime(timeStart) Then
                 Dim randomNumber = WheelController.GetRandomRegular()
-                CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & WheelController.letterControlList(randomNumber)), PuzzleBoardLetter).displayBlueBKG()
-                CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & WheelController.letterControlList(randomNumber)), PuzzleBoardLetter).playDing()
+                CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & WheelController.letterControlList(randomNumber)), PuzzleBoardLetter).displayBlueBKG()
+                CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & WheelController.letterControlList(randomNumber)), PuzzleBoardLetter).playDing()
                 frmPuzzleBoard.ListBox4.Items.Add(randomNumber & CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & WheelController.letterControlList(randomNumber)), PuzzleBoardLetter).letterBehind)
                 WheelController.letterControlList.Remove(WheelController.letterControlList(randomNumber))
                 timeStart = DateTime.Now.Second
@@ -993,7 +993,7 @@
         For my2i As Integer = 1 To WheelController.letterControlList.Count
             If DateTime.Now.Second = WheelController.convertTime(timeStart) Then
                 Dim randomNumber = WheelController.GetRandomRegular()
-                CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & WheelController.letterControlList(randomNumber)), PuzzleBoardLetter).revealLetter()
+                CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & WheelController.letterControlList(randomNumber)), PuzzleBoardLetter).revealLetter()
                 frmPuzzleBoard.ListBox4.Items.Add(randomNumber & CType(frmPuzzleBoard.Controls("PuzzleBoardLetter" & WheelController.letterControlList(randomNumber)), PuzzleBoardLetter).letterBehind)
                 WheelController.letterControlList.Remove(WheelController.letterControlList(randomNumber))
                 timeStart = DateTime.Now.Second
