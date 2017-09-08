@@ -52,6 +52,7 @@ Public MustInherit Class WheelController
     Public Shared numberOfTurns As Integer = 10
     Public Shared crosswordStatus As Integer
     Public Shared puzzleLoaded As Boolean = False
+    Public Shared moneyValue As Integer
 #End Region
     Public Enum PuzzleType
         TU1
@@ -265,7 +266,7 @@ Public MustInherit Class WheelController
         Dim row4 As Boolean = False
         Dim wordLengths As New List(Of Integer)
         If crosswordStatus = 0 Then
-            If puzzle.Length < 14 Then
+            If puzzle.Length < 14 And myWords.Count > 1 Then
                 For Each word As String In myWords
                     If word.Replace(" ", "").Length <= 8 - numberOfLengths And row2 = False Then
                         row1 = True
@@ -285,7 +286,7 @@ Public MustInherit Class WheelController
                                 numberOfLengths += 1
                             End If
                         Next
-                    ElseIf (word.Replace(" ", "").Length >= 8 - numberOfLengths And row1 = True And row2 = False) Or (word.Replace(" ", "").Length <= 13 - numberOfLengths2 And row2 = True And row3 = False) Then
+                    ElseIf ((word.Replace(" ", "").Length >= 8 - numberOfLengths) And row1 = True And row2 = False) Or (word.Replace(" ", "").Length <= 13 - numberOfLengths2 And row2 = True And row3 = False) Then
                         row2 = True
                         For myLetter = 0 To word.Length - 1
                             If word.Chars(myLetter).ToString() <> " " Then
