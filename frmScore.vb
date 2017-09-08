@@ -366,6 +366,7 @@
                             End If
                         End If
                     Next
+                    WheelController.moneyValue = WheelController.spinResult * WheelController.letterControlList.Count
                 ElseIf Not WheelController.puzzle.Contains(currentLetter) Then
                     If lblCurrentValue.Text <> "Free Play" Then
                         WheelController.LoseATurn()

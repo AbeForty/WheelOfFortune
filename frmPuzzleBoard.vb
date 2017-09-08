@@ -131,6 +131,8 @@
     End Sub
     Dim puzzleSolved = False
     Public Sub solvePuzzle(preview As Boolean)
+        WheelController.expressStatus = False
+        WheelController.spinResult = 0
         WheelController.puzzleLoaded = False
         PuzzleBoard1.clearLetterList()
         PuzzleBoard1.rightControlDetermined = False

@@ -83,7 +83,7 @@ Partial Class frmPuzzleBoard
         'pnlCategory
         '
         Me.pnlCategory.BackColor = System.Drawing.Color.Transparent
-        Me.pnlCategory.BackgroundImage = CType(resources.GetObject("pnlCategory.BackgroundImage"), System.Drawing.Image)
+        Me.pnlCategory.BackgroundImage = Global.WheelOfFortune.My.Resources.Resources.CategoryBarNew
         Me.pnlCategory.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pnlCategory.Controls.Add(Me.lblCategory)
         Me.pnlCategory.Controls.Add(Me.bkgCategory)
@@ -109,7 +109,7 @@ Partial Class frmPuzzleBoard
         'bkgCategory
         '
         Me.bkgCategory.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.bkgCategory.Image = CType(resources.GetObject("bkgCategory.Image"), System.Drawing.Image)
+        Me.bkgCategory.Image = Global.WheelOfFortune.My.Resources.Resources.CategoryBarNew
         Me.bkgCategory.Location = New System.Drawing.Point(0, 0)
         Me.bkgCategory.Name = "bkgCategory"
         Me.bkgCategory.Size = New System.Drawing.Size(907, 45)
@@ -417,9 +417,9 @@ Partial Class frmPuzzleBoard
         '
         Me.pboxTossUp.BackColor = System.Drawing.Color.Transparent
         Me.pboxTossUp.Image = Global.WheelOfFortune.My.Resources.Resources.Toss_Up_1000
-        Me.pboxTossUp.Location = New System.Drawing.Point(738, 180)
+        Me.pboxTossUp.Location = New System.Drawing.Point(759, 194)
         Me.pboxTossUp.Name = "pboxTossUp"
-        Me.pboxTossUp.Size = New System.Drawing.Size(460, 418)
+        Me.pboxTossUp.Size = New System.Drawing.Size(460, 412)
         Me.pboxTossUp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.pboxTossUp.TabIndex = 203
         Me.pboxTossUp.TabStop = False
@@ -488,20 +488,20 @@ Partial Class frmPuzzleBoard
         Me.PuzzleBoard1.BackColor = System.Drawing.Color.Transparent
         Me.PuzzleBoard1.BackgroundImage = CType(resources.GetObject("PuzzleBoard1.BackgroundImage"), System.Drawing.Image)
         Me.PuzzleBoard1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.PuzzleBoard1.Location = New System.Drawing.Point(586, 248)
+        Me.PuzzleBoard1.Location = New System.Drawing.Point(581, 248)
         Me.PuzzleBoard1.Name = "PuzzleBoard1"
-        Me.PuzzleBoard1.Size = New System.Drawing.Size(877, 333)
+        Me.PuzzleBoard1.Size = New System.Drawing.Size(877, 332)
         Me.PuzzleBoard1.TabIndex = 208
         '
         'frmPuzzleBoard
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackgroundImage = Global.WheelOfFortune.My.Resources.Resources.WheelBoardBKG
+        Me.BackgroundImage = Global.WheelOfFortune.My.Resources.Resources.WheelBoard
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(1902, 1092)
-        Me.Controls.Add(Me.pboxTossUp)
         Me.Controls.Add(Me.WheelSpinControl1)
+        Me.Controls.Add(Me.pboxTossUp)
         Me.Controls.Add(Me.pboxWild)
         Me.Controls.Add(Me.ListBox4)
         Me.Controls.Add(Me.btnBlueRingIn)
@@ -523,9 +523,9 @@ Partial Class frmPuzzleBoard
         Me.Controls.Add(Me.pnlCategory)
         Me.Controls.Add(Me.noMoreVowels)
         Me.Controls.Add(Me.wheelTilt)
-        Me.Controls.Add(Me.wheelMenu)
         Me.Controls.Add(Me.mysteryReveal)
         Me.Controls.Add(Me.PuzzleBoard1)
+        Me.Controls.Add(Me.wheelMenu)
         Me.DoubleBuffered = True
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
