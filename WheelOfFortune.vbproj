@@ -160,6 +160,12 @@
     <Compile Include="frmCustomizer.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmDailyPuzzleTest.Designer.vb">
+      <DependentUpon>frmDailyPuzzleTest.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmDailyPuzzleTest.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmFinalSpin.Designer.vb">
       <DependentUpon>frmFinalSpin.vb</DependentUpon>
     </Compile>
@@ -359,6 +365,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmCustomizer.resx">
       <DependentUpon>frmCustomizer.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDailyPuzzleTest.resx">
+      <DependentUpon>frmDailyPuzzleTest.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmFinalSpin.resx">
       <DependentUpon>frmFinalSpin.vb</DependentUpon>
@@ -663,11 +672,17 @@
     <None Include="Resources\WheelLogoMini.png" />
     <None Include="Resources\speedup_new.wav" />
     <None Include="Resources\choose_letters_new.wav" />
-    <None Include="Resources\R S T L N E new.wav" />
     <None Include="Resources\toss_up_solved.wav" />
     <None Include="Resources\music_bonus_lose_vamp.wav" />
     <None Include="Resources\music_bonus_win_vamp_new.wav" />
     <None Include="Resources\PassSolve.png" />
+    <None Include="Resources\bonus_spin.wav" />
+    <None Include="Resources\bonus_transition.wav" />
+    <None Include="Resources\R S T L N E New.wav" />
+    <None Include="Resources\aud_cheer1.wav" />
+    <None Include="Resources\aud_cheer2.wav" />
+    <None Include="Resources\WheelBlurBKG.png" />
+    <None Include="Resources\music_express.wav" />
     <Content Include="WheelPuzzles.mdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

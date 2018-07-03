@@ -16,6 +16,7 @@
         frmPuzzleBoard.wheelTilt.Enabled = False
         WheelController.expressStatus = True
         WheelController.spinResult = 1000
+        frmAudio.playExpress(True)
         Me.Close()
     End Sub
 

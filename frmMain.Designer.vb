@@ -35,12 +35,12 @@ Partial Class frmMain
         'btnPlay
         '
         Me.btnPlay.BackColor = System.Drawing.Color.White
-        Me.btnPlay.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.HotTrack
-        Me.btnPlay.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.HotTrack
+        Me.btnPlay.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnPlay.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.btnPlay.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnPlay.Font = New System.Drawing.Font("Gotham Bold", 15.0!, System.Drawing.FontStyle.Bold)
         Me.btnPlay.ForeColor = System.Drawing.Color.Black
-        Me.btnPlay.Location = New System.Drawing.Point(1009, 326)
+        Me.btnPlay.Location = New System.Drawing.Point(854, 322)
         Me.btnPlay.Name = "btnPlay"
         Me.btnPlay.Size = New System.Drawing.Size(249, 83)
         Me.btnPlay.TabIndex = 2
@@ -50,12 +50,12 @@ Partial Class frmMain
         'btnSettings
         '
         Me.btnSettings.BackColor = System.Drawing.Color.White
-        Me.btnSettings.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.HotTrack
-        Me.btnSettings.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.HotTrack
+        Me.btnSettings.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnSettings.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnSettings.Font = New System.Drawing.Font("Gotham Bold", 15.0!, System.Drawing.FontStyle.Bold)
         Me.btnSettings.ForeColor = System.Drawing.Color.Black
-        Me.btnSettings.Location = New System.Drawing.Point(1009, 517)
+        Me.btnSettings.Location = New System.Drawing.Point(854, 513)
         Me.btnSettings.Name = "btnSettings"
         Me.btnSettings.Size = New System.Drawing.Size(249, 83)
         Me.btnSettings.TabIndex = 3
@@ -83,16 +83,17 @@ Partial Class frmMain
         Me.wheelIcon.Name = "wheelIcon"
         Me.wheelIcon.Size = New System.Drawing.Size(258, 252)
         Me.wheelIcon.TabIndex = 5
+        Me.wheelIcon.Visible = False
         '
         'btnCustomize
         '
         Me.btnCustomize.BackColor = System.Drawing.Color.White
-        Me.btnCustomize.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.HotTrack
-        Me.btnCustomize.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.HotTrack
+        Me.btnCustomize.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnCustomize.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.btnCustomize.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnCustomize.Font = New System.Drawing.Font("Gotham Bold", 15.0!, System.Drawing.FontStyle.Bold)
         Me.btnCustomize.ForeColor = System.Drawing.Color.Black
-        Me.btnCustomize.Location = New System.Drawing.Point(1009, 422)
+        Me.btnCustomize.Location = New System.Drawing.Point(854, 418)
         Me.btnCustomize.Name = "btnCustomize"
         Me.btnCustomize.Size = New System.Drawing.Size(249, 83)
         Me.btnCustomize.TabIndex = 6
@@ -102,12 +103,12 @@ Partial Class frmMain
         'btnHelp
         '
         Me.btnHelp.BackColor = System.Drawing.Color.White
-        Me.btnHelp.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.HotTrack
-        Me.btnHelp.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.HotTrack
+        Me.btnHelp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnHelp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.btnHelp.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnHelp.Font = New System.Drawing.Font("Gotham Bold", 15.0!, System.Drawing.FontStyle.Bold)
         Me.btnHelp.ForeColor = System.Drawing.Color.Black
-        Me.btnHelp.Location = New System.Drawing.Point(1009, 613)
+        Me.btnHelp.Location = New System.Drawing.Point(854, 609)
         Me.btnHelp.Name = "btnHelp"
         Me.btnHelp.Size = New System.Drawing.Size(249, 83)
         Me.btnHelp.TabIndex = 7
@@ -118,8 +119,8 @@ Partial Class frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackColor = System.Drawing.SystemColors.HotTrack
-        Me.BackgroundImage = Global.WheelOfFortune.My.Resources.Resources.wof_twitter_skin_2
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.BackgroundImage = Global.WheelOfFortune.My.Resources.Resources.WheelBlurBKG
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(1932, 1092)
         Me.Controls.Add(Me.btnHelp)
@@ -128,6 +129,7 @@ Partial Class frmMain
         Me.Controls.Add(Me.btnSettings)
         Me.Controls.Add(Me.btnPlay)
         Me.Controls.Add(Me.wheelIcon)
+        Me.DoubleBuffered = True
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmMain"

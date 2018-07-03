@@ -162,7 +162,7 @@
         If DateTime.Now.Second = WheelController.convertTime(WheelController.timeStart + 9) Then
             tmrBonusTimer.Stop()
             WheelController.timeStart = DateTime.Now.Second
-            tmrSolveFailed.Start()
+            'tmrSolveFailed.Start()
         End If
     End Sub
     Private Sub tmrLetterReveal_Tick(sender As Object, e As EventArgs) Handles tmrLetterReveal.Tick
@@ -175,6 +175,7 @@
             WheelController.previousValue = ""
             My.Computer.Audio.Play(My.Resources.Buzzer, AudioPlayMode.Background)
             usedLetterBoard.Enabled = True
+            WheelController.numberOfTurns += 1
         End If
     End Sub
     'Private Sub tmrSolveFailed_Tick(sender As Object, e As EventArgs) Handles tmrSolveFailed.Tick

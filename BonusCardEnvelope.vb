@@ -41,7 +41,7 @@ Public Class BonusCardEnvelope
                     BackgroundImage = My.Resources.WOF_100_000
                 ElseIf frmScore.lblControllerSpinResult.Text = 1000000 Then
                     BackgroundImage = My.Resources.WOF_One_Million_2
-                ElseIf frmScore.lblControllerSpinResult.Text = 25000 Then
+                ElseIf frmScore.lblControllerSpinResult.Text = 33000 Then
                     BackgroundImage = My.Resources.WOF_CAR
                 Else
                     BackgroundImage = My.Resources.WOF_35_000

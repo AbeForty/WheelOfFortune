@@ -170,7 +170,7 @@ Public Class PuzzleBoardLetter
     Private Sub letterClick()
         retroLetter.Image = My.Resources.PremiereLetterTurn
         retroLetter.Hide()
-        'MsgBox(Me.Name)
+        'MsgBox(Me.letterBehind)
         'playDing()
         'revealLetter()
         If WheelController.solveMode = True And letterRevealed = False Then
@@ -186,6 +186,7 @@ Public Class PuzzleBoardLetter
             If WheelController.letterControlTappedList.Count = 0 Then
                 'If finalSpin = True Then
                 'Else
+                frmPuzzleBoard.btnSolve.Enabled = True
                 frmScore.usedLetterBoard.Enabled = True
                 'End If
                 If WheelController.finalSpinSpun = True Then

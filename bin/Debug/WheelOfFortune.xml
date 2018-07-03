@@ -37,6 +37,16 @@ WheelOfFortune
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
 </member>
+<member name="P:WheelOfFortune.My.Resources.Resources.aud_cheer1">
+<summary>
+  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+</summary>
+</member>
+<member name="P:WheelOfFortune.My.Resources.Resources.aud_cheer2">
+<summary>
+  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+</summary>
+</member>
 <member name="P:WheelOfFortune.My.Resources.Resources.b">
 <summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
@@ -55,6 +65,16 @@ WheelOfFortune
 <member name="P:WheelOfFortune.My.Resources.Resources.BlueArrow">
 <summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:WheelOfFortune.My.Resources.Resources.bonus_spin">
+<summary>
+  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+</summary>
+</member>
+<member name="P:WheelOfFortune.My.Resources.Resources.bonus_transition">
+<summary>
+  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
 </summary>
 </member>
 <member name="P:WheelOfFortune.My.Resources.Resources.Bonus_Wheel_Music">
@@ -297,6 +317,11 @@ WheelOfFortune
   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
 </summary>
 </member>
+<member name="P:WheelOfFortune.My.Resources.Resources.music_express">
+<summary>
+  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+</summary>
+</member>
 <member name="P:WheelOfFortune.My.Resources.Resources.Mystery_10000_2014">
 <summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
@@ -407,7 +432,7 @@ WheelOfFortune
   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
 </summary>
 </member>
-<member name="P:WheelOfFortune.My.Resources.Resources.R_S_T_L_N_E_new">
+<member name="P:WheelOfFortune.My.Resources.Resources.R_S_T_L_N_E_New">
 <summary>
   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
 </summary>
@@ -550,6 +575,11 @@ WheelOfFortune
 <member name="P:WheelOfFortune.My.Resources.Resources.wheel_spin">
 <summary>
   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+</summary>
+</member>
+<member name="P:WheelOfFortune.My.Resources.Resources.WheelBlurBKG">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
 </member>
 <member name="P:WheelOfFortune.My.Resources.Resources.WheelBoard">

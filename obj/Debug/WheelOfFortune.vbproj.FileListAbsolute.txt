@@ -53,3 +53,4 @@ C:\Users\ac765\Documents\Visual Studio 2015\Projects\WheelOfFortune\WheelOfFortu
 C:\Users\ac765\Documents\Visual Studio 2015\Projects\WheelOfFortune\WheelOfFortune\obj\Debug\WheelOfFortune.ContestantControl.resources
 C:\Users\ac765\Documents\Visual Studio 2015\Projects\WheelOfFortune\WheelOfFortune\obj\Debug\WheelOfFortune.frmContestantManager.resources
 C:\Users\ac765\Documents\Visual Studio 2015\Projects\WheelOfFortune\WheelOfFortune\obj\Debug\WheelOfFortune.StatsControl.resources
+C:\Users\ac765\Documents\Visual Studio 2015\Projects\WheelOfFortune\WheelOfFortune\obj\Debug\WheelOfFortune.frmDailyPuzzleTest.resources

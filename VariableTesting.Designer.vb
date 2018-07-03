@@ -29,6 +29,7 @@ Partial Class VariableTesting
         Me.lblCurrentTime = New System.Windows.Forms.Label()
         Me.lblTimeLeft = New System.Windows.Forms.Label()
         Me.lblTimeToStop = New System.Windows.Forms.Label()
+        Me.lblPlayState = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'tmrCheckVariables
@@ -70,11 +71,21 @@ Partial Class VariableTesting
         Me.lblTimeToStop.TabIndex = 3
         Me.lblTimeToStop.Text = "[timeToStop]"
         '
+        'lblPlayState
+        '
+        Me.lblPlayState.AutoSize = True
+        Me.lblPlayState.Location = New System.Drawing.Point(22, 192)
+        Me.lblPlayState.Name = "lblPlayState"
+        Me.lblPlayState.Size = New System.Drawing.Size(75, 17)
+        Me.lblPlayState.TabIndex = 4
+        Me.lblPlayState.Text = "[playState]"
+        '
         'VariableTesting
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(167, 197)
+        Me.ClientSize = New System.Drawing.Size(288, 244)
+        Me.Controls.Add(Me.lblPlayState)
         Me.Controls.Add(Me.lblTimeToStop)
         Me.Controls.Add(Me.lblTimeLeft)
         Me.Controls.Add(Me.lblCurrentTime)
@@ -96,4 +107,5 @@ Partial Class VariableTesting
     Friend WithEvents lblCurrentTime As Label
     Friend WithEvents lblTimeLeft As Label
     Friend WithEvents lblTimeToStop As Label
+    Friend WithEvents lblPlayState As Label
 End Class

@@ -145,6 +145,7 @@ Public Class frmNewGame
             Loop
             connPuzzle.Close()
             cboPack.Items.Add("RANDOM")
+            cboPack.Items.Add("TODAY'S WHEEL EPISODE")
         Catch ex As Exception
             MsgBox("An error occurred while loading pack names.", vbCritical, "WHEEL OF FORTUNE")
         End Try
@@ -175,7 +176,7 @@ Public Class frmNewGame
                     WheelController.player3Name = CType(pnlNewGame.Controls("NameTag" & i), NameTag).contestantName
                 End If
             Next
-            If cboPack.SelectedItem <> Nothing And cboPack.SelectedItem <> "DISNEY WHEEL OF FORTUNE" And cboPack.SelectedItem <> "RANDOM" Then
+            If cboPack.SelectedItem <> Nothing And cboPack.SelectedItem <> "TODAY'S WHEEL EPISODE" And cboPack.SelectedItem.ToString.Contains("DISNEY WHEEL OF FORTUNE") = False And cboPack.SelectedItem <> "RANDOM" Then
                 'Me.DialogResult = System.Windows.Forms.DialogResult.OK
                 WheelController.packName = cboPack.SelectedItem.ToString
                 WheelController.puzzleMode = WheelController.wheelMode.Classic
@@ -183,7 +184,7 @@ Public Class frmNewGame
                 frmMain.Close()
                 IntroScreen.Show()
                 Me.Close()
-            ElseIf cboPack.SelectedItem = "DISNEY WHEEL OF FORTUNE" Then
+            ElseIf cboPack.SelectedItem.ToString.Contains("DISNEY WHEEL OF FORTUNE") Then
                 'Me.DialogResult = System.Windows.Forms.DialogResult.OK
                 WheelController.puzzleMode = WheelController.wheelMode.Disney
                 WheelController.packName = cboPack.SelectedItem.ToString
@@ -193,6 +194,18 @@ Public Class frmNewGame
                 Me.Close()
             ElseIf cboPack.SelectedItem = "RANDOM" Then
                 MsgBox("Random mode not implemented yet.", vbExclamation, "Wheel of Fortune")
+            ElseIf cboPack.SelectedItem = "TODAY'S WHEEL EPISODE" Then
+                If My.Computer.Network.IsAvailable = True Then
+                    WheelController.packName = cboPack.SelectedItem.ToString
+                    WheelController.puzzleMode = WheelController.wheelMode.Daily
+                    'Dim gotPuzzles = False
+                    'Do Until gotPuzzles = True
+                    frmDailyPuzzleTest.Show()
+                    'WheelController.getDailyPuzzles()
+                    'Loop
+                Else
+                    MsgBox("This feature requires an active internet connection. Please try again.", vbExclamation, "Wheel of Fortune")
+                End If
             Else
                 MsgBox("Please select a pack before clicking OK.", vbExclamation, "Wheel of Fortune")
             End If

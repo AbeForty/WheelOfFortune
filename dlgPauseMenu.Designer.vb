@@ -52,8 +52,8 @@ Partial Class dlgPauseMenu
         'btnSettings
         '
         Me.btnSettings.BackColor = System.Drawing.Color.White
-        Me.btnSettings.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.HotTrack
-        Me.btnSettings.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.HotTrack
+        Me.btnSettings.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnSettings.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnSettings.Font = New System.Drawing.Font("Gotham Bold", 16.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnSettings.Location = New System.Drawing.Point(445, 377)
@@ -67,8 +67,8 @@ Partial Class dlgPauseMenu
         'btnHelp
         '
         Me.btnHelp.BackColor = System.Drawing.Color.White
-        Me.btnHelp.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.HotTrack
-        Me.btnHelp.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.HotTrack
+        Me.btnHelp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnHelp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.btnHelp.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnHelp.Font = New System.Drawing.Font("Gotham Bold", 16.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnHelp.Location = New System.Drawing.Point(445, 447)
@@ -82,8 +82,8 @@ Partial Class dlgPauseMenu
         'btnMain
         '
         Me.btnMain.BackColor = System.Drawing.Color.White
-        Me.btnMain.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.HotTrack
-        Me.btnMain.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.HotTrack
+        Me.btnMain.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnMain.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.btnMain.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnMain.Font = New System.Drawing.Font("Gotham Bold", 16.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnMain.Location = New System.Drawing.Point(445, 518)
@@ -97,8 +97,8 @@ Partial Class dlgPauseMenu
         'btnResume
         '
         Me.btnResume.BackColor = System.Drawing.Color.White
-        Me.btnResume.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.HotTrack
-        Me.btnResume.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.HotTrack
+        Me.btnResume.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnResume.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.btnResume.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnResume.Font = New System.Drawing.Font("Gotham Bold", 16.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnResume.Location = New System.Drawing.Point(445, 308)

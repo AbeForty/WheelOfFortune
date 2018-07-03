@@ -130,14 +130,23 @@
   <data name="l" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\l.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WheelPackSelect" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WheelPackSelect.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="DownChevron" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DownChevron.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bonus_spin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bonus_spin.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="WheelBonusPrizeReveal" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WheelBonusPrizeReveal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="wof_chant" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wof_chant.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="Bonus_Wheel_Music" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Bonus Wheel Music.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="R_S_T_L_N_E" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\R S T L N E.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="WheelCover" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WheelCover.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -147,9 +156,6 @@
   </data>
   <data name="WheelTilted" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WheelTilted.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="apos" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\apos.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="toss_up_solved" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\toss_up_solved.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -184,8 +190,8 @@
   <data name="wof" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wof.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WheelBoardBKG" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WheelBoardBKG.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="toss_up_reveal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\toss_up_reveal.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="puzzle_solved" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\puzzle_solved.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -205,14 +211,11 @@
   <data name="CurrentPlayerRightSide" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CurrentPlayerRightSide.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WheelLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WheelLogo.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="CategoryBar" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CategoryBar.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WOF_CAR" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WOF_CAR.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="nomorevowels" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\nomorevowels.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="i" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\i.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -235,9 +238,6 @@
   <data name="wheelCoverHD" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wheelCoverHD.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="snd_vowels_only" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\snd_vowels_only.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="c" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\c.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -247,6 +247,9 @@
   <data name="finalspin" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\finalspin.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="R_S_T_L_N_E_New" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\R S T L N E New.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="retro_frame" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\retro_frame.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -255,6 +258,9 @@
   </data>
   <data name="Delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Delete.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toss_win_eq" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\toss_win_eq.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="_and" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\and.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -276,6 +282,9 @@
   </data>
   <data name="BlueArrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BlueArrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WheelSpinMeter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WheelSpinMeter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="NameTag" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\NameTag.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -300,6 +309,9 @@
   </data>
   <data name="WheelLogoMini" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WheelLogoMini.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\x.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WheelNameCustomizer" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WheelNameCustomizer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -337,11 +349,17 @@
   <data name="WheelBoard" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WheelBoard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="clock_new" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\clock_new.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="snd_vowels_only" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\snd_vowels_only.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="WheelTiltedSmallR2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WheelTiltedSmallR2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aud_cheer1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\aud_cheer1.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="WheelBoardBKG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WheelBoardBKG.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="MDW_Front" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\MDW_Front.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -397,20 +415,20 @@
   <data name="u" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\u.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="WheelPackSelect" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WheelPackSelect.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="WOF_100_000" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WOF_100,000.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bonus_transition" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bonus_transition.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="wof_twitter_skin_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wof_twitter_skin_2.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="wof_theme" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\wof_theme.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="WOF_40_000" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WOF_40,000.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="toss_up_reveal" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\toss_up_reveal.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="background_00s" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\background_00s.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -448,9 +466,6 @@
   <data name="dash" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\dash.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="DownChevron" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\DownChevron.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="WOF_34_000" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WOF_34,000.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -469,11 +484,14 @@
   <data name="period" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\period.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="R_S_T_L_N_E_new" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\R S T L N E new.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="clock_new" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\clock_new.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="o" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\o.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aud_cheer2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\aud_cheer2.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="WheelCustomizerScreen" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WheelCustomizerScreen.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -508,14 +526,14 @@
   <data name="snd_express" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\express.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="wof_chant" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\wof_chant.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="apos" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\apos.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="toss_up" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\toss_up.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="semicolon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\semicolon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="PassSolve" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PassSolve.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="g" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\g.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -532,8 +550,8 @@
   <data name="wheelCoverHDR2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wheelCoverHDR2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\x.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="WOF_CAR" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WOF_CAR.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Wild_Card" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Wild_Card.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -553,8 +571,8 @@
   <data name="WheelTiltedSmallR4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WheelTiltedSmallR4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="toss_win_eq" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\toss_win_eq.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="wof_theme" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wof_theme.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="CLUE" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CLUE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -562,17 +580,14 @@
   <data name="puzzle_reveal" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\puzzle_reveal.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="nomorevowels" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\nomorevowels.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="WheelTiltedSmallBonusCards" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WheelTiltedSmallBonusCards.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="choose_letters_new" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\choose_letters_new.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="R_S_T_L_N_E" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\R S T L N E.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="WheelLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WheelLogo.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="exclaim" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\exclaim.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -580,13 +595,16 @@
   <data name="n" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\n.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WheelSpinMeter" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WheelSpinMeter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="semicolon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\semicolon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="w" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\w.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="PassSolve" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PassSolve.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="WheelBlurBKG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WheelBlurBKG.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="music_express" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\music_express.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

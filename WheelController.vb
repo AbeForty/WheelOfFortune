@@ -126,6 +126,9 @@ Public MustInherit Class WheelController
     Public Shared fromGameLoad As Boolean = False
     Public Shared solved = False
     Public Shared tossUpIntroComplete = False
+    Public Shared dailyPuzzleList As New List(Of List(Of String))
+    Private Shared roundString = ""
+    Public Shared highestRoundString = ""
 #End Region
     Public Enum PuzzleType
         TU1
@@ -151,6 +154,7 @@ Public MustInherit Class WheelController
         Classic
         Disney
         Random
+        Daily
     End Enum
 #Region "Reset Players"
     Public Shared Sub resetPlayers()
@@ -353,39 +357,41 @@ Public MustInherit Class WheelController
 #End Region
 #Region "Load Bonus Categories"
     Public Shared Sub loadBonusCategories(mode As wheelMode)
-        Dim connPuzzle As SqlConnection
-        connPuzzle = New SqlConnection("Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" & Application.StartupPath & "\WheelPuzzles.mdf;Integrated Security=True")
-        Dim strSQL
-        roundType = round
-        round = PuzzleType.BR
-        If mode = wheelMode.Classic Then
-            strSQL = "Select * From Puzzle WHERE Type = 2 and RoundNumber =1 and PackName =  @PackName"
-        ElseIf mode = wheelMode.Disney Then
-            strSQL = "Select * From Puzzle WHERE LEN(puzzle) <=28 and PackName =  'Disney Wheel of Fortune'"
-        ElseIf mode = wheelMode.Random Then
-            strSQL = "Select * From Puzzle WHERE Type = 2 and RoundNumber =1"
-        End If
-        Dim drProduct As SqlDataReader
-        Dim cmdProduct As SqlCommand
-        Dim packNameParam As SqlParameter = New SqlParameter("@PackName", packName)
-        connPuzzle.Open()
-        cmdProduct = New SqlCommand(strSQL, connPuzzle)
-        If mode = wheelMode.Classic Then
-            cmdProduct.Parameters.Add(packNameParam)
-        Else
-        End If
-        drProduct = cmdProduct.ExecuteReader(CommandBehavior.CloseConnection)
-        While drProduct.Read()
-            bonusCategoriesListPrelim.Add(Trim(drProduct("Category")))
-            If mode = wheelMode.Disney Then
-                Dim myPuzzle As New clsPuzzle
-                myPuzzle.category = Trim(drProduct("Category"))
-                myPuzzle.puzzle = Trim(drProduct("Puzzle"))
-                myPuzzle.puzzleTypeInt = CInt(Trim(drProduct("Type")))
-                myPuzzle.crosswordStatus = CInt(Trim(drProduct("Crossword")))
-                categoryListPrelim.Add(myPuzzle)
+        If mode <> wheelMode.Daily Then
+            Dim connPuzzle As SqlConnection
+            connPuzzle = New SqlConnection("Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" & Application.StartupPath & "\WheelPuzzles.mdf;Integrated Security=True")
+            Dim strSQL
+            roundType = round
+            round = PuzzleType.BR
+            If mode = wheelMode.Classic Then
+                strSQL = "Select * From Puzzle WHERE Type = 2 and RoundNumber =1 and PackName =  @PackName"
+            ElseIf mode = wheelMode.Disney Then
+                strSQL = "Select * From Puzzle WHERE LEN(puzzle) <=28 and PackName =  @PackName"
+            ElseIf mode = wheelMode.Random Then
+                strSQL = "Select * From Puzzle WHERE Type = 2 and RoundNumber =1"
             End If
-        End While
+            Dim drProduct As SqlDataReader
+            Dim cmdProduct As SqlCommand
+            Dim packNameParam As SqlParameter = New SqlParameter("@PackName", packName)
+            connPuzzle.Open()
+            cmdProduct = New SqlCommand(strSQL, connPuzzle)
+            If mode = wheelMode.Classic Or mode = wheelMode.Disney Then
+                cmdProduct.Parameters.Add(packNameParam)
+            Else
+            End If
+            drProduct = cmdProduct.ExecuteReader(CommandBehavior.CloseConnection)
+            While drProduct.Read()
+                bonusCategoriesListPrelim.Add(Trim(drProduct("Category")))
+                If mode = wheelMode.Disney Then
+                    Dim myPuzzle As New clsPuzzle
+                    myPuzzle.category = Trim(drProduct("Category"))
+                    myPuzzle.puzzle = Trim(drProduct("Puzzle"))
+                    myPuzzle.puzzleTypeInt = CInt(Trim(drProduct("Type")))
+                    myPuzzle.crosswordStatus = CInt(Trim(drProduct("Crossword")))
+                    categoryListPrelim.Add(myPuzzle)
+                End If
+            End While
+        End If
         If mode = wheelMode.Classic Then
             For Each item In bonusCategoriesListPrelim
                 bonusCategoriesList.Add(item)
@@ -398,7 +404,7 @@ Public MustInherit Class WheelController
             If mode = wheelMode.Disney Then
                 For i As Integer = 1 To 3
                     Dim newPuzzle = (categoryListPrelim(getRandomIndex(randomCatNumbers)))
-                    Dim newPuzzleList = categoryList.Where(Function(p) p.category = newPuzzle.category)
+                    Dim newPuzzleList = categoryList.Where(Function(p) p.category.Contains(newPuzzle.category))
                     Do Until newPuzzleList.Count = 0
                         newPuzzle = (categoryListPrelim(getRandomIndex(randomCatNumbers)))
                     Loop
@@ -411,6 +417,8 @@ Public MustInherit Class WheelController
                     bonusCategoriesList.Add(bonusCategoriesListPrelim(getRandomIndex(randomCatNumbers)))
                 Next
             End If
+        ElseIf mode = wheelMode.Daily Then
+
         End If
     End Sub
 #End Region
@@ -421,180 +429,309 @@ Public MustInherit Class WheelController
 #End Region
 #Region "Load Puzzle"
     Public Shared Sub loadPuzzle(round As PuzzleType, mode As wheelMode, preview As Boolean)
+        'Try
         frmScore.lblPlayer1.Text = ""
-        frmScore.lblPlayer2.Text = ""
-        frmScore.lblPlayer3.Text = ""
-        solveMode = False
-        solveAttempt = ""
-        solveSortedList.Clear()
-        lastLetter = 0
-        'solveSortedList.Clear()
-        'solveTypedList.Clear()
-        If (round = PuzzleType.TU1 Or round = PuzzleType.TU2 Or round = PuzzleType.TU3 Or round = PuzzleType.TBTU) And preview = False Then
-            If virtualHost = True Then
-                tossUpIntroComplete = False
-            Else
-                tossUpIntroComplete = True
-            End If
-            If numberOfPlayers = 3 Then
-                frmPuzzleBoard.btnRedRingIn.Show()
-                frmPuzzleBoard.btnYellowRingIn.Show()
-                frmPuzzleBoard.btnBlueRingIn.Show()
-                player3RingIn = True
-            ElseIf numberOfPlayers = 2 Then
-                frmPuzzleBoard.btnRedRingIn.Show()
-                frmPuzzleBoard.btnYellowRingIn.Show()
-                frmPuzzleBoard.btnBlueRingIn.Hide()
-                player3RingIn = True
-            ElseIf numberOfPlayers = 1 Then
-                frmPuzzleBoard.btnRedRingIn.Show()
-                frmPuzzleBoard.btnYellowRingIn.Hide()
-                player2RingIn = True
-                frmPuzzleBoard.btnBlueRingIn.Hide()
-                player3RingIn = True
-            End If
-            player1RingIn = True
-            player2RingIn = True
-            player3RingIn = True
-            frmScore.usedLetterBoard.Enabled = False
-            frmPuzzleBoard.btnSolve.Enabled = False
-        Else
-            frmPuzzleBoard.btnRedRingIn.Hide()
-            frmPuzzleBoard.btnYellowRingIn.Hide()
-            frmPuzzleBoard.btnBlueRingIn.Hide()
-            player1RingIn = True
-            player2RingIn = True
-            player3RingIn = True
-        End If
-        frmPuzzleBoard.btnRedRingIn.Enabled = False
-        frmPuzzleBoard.btnYellowRingIn.Enabled = False
-        frmPuzzleBoard.btnBlueRingIn.Enabled = False
-        If Not SAPI Is Nothing Then
-            SAPI.SynchronousSpeakTimeout = 1000
-        End If
-        letterControlSortedList1.Clear()
-        letterControlSortedList2.Clear()
-        letterControlSortedList3.Clear()
-        letterControlSortedList4.Clear()
-        numberOfTurns = 10
-        frmScore.lblNumberOfTurns.Text = "10"
-        For Each lettersControls As Control In frmPuzzleBoard.PuzzleBoard1.Controls
-            If lettersControls.GetType() Is GetType(PuzzleBoardLetter) Then
-                CType(lettersControls, PuzzleBoardLetter).Hide()
-                CType(lettersControls, PuzzleBoardLetter).letterRevealed = False
-            End If
-        Next
-        Dim TheseAreYourWords As String()
-        Dim myWords As New List(Of String)
-        If preview = False Then
-            Dim connPuzzle As SqlConnection
-            connPuzzle = New SqlConnection("Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" & Application.StartupPath & "\WheelPuzzles.mdf;Integrated Security=True")
-            Dim strSQL
-            roundType = round
-            loadWheel(round)
-            If mode = wheelMode.Classic Then
-                If round = PuzzleType.TU1 Then
-                    strSQL = "Select * From Puzzle WHERE Type = 0 and RoundNumber =1 and PackName =  @PackName"
-                ElseIf round = PuzzleType.TU2 Then
-                    strSQL = "Select * From Puzzle WHERE Type = 0 and RoundNumber =2 and PackName =  @PackName"
-                ElseIf round = PuzzleType.R1 Then
-                    strSQL = "Select * From Puzzle WHERE Type = 1 and RoundNumber =1 and PackName =  @PackName"
-                ElseIf round = PuzzleType.R2 Then
-                    strSQL = "Select * From Puzzle WHERE Type = 1 and RoundNumber =2 and PackName =  @PackName"
-                ElseIf round = PuzzleType.R3 Then
-                    strSQL = "Select * From Puzzle WHERE Type = 1 and RoundNumber =3 and PackName =  @PackName"
-                ElseIf round = PuzzleType.TU3 Then
-                    strSQL = "Select * From Puzzle WHERE Type = 0 and RoundNumber =3 and PackName =  @PackName"
-                ElseIf round = PuzzleType.R4 Then
-                    strSQL = "Select * From Puzzle WHERE Type = 1 and RoundNumber =4 and PackName =  @PackName"
-                ElseIf round = PuzzleType.R5 Then
-                    strSQL = "Select * From Puzzle WHERE Type = 1 and RoundNumber =5 and PackName =  @PackName"
-                ElseIf round = PuzzleType.R6 Then
-                    strSQL = "Select * From Puzzle WHERE Type = 1 and RoundNumber =6 and PackName =  @PackName"
-                ElseIf round = PuzzleType.R7 Then
-                    strSQL = "Select * From Puzzle WHERE Type = 1 and RoundNumber =7 and PackName =  @PackName"
-                ElseIf round = PuzzleType.R8 Then
-                    strSQL = "Select * From Puzzle WHERE Type = 1 and RoundNumber =8 and PackName =  @PackName"
-                ElseIf round = PuzzleType.R9 Then
-                    strSQL = "Select * From Puzzle WHERE Type = 1 and RoundNumber =9 and PackName =  @PackName"
-                ElseIf round = PuzzleType.TBTU Then
-                    strSQL = "Select * From Puzzle WHERE Type = 0 and RoundNumber = 4 and PackName =  @PackName"
-                ElseIf round = PuzzleType.BR And mode <> wheelMode.Disney Then
-                    strSQL = "Select * From Puzzle WHERE Category =  @Category and Type = 2 and RoundNumber =1 and PackName = @PackName"
-                ElseIf round = PuzzleType.BR And mode = wheelMode.Disney Then
-                End If
-                Dim categoryParam As SqlParameter = New SqlParameter("@Category", category)
-                Dim packNameParam As SqlParameter = New SqlParameter("@PackName", packName)
-                Dim drProduct As SqlDataReader
-                Dim cmdProduct As SqlCommand
-                connPuzzle.Open()
-                cmdProduct = New SqlCommand(strSQL, connPuzzle)
-                If round = PuzzleType.BR Then
-                    cmdProduct.Parameters.Add(categoryParam)
-                End If
-                cmdProduct.Parameters.Add(packNameParam)
-                drProduct = cmdProduct.ExecuteReader(CommandBehavior.CloseConnection)
-                If drProduct.Read() Then
-                    category = Trim(drProduct("Category"))
-                    puzzle = Trim(drProduct("Puzzle"))
-                    puzzleTypeInt = CInt(Trim(drProduct("Type")))
-                    crosswordStatus = CInt(Trim(drProduct("Crossword")))
-                End If
-            ElseIf mode = wheelMode.Disney Then
-                strSQL = "Select * From Puzzle WHERE Type = 1 and PackName = 'Disney Wheel of Fortune'"
-                If round <> PuzzleType.BR Then
-                    If categoryListPrelim.Count = 0 Then
-                        Dim categoryParam As SqlParameter = New SqlParameter("@Category", category)
-                        Dim drProduct As SqlDataReader
-                        Dim cmdProduct As SqlCommand
-                        connPuzzle.Open()
-                        cmdProduct = New SqlCommand(strSQL, connPuzzle)
-                        If round = PuzzleType.BR Then
-                            cmdProduct.Parameters.Add(categoryParam)
-                        End If
-                        drProduct = cmdProduct.ExecuteReader(CommandBehavior.CloseConnection)
-                        While drProduct.Read()
-                            Dim myPuzzle As New clsPuzzle
-                            myPuzzle.category = Trim(drProduct("Category"))
-                            myPuzzle.puzzle = Trim(drProduct("Puzzle"))
-                            myPuzzle.puzzleTypeInt = CInt(Trim(drProduct("Type")))
-                            myPuzzle.crosswordStatus = CInt(Trim(drProduct("Crossword")))
-                            categoryListPrelim.Add(myPuzzle)
-                        End While
-                    End If
-                    Dim myNewPuzzle = categoryListPrelim(GetRandomPlayer(1, categoryListPrelim.Count))
-                    categoryListPrelim.Remove(myNewPuzzle)
-                    category = myNewPuzzle.category
-                    puzzle = myNewPuzzle.puzzle
-                    puzzleTypeInt = myNewPuzzle.puzzleTypeInt
-                    crosswordStatus = myNewPuzzle.crosswordStatus
+            frmScore.lblPlayer2.Text = ""
+            frmScore.lblPlayer3.Text = ""
+            solveMode = False
+            solveAttempt = ""
+            solveSortedList.Clear()
+            lastLetter = 0
+            'solveSortedList.Clear()
+            'solveTypedList.Clear()
+            If (round = PuzzleType.TU1 Or round = PuzzleType.TU2 Or round = PuzzleType.TU3 Or round = PuzzleType.TBTU) And preview = False Then
+                If virtualHost = True Then
+                    tossUpIntroComplete = False
                 Else
+                    tossUpIntroComplete = True
                 End If
-            ElseIf mode = wheelMode.Random Then
-                If round = PuzzleType.TU1 Or round = PuzzleType.TU2 Or round = PuzzleType.TU3 Then
-                    strSQL = "Select * From Puzzle WHERE Type = 0 and PackName != 'Disney Wheel of Fortune'"
-
+                If numberOfPlayers = 3 Then
+                    frmPuzzleBoard.btnRedRingIn.Show()
+                    frmPuzzleBoard.btnYellowRingIn.Show()
+                    frmPuzzleBoard.btnBlueRingIn.Show()
+                    player3RingIn = True
+                ElseIf numberOfPlayers = 2 Then
+                    frmPuzzleBoard.btnRedRingIn.Show()
+                    frmPuzzleBoard.btnYellowRingIn.Show()
+                    frmPuzzleBoard.btnBlueRingIn.Hide()
+                    player3RingIn = True
+                ElseIf numberOfPlayers = 1 Then
+                    frmPuzzleBoard.btnRedRingIn.Show()
+                    frmPuzzleBoard.btnYellowRingIn.Hide()
+                    player2RingIn = True
+                    frmPuzzleBoard.btnBlueRingIn.Hide()
+                    player3RingIn = True
                 End If
-            End If
-        ElseIf preview = True Then
-            If frmCustomizer.cboCategory.SelectedItem <> "CROSSWORD" Then
-                category = frmCustomizer.cboCategory.SelectedItem.ToString
+                player1RingIn = True
+                player2RingIn = True
+                player3RingIn = True
+                frmScore.usedLetterBoard.Enabled = False
+                frmPuzzleBoard.btnSolve.Enabled = False
             Else
-                category = frmCustomizer.txtCrosswordClue.Text.ToUpper
+                frmPuzzleBoard.btnRedRingIn.Hide()
+                frmPuzzleBoard.btnYellowRingIn.Hide()
+                frmPuzzleBoard.btnBlueRingIn.Hide()
+                player1RingIn = True
+                player2RingIn = True
+                player3RingIn = True
             End If
-            puzzle = frmCustomizer.txtPuzzle.Text.ToUpper
-        End If
+            frmPuzzleBoard.btnRedRingIn.Enabled = False
+            frmPuzzleBoard.btnYellowRingIn.Enabled = False
+            frmPuzzleBoard.btnBlueRingIn.Enabled = False
+            If Not SAPI Is Nothing Then
+                SAPI.SynchronousSpeakTimeout = 1000
+            End If
+            letterControlSortedList1.Clear()
+            letterControlSortedList2.Clear()
+            letterControlSortedList3.Clear()
+            letterControlSortedList4.Clear()
+            numberOfTurns = 10
+            frmScore.lblNumberOfTurns.Text = "10"
+            For Each lettersControls As Control In frmPuzzleBoard.PuzzleBoard1.Controls
+                If lettersControls.GetType() Is GetType(PuzzleBoardLetter) Then
+                    CType(lettersControls, PuzzleBoardLetter).Hide()
+                    CType(lettersControls, PuzzleBoardLetter).letterRevealed = False
+                End If
+            Next
+            Dim TheseAreYourWords As String()
+            Dim myWords As New List(Of String)
+            If preview = False Then
+                If round = PuzzleType.TU1 Then
+                    roundString = "TU1"
+                ElseIf round = PuzzleType.TU2 Then
+                    roundString = "TU2"
+                ElseIf round = PuzzleType.R1 Then
+                    roundString = "R1"
+                ElseIf round = PuzzleType.R2 Then
+                    roundString = "R2"
+                ElseIf round = PuzzleType.R3 Then
+                    roundString = "R3"
+                ElseIf round = PuzzleType.TU3 Then
+                    roundString = "TU3"
+                ElseIf round = PuzzleType.R4 Then
+                    roundString = "R4"
+                ElseIf round = PuzzleType.R5 Then
+                    roundString = "R5"
+                ElseIf round = PuzzleType.R6 Then
+                    roundString = "R6"
+                ElseIf round = PuzzleType.R7 Then
+                    roundString = "R7"
+                ElseIf round = PuzzleType.R8 Then
+                    roundString = "R8"
+                ElseIf round = PuzzleType.R9 Then
+                    roundString = "R9"
+                ElseIf round = PuzzleType.BR Then
+                    roundString = "BR"
+                End If
+                Dim connPuzzle As SqlConnection
+                connPuzzle = New SqlConnection("Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" & Application.StartupPath & "\WheelPuzzles.mdf;Integrated Security=True")
+                Dim strSQL
+                roundType = round
+                loadWheel(round)
+                If mode = wheelMode.Classic Then
+                    If round = PuzzleType.TU1 Then
+                        strSQL = "Select * From Puzzle WHERE Type = 0 and RoundNumber =1 and PackName =  @PackName"
+                    ElseIf round = PuzzleType.TU2 Then
+                        strSQL = "Select * From Puzzle WHERE Type = 0 and RoundNumber =2 and PackName =  @PackName"
+                    ElseIf round = PuzzleType.R1 Then
+                        strSQL = "Select * From Puzzle WHERE Type = 1 and RoundNumber =1 and PackName =  @PackName"
+                    ElseIf round = PuzzleType.R2 Then
+                        strSQL = "Select * From Puzzle WHERE Type = 1 and RoundNumber =2 and PackName =  @PackName"
+                    ElseIf round = PuzzleType.R3 Then
+                        strSQL = "Select * From Puzzle WHERE Type = 1 and RoundNumber =3 and PackName =  @PackName"
+                    ElseIf round = PuzzleType.TU3 Then
+                        strSQL = "Select * From Puzzle WHERE Type = 0 and RoundNumber =3 and PackName =  @PackName"
+                    ElseIf round = PuzzleType.R4 Then
+                        strSQL = "Select * From Puzzle WHERE Type = 1 and RoundNumber =4 and PackName =  @PackName"
+                    ElseIf round = PuzzleType.R5 Then
+                        strSQL = "Select * From Puzzle WHERE Type = 1 and RoundNumber =5 and PackName =  @PackName"
+                    ElseIf round = PuzzleType.R6 Then
+                        strSQL = "Select * From Puzzle WHERE Type = 1 and RoundNumber =6 and PackName =  @PackName"
+                    ElseIf round = PuzzleType.R7 Then
+                        strSQL = "Select * From Puzzle WHERE Type = 1 and RoundNumber =7 and PackName =  @PackName"
+                    ElseIf round = PuzzleType.R8 Then
+                        strSQL = "Select * From Puzzle WHERE Type = 1 and RoundNumber =8 and PackName =  @PackName"
+                    ElseIf round = PuzzleType.R9 Then
+                        strSQL = "Select * From Puzzle WHERE Type = 1 and RoundNumber =9 and PackName =  @PackName"
+                    ElseIf round = PuzzleType.TBTU Then
+                        strSQL = "Select * From Puzzle WHERE Type = 0 and RoundNumber = 4 and PackName =  @PackName"
+                    ElseIf round = PuzzleType.BR And mode <> wheelMode.Disney Then
+                        strSQL = "Select * From Puzzle WHERE Category =  @Category and Type = 2 and RoundNumber =1 and PackName = @PackName"
+                    ElseIf round = PuzzleType.BR And mode = wheelMode.Disney Then
+                    End If
+                    Dim categoryParam As SqlParameter = New SqlParameter("@Category", category)
+                    Dim packNameParam As SqlParameter = New SqlParameter("@PackName", packName)
+                    Dim drProduct As SqlDataReader
+                    Dim cmdProduct As SqlCommand
+                    connPuzzle.Open()
+                    cmdProduct = New SqlCommand(strSQL, connPuzzle)
+                    If round = PuzzleType.BR Then
+                        cmdProduct.Parameters.Add(categoryParam)
+                    End If
+                    cmdProduct.Parameters.Add(packNameParam)
+                    drProduct = cmdProduct.ExecuteReader(CommandBehavior.CloseConnection)
+                    If drProduct.Read() Then
+                        category = Trim(drProduct("Category"))
+                        puzzle = Trim(drProduct("Puzzle"))
+                        puzzleTypeInt = CInt(Trim(drProduct("Type")))
+                        crosswordStatus = CInt(Trim(drProduct("Crossword")))
+                    End If
+                ElseIf mode = wheelMode.Disney Then
+                    strSQL = "Select * From Puzzle WHERE Type = 1 and PackName = @packName"
+                    If round <> PuzzleType.BR Then
+                        If categoryListPrelim.Count = 0 Then
+                            Dim categoryParam As SqlParameter = New SqlParameter("@Category", category)
+                            Dim packNameParam As SqlParameter = New SqlParameter("@PackName", packName)
+                            Dim drProduct As SqlDataReader
+                            Dim cmdProduct As SqlCommand
+                            connPuzzle.Open()
+                            cmdProduct = New SqlCommand(strSQL, connPuzzle)
+                            If round = PuzzleType.BR Then
+                                cmdProduct.Parameters.Add(categoryParam)
+                            End If
+                            cmdProduct.Parameters.Add(packNameParam)
+                            drProduct = cmdProduct.ExecuteReader(CommandBehavior.CloseConnection)
+                            While drProduct.Read()
+                                Dim myPuzzle As New clsPuzzle
+                                myPuzzle.category = Trim(drProduct("Category"))
+                                myPuzzle.puzzle = Trim(drProduct("Puzzle"))
+                                myPuzzle.puzzleTypeInt = CInt(Trim(drProduct("Type")))
+                                myPuzzle.crosswordStatus = CInt(Trim(drProduct("Crossword")))
+                                categoryListPrelim.Add(myPuzzle)
+                            End While
+                        End If
+                        Dim myNewPuzzle = categoryListPrelim(GetRandomPlayer(1, categoryListPrelim.Count))
+                        categoryListPrelim.Remove(myNewPuzzle)
+                        category = myNewPuzzle.category
+                        puzzle = myNewPuzzle.puzzle
+                        puzzleTypeInt = myNewPuzzle.puzzleTypeInt
+                        crosswordStatus = myNewPuzzle.crosswordStatus
+                    Else
+                    End If
+                ElseIf mode = wheelMode.Random Then
+                    If round = PuzzleType.TU1 Or round = PuzzleType.TU2 Or round = PuzzleType.TU3 Then
+                        strSQL = "Select * From Puzzle WHERE Type = 0 and PackName != 'Disney Wheel of Fortune'"
+                    End If
+                ElseIf mode = wheelMode.Daily Then
+                    For Each puzzleListItem As List(Of String) In dailyPuzzleList
+                        If puzzleListItem(0) = roundString Then
+                            If roundString = highestRoundString Then
+                                finalSpinQueued = True
+                            End If
+                            category = puzzleListItem(1)
+                            puzzle = puzzleListItem(2)
+                            If System.Text.RegularExpressions.Regex.IsMatch(puzzleListItem(2), "\d+") Then
+                                crosswordStatus = 1
+                            Else
+                                crosswordStatus = 0
+                            End If
+                            Exit For
+                        End If
+                    Next
+                End If
+            ElseIf preview = True Then
+            If frmCustomizer.cboCategory.SelectedItem <> "CROSSWORD" Then
+                If frmCustomizer.chk80sPuzzle.Checked = False Then
+                    category = frmCustomizer.cboCategory.SelectedItem.ToString
+                Else
+                    category = "80's " & frmCustomizer.cboCategory.SelectedItem.ToString
+                End If
+            Else
+                    category = frmCustomizer.txtCrosswordClue.Text.ToUpper
+                End If
+                puzzle = frmCustomizer.txtPuzzle.Text.ToUpper
+            End If
         TheseAreYourWords = puzzle.Split(" ")
+        Dim maxLength As Integer = 0
+        Dim index As Integer = 0
+        Dim comboMaxLength As Integer = 0
+        Dim longWordLength As Integer = 0
         For Each item As String In TheseAreYourWords
             'If Not item = TheseAreYourWords.Last Then
-            myWords.Add(item & " ")
+            If item.Length >= maxLength Then
+                maxLength = item.Length
+                longWordLength = item.Length
+            Else
+                If (index + 1) < TheseAreYourWords.Length And Not (TheseAreYourWords.Length Mod 2 = 0) And Not ((puzzle.Length + 1) Mod 2 = 0 And puzzle(((puzzle.Length + 1) / 2) - 1) = " ") Then
+                    If TheseAreYourWords(index).Length + TheseAreYourWords(index + 1).Length <= maxLength Then
+                        comboMaxLength += 1
+                    End If
+                End If
+            End If
+                myWords.Add(item & " ")
+            index += 1
             'Else
             '    myWords.Add(item)
             'End If
         Next
+        'GRILLED CORN ON THE COB
+        Dim threeRowPuzzle As Boolean = False
+        Dim midpoint = 0
+        Dim evenWordLength1 = 0
+        Dim evenWordLength2 = 0
+        If myWords.Count Mod 2 = 0 Or (puzzle.Length) Mod 2 = 0 Or (puzzle.Length + 1) Mod 2 = 0 Or ((puzzle.Length + 1) Mod 2 = 0 And puzzle(((puzzle.Length + 1) / 2) - 1) = " ") Then
+            If myWords.Count Mod 2 = 0 Or (puzzle.Length) Mod 2 = 0 Or ((puzzle.Length + 1) Mod 2 = 0 And Not puzzle(((puzzle.Length + 1) / 2) - 1) = " ") And Not ((puzzle.Length + 1) Mod 2 = 0 And puzzle(((puzzle.Length + 1) / 2) - 1) = " ") Then
+                midpoint = myWords.Count / 2
+                For i As Integer = 0 To (midpoint) - 1
+                    evenWordLength1 += myWords(i).Length
+                Next
+                For i As Integer = ((midpoint)) To myWords.Count - 1
+                    If i <> myWords.Count - 1 Then
+                        evenWordLength2 += myWords(i).Length
+                    Else
+                        evenWordLength2 += myWords(i).Length - 1
+                    End If
+                Next
+            ElseIf (puzzle.Length + 1) Mod 2 = 0 And puzzle(((puzzle.Length + 1) / 2) - 1) = " " Then
+                midpoint = (puzzle.Length + 1) / 2
+                evenWordLength1 = midpoint
+                evenWordLength2 = midpoint
+            End If
+            '8, 15
+            If evenWordLength2 >= evenWordLength1 And evenWordLength2 - evenWordLength1 <= 4 Then
+                maxLength = evenWordLength2
+            End If
+        Else
+            threeRowPuzzle = True
+            'maxLength -= 4
+        End If
+        'If comboMaxLength = 0 Then
+        'If myWords.Count Mod 2 = 0 Or (puzzle.Length) Mod 2 = 0 Or ((puzzle.Length + 1) Mod 2 = 0) Then
+        If 13 - maxLength >= 4 Then
+                If 13 - maxLength >= 5 Then
+                    maxLength = 13
+                Else
+                    maxLength += 4
+                End If
+            Else
+            End If
+        'Else
+        '    maxLength += 4
+        'End If
+        'End If
+        'If myWords.Count Mod 2 = 0 And maxLength Then
+        '    maxLength = 0
+        '    Dim halfLength = puzzle.Length / 2
+        '    Dim midwayPoint = myWords.Count / 2
+        '    'Dim wordSum As Integer = 0
+        '    'Dim threeRowPuzzle As Boolean = False
+        '    For i As Integer = 0 To midwayPoint - 1
+        '        maxLength += myWords(i).Length
+        '    Next
+        '    'If wordSum > halfLength  And (puzzle.Length - wordSum) > halfLength  Then
+        '    '    threeRowPuzzle = True
+        '    'End If
+        'End If
         If category = "SAME LETTER" Then
             sameLetter = puzzle.Substring(0, 1)
+            If puzzle.Contains("&") = False Then
+                threeRowPuzzle = True
+            End If
         End If
+        'VENUS & SERENA WILLIAMS
+        'HUNCHBACK OF THE NOTRE DAME
+        'FOR EACH WORD IN PUZZLE 
+        'PUZZLE.LENGTH
         puzzleString = puzzle
         Dim numberOfLengths As Integer = 0
         Dim numberOfLengths2 As Integer = 0
@@ -606,8 +743,9 @@ Public MustInherit Class WheelController
         Dim row4 As Boolean = False
         Dim wordCount = 0
         Dim wordLengths As New List(Of Integer)
+        Dim lastWordMatch As Boolean = False
         If crosswordStatus = 0 Then
-            If puzzle.Length <= 14 And myWords.Count >= 1 Then
+            If puzzle.Length <= 14 And myWords.Count >= 1 And threeRowPuzzle = False Then
                 For Each word As String In myWords
                     If ((puzzle.Length + 1 - (numberOfLengths)) > (numberOfLengths)) And ((word.Replace(" ", "").Length <= 10 - numberOfLengths And row2 = False And ((myWords.Count - myWords.IndexOf(word) >= 2))) Or (myWords.Count = 1 And row2 = False)) Then
                         row1 = True
@@ -651,11 +789,12 @@ Public MustInherit Class WheelController
                         Next
                     End If
                 Next
-            ElseIf puzzle.Length <= 28 Then
+            ElseIf puzzle.Length <= 28 And threeRowPuzzle = False Then
                 For Each word As String In myWords
                     wordCount += 1
                     'If puzzle.length - numberOfLengths = numberOfLengths Then
-                    If ((puzzle.Length + 1 - (numberOfLengths)) > (numberOfLengths)) And (word.Replace(" ", "").Length <= 14 - numberOfLengths And row2 = False And ((wordCount <= 2) Or (wordCount = 3 And ((word.Length >= 5) Or ((numberOfLengths + word.Length < 13) And ((myWords.Count - myWords.IndexOf(word)) > 2)))))) Then
+                    'If ((puzzle.Length + 1 - (numberOfLengths)) <> (numberOfLengths)) And (word.Replace(" ", "").Length <= 14 - numberOfLengths And row2 = False And ((wordCount <= 2) Or (wordCount = 3 And ((word.Length >= 5) Or ((numberOfLengths + word.Length < 13) And ((myWords.Count - myWords.IndexOf(word)) > 2)))))) Then
+                    If ((word.Replace(" ", "").Length <= (maxLength) - numberOfLengths And row2 = False)) Then
                         row1 = True
                         For myLetter = 0 To word.Length - 1
                             If word.Chars(myLetter).ToString() <> " " Then
@@ -696,11 +835,12 @@ Public MustInherit Class WheelController
                         '        End If
                         '        numberOfLengths2 += 1
                         '    Next
-                    ElseIf ((puzzle.Length + 1 - (numberOfLengths)) = (numberOfLengths)) Or (word.Replace(" ", "").Length >= 14 - numberOfLengths And row1 = True And row2 = False) Or (word.Replace(" ", "").Length <= 14 - numberOfLengths And row1 = True And row2 = False And wordCount > 2) Or (word.Replace(" ", "").Length <= 14 - numberOfLengths2 And row2 = True And row3 = False) Then
+                        'ElseIf ((puzzle.Length + 1 - (numberOfLengths)) = (numberOfLengths)) Or (word.Replace(" ", "").Length >= 14 - numberOfLengths And row1 = True And row2 = False) Or (word.Replace(" ", "").Length <= 14 - numberOfLengths And row1 = True And row2 = False And wordCount > 2) Or (word.Replace(" ", "").Length <= 14 - numberOfLengths2 And row2 = True And row3 = False) Then
+
+                    ElseIf ((puzzle.Length + 1 - (numberOfLengths)) = (numberOfLengths)) Or (word.Replace(" ", "").Length >= (maxLength) - numberOfLengths And row1 = True And row2 = False) Or (word.Replace(" ", "").Length <= (maxLength) - numberOfLengths And row1 = True And row2 = False) Or (word.Replace(" ", "").Length <= (maxLength) - numberOfLengths2 And row2 = True And row3 = False) Then
                         wordCount = 0
                         row2 = True
                         For myLetter = 0 To word.Length - 1
-
                             'If frmPuzzleBoard.PuzzleBoard1.PuzzleBoardLetter13.Visible = False Then
                             If word.Chars(myLetter).ToString() <> " " Then
                                 letterControlSortedList3.Add((27 + (numberOfLengths2)), word.Chars(myLetter).ToString())
@@ -760,7 +900,8 @@ Public MustInherit Class WheelController
                         '        End If
                         '        numberOfLengths2 += 1
                         '    Next
-                    ElseIf word.Replace(" ", "").Length > 14 - numberOfLengths2 And row2 = True And row3 = False Or (word.Replace(" ", "").Length <= 14 - numberOfLengths3 And row3 = True And row4 = False) Then
+                        'ElseIf word.Replace(" ", "").Length > 14 - numberOfLengths2 And row2 = True And row3 = False Or (word.Replace(" ", "").Length <= 14 - numberOfLengths3 And row3 = True And row4 = False) Then
+                    ElseIf word.Replace(" ", "").Length > (maxLength) - numberOfLengths2 And row2 = True And row3 = False Or (word.Replace(" ", "").Length <= (maxLength) - numberOfLengths3 And row3 = True And row4 = False) Then
                         wordCount = 0
                         row3 = True
                         For myLetter = 0 To word.Length - 1
@@ -816,9 +957,31 @@ Public MustInherit Class WheelController
                         'Next
                     End If
                 Next
-            ElseIf puzzle.Length > 28 Then
+            ElseIf puzzle.Length > 28 Or threeRowPuzzle = True Then
                 For Each word As String In myWords
-                    If word.Replace(" ", "").Length <= 12 - numberOfLengths And row2 = False Then
+                    If category = "SAME LETTER" And puzzle.Contains("&") = False Then
+                        maxLength = word.Length
+                    Else
+                        If (word.Length - 1 = longWordLength Or lastWordMatch = True) And Not maxLength = 13 Then
+                            maxLength = longWordLength
+                            If word.Length - 1 = longWordLength Then
+                                lastWordMatch = True
+                            Else
+                                lastWordMatch = False
+                            End If
+                        Else
+                            If row2 = False Or row4 = True Then
+                                maxLength = 12
+                                lastWordMatch = False
+                            Else
+                                maxLength = 13
+                                lastWordMatch = False
+                            End If
+                        End If
+                    End If
+                    'And ((category = "SAME LETTER" And (puzzle.Contains("&") = True Or numberOfLengths = 0)) Or (category <> "SAME LETTER"))
+                    'If (word.Replace(" ", "").Length <= 12- numberOfLengths And row2 = False) Then
+                    If (word.Replace(" ", "").Length <= (maxLength) - numberOfLengths And row2 = False) Then
                         row1 = True
                         For myLetter = 0 To word.Length - 1
                             If word.Chars(myLetter).ToString() <> " " Then
@@ -837,7 +1000,9 @@ Public MustInherit Class WheelController
                                 numberOfLengths += 1
                             End If
                         Next
-                    ElseIf (word.Replace(" ", "").Length > 12 - numberOfLengths And row1 = True And row2 = False) Or (word.Replace(" ", "").Length <= 13 - numberOfLengths2 And row2 = True And row3 = False) Then
+                        'Or (category = "SAME LETTER" And puzzle.Contains("&") = False) 
+                        'ElseIf ((word.Replace(" ", "").Length > 12 - numberOfLengths And row1 = True And row2 = False) Or (word.Replace(" ", "").Length <= 13 - numberOfLengths2 And row2 = True And row3 = False)) Then
+                    ElseIf ((word.Replace(" ", "").Length > (maxLength) - numberOfLengths And row1 = True And row2 = False) Or (word.Replace(" ", "").Length <= (maxLength) - numberOfLengths2 And row2 = True And row3 = False)) Then
                         row2 = True
                         For myLetter = 0 To word.Length - 1
                             If word.Chars(myLetter).ToString() <> " " Then
@@ -856,7 +1021,8 @@ Public MustInherit Class WheelController
                                 numberOfLengths2 += 1
                             End If
                         Next
-                    ElseIf word.Replace(" ", "").Length > 13 - numberOfLengths2 And row2 = True And row3 = False Or (word.Replace(" ", "").Length <= 13 - numberOfLengths3 And row3 = True And row4 = False) Then
+                        'ElseIf word.Replace(" ", "").Length > 13 - numberOfLengths2 And row2 = True And row3 = False Or (word.Replace(" ", "").Length <= 13 - numberOfLengths3 And row3 = True And row4 = False) Then
+                    ElseIf word.Replace(" ", "").Length > (maxLength) - numberOfLengths2 And row2 = True And row3 = False Or (word.Replace(" ", "").Length <= (maxLength) - numberOfLengths3 And row3 = True And row4 = False) Then
                         row3 = True
                         For myLetter = 0 To word.Length - 1
                             If word.Chars(myLetter).ToString() <> " " Then
@@ -875,7 +1041,9 @@ Public MustInherit Class WheelController
                                 numberOfLengths3 += 1
                             End If
                         Next
-                    ElseIf word.Replace(" ", "").Length > 13 - numberOfLengths3 And row3 = True And row4 = False Or (word.Replace(" ", "").Length <= 12 - numberOfLengths4 And row4 = True) Then
+                        'ElseIf word.Replace(" ", "").Length > 13 - numberOfLengths3 And row3 = True And row4 = False Or (word.Replace(" ", "").Length <= 12 - numberOfLengths4 And row4 = True) Then
+
+                    ElseIf word.Replace(" ", "").Length > (maxLength) - numberOfLengths3 And row3 = True And row4 = False Or (word.Replace(" ", "").Length <= (maxLength) - numberOfLengths4 And row4 = True) Then
                         row4 = True
                         Try
                             For myLetter = 0 To word.Length - 1
@@ -902,20 +1070,26 @@ Public MustInherit Class WheelController
                     End If
                 Next
             End If
-            trillonOffset = 0
-            If (letterControlSortedList1.Count = 13 Or letterControlSortedList1.Count = 12) Or (letterControlSortedList4.Count = 13 Or letterControlSortedList4.Count = 12) Then
-                trillonOffset = 1
-            End If
-            If letterControlSortedList4.Count > 1 And letterControlSortedList1.Count = 0 Then
-                trillonPreset = 14
-            Else
-                trillonPreset = 0
-            End If
+                trillonOffset = 0
+                If (letterControlSortedList1.Count = 13 Or letterControlSortedList1.Count = 12) Or (letterControlSortedList4.Count = 13 Or letterControlSortedList4.Count = 12) Then
+                    trillonOffset = 1
+                End If
+                If letterControlSortedList4.Count > 1 And letterControlSortedList1.Count = 0 Then
+                    trillonPreset = 14
+                Else
+                    trillonPreset = 0
+                End If
             'If letterControlSortedList1.Count = 0 And letterControlSortedList4.Count <> 13 Then
             If (letterControlSortedList1.Count <> 13 And letterControlSortedList1.Count <> 12) And (letterControlSortedList4.Count <> 13 And letterControlSortedList4.Count <> 12) And letterControlSortedList2.Count <> 15 And letterControlSortedList3.Count <> 15 Then
-                trillonOffset = Math.Ceiling((12 - letterControlSortedList1.Count) / 2)
+                'If letterControlSortedList1.Count = letterControlSortedList2.Count Then
+                trillonOffset = Math.Ceiling((14 - letterControlSortedList1.Count) / 2)
+                'Else
+                '    trillonOffset = Math.Ceiling((12 - letterControlSortedList1.Count) / 2)
+                'End If
                 Dim max = letterControlSortedList1.Count
-                If letterControlSortedList2.Count > max And letterControlSortedList2.Count <> 15 Then
+                'If letterControlSortedList2.Count > max And letterControlSortedList2.Count <> 15 Then
+
+                If letterControlSortedList2.Count <> 15 Then
                     max = letterControlSortedList2.Count
                     If max = 14 Then
                         If letterControlSortedList4.Count > 1 And letterControlSortedList1.Count = 0 Then
@@ -946,105 +1120,111 @@ Public MustInherit Class WheelController
                 End If
             End If
             For Each item As KeyValuePair(Of Integer, String) In letterControlSortedList1
-                loadTrillonOffset(item, trillonPreset, trillonOffset, letterControlSortedList1.Count)
-                'If item.Key = letterControlSortedList1.Last.Key Then
-                '    lastLetter = item.Key - 1
-                'End If
-            Next
-            For Each item As KeyValuePair(Of Integer, String) In letterControlSortedList2
-                If letterControlSortedList2.Count <> 15 Then
                     loadTrillonOffset(item, trillonPreset, trillonOffset, letterControlSortedList1.Count)
-                Else
-                    loadTrillonOffset(item, trillonPreset, 0, letterControlSortedList1.Count)
-                End If
-                'If item.Key = letterControlSortedList2.Last.Key Then
-                '    lastLetter = item.Key - 1
-                'End If
-            Next
-            For Each item As KeyValuePair(Of Integer, String) In letterControlSortedList3
-                If letterControlSortedList3.Count <> 15 Then
-                    loadTrillonOffset(item, trillonPreset, trillonOffset, letterControlSortedList1.Count)
-                Else
-                    loadTrillonOffset(item, trillonPreset, 0, letterControlSortedList1.Count)
-                End If
-                'If item.Key = letterControlSortedList3.Last.Key Then
-                '    lastLetter = item.Key - 1
-                'End If
-            Next
-            If Not (letterControlSortedList4.Count > 1 And letterControlSortedList1.Count = 0) Then
-                trillonOffset -= 1
-            End If
-            For Each item As KeyValuePair(Of Integer, String) In letterControlSortedList4
-                If letterControlSortedList4.Count = 13 Or trillonOffset = 1 Then
-                    loadTrillonOffset(item, trillonPreset, (trillonOffset), letterControlSortedList1.Count)
+                    'If item.Key = letterControlSortedList1.Last.Key Then
+                    '    lastLetter = item.Key - 1
                     'End If
-                Else
-                    loadTrillonOffset(item, trillonPreset, (trillonOffset), letterControlSortedList1.Count)
-                End If
-                'If item.Key = letterControlSortedList4.Last.Key Then
-                '    lastLetter = item.Key - 1
-                'End If
-            Next
-        Else
-            frmPuzzleBoard.logoCrossword.Show()
-            Try
-                For Each word As String In myWords
-                    'word.Replace(" ", "")
-                    Dim puzzleBoardLetterInteger As Integer
-                    Dim myChars() As Char = word.ToCharArray()
-                    puzzleBoardLetterInteger = Nothing
-                    For Each ch As Char In myChars
-                        If Char.IsDigit(ch) Then
-                            puzzleBoardLetterInteger &= ch
-                        End If
-                    Next
-                    If myWords.Last.Contains(puzzleBoardLetterInteger) Then
-                        lastLetter = puzzleBoardLetterInteger
-                    End If
-                    For myLetter = 0 To word.Length - 1
-                        Dim letter
-                        If word.Chars(myLetter).ToString() <> " " And Not Char.IsDigit(word.Chars(myLetter)) Then
-                            letter = word.Chars(myLetter).ToString().Replace(puzzleBoardLetterInteger, "")
-                            CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & puzzleBoardLetterInteger), PuzzleBoardLetter).letterBehind = letter
-                            CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & puzzleBoardLetterInteger), PuzzleBoardLetter).Show()
-                            'CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & puzzleBoardLetterInteger), PuzzleBoardLetter).btnLetter.BackgroundImage = My.Resources.PremiereLetterRevealTurn
-                            puzzleBoardLetterInteger = Nothing
-                        End If
-                    Next
                 Next
-            Catch ex As Exception
-                MsgBox("The crossword puzzle is invalid, please go to the customizer and re-enter the puzzle. Remember to follow the crossword format exactly as mistakes will cause the crossword to not load.", vbCritical, "Wheel of Fortune")
-            End Try
-        End If
-        'For i As Integer = 1 To lastLetter
-        '    If CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & i), PuzzleBoardLetter).Visible = True Then
-        '        solveTypedList.Add(i)
-        '    End If
-        'Next
-        'For Each myLetterControl As PuzzleBoardLetter In frmPuzzleBoard.PuzzleBoard1.Controls
-        '    If myLetterControl.Visible = True Then
-        '        solveTypedList.Add(myLetterControl.Name.Replace("PuzzleBoardLetter", ""))
-        '    End If
-        'Next
-        For Each item As KeyValuePair(Of Integer, String) In solveSortedList
-            If item.Key = solveSortedList.Last.Key Then
-
+                For Each item As KeyValuePair(Of Integer, String) In letterControlSortedList2
+                    If letterControlSortedList2.Count <> 15 Then
+                        loadTrillonOffset(item, trillonPreset, trillonOffset, letterControlSortedList1.Count)
+                    Else
+                        loadTrillonOffset(item, trillonPreset, 0, letterControlSortedList1.Count)
+                    End If
+                    'If item.Key = letterControlSortedList2.Last.Key Then
+                    '    lastLetter = item.Key - 1
+                    'End If
+                Next
+                For Each item As KeyValuePair(Of Integer, String) In letterControlSortedList3
+                    If letterControlSortedList3.Count <> 15 Then
+                        loadTrillonOffset(item, trillonPreset, trillonOffset, letterControlSortedList1.Count)
+                    Else
+                        loadTrillonOffset(item, trillonPreset, 0, letterControlSortedList1.Count)
+                    End If
+                    'If item.Key = letterControlSortedList3.Last.Key Then
+                    '    lastLetter = item.Key - 1
+                    'End If
+                Next
+                If Not (letterControlSortedList4.Count > 1 And letterControlSortedList1.Count = 0) Then
+                    trillonOffset -= 1
+                End If
+                For Each item As KeyValuePair(Of Integer, String) In letterControlSortedList4
+                    If letterControlSortedList4.Count = 13 Or trillonOffset = 1 Then
+                        loadTrillonOffset(item, trillonPreset, (trillonOffset), letterControlSortedList1.Count)
+                        'End If
+                    Else
+                        loadTrillonOffset(item, trillonPreset, (trillonOffset), letterControlSortedList1.Count)
+                    End If
+                    'If item.Key = letterControlSortedList4.Last.Key Then
+                    '    lastLetter = item.Key - 1
+                    'End If
+                Next
+            Else
+                frmPuzzleBoard.logoCrossword.Show()
+                Try
+                    For Each word As String In myWords
+                        'word.Replace(" ", "")
+                        Dim puzzleBoardLetterInteger As Integer
+                        Dim myChars() As Char = word.ToCharArray()
+                        puzzleBoardLetterInteger = Nothing
+                        For Each ch As Char In myChars
+                            If Char.IsDigit(ch) Then
+                                puzzleBoardLetterInteger &= ch
+                            End If
+                        Next
+                        If myWords.Last.Contains(puzzleBoardLetterInteger) Then
+                            lastLetter = puzzleBoardLetterInteger
+                        End If
+                        For myLetter = 0 To word.Length - 1
+                            Dim letter
+                            If word.Chars(myLetter).ToString() <> " " And Not Char.IsDigit(word.Chars(myLetter)) Then
+                                letter = word.Chars(myLetter).ToString().Replace(puzzleBoardLetterInteger, "")
+                                CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & puzzleBoardLetterInteger), PuzzleBoardLetter).letterBehind = letter
+                                CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & puzzleBoardLetterInteger), PuzzleBoardLetter).Show()
+                                'CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & puzzleBoardLetterInteger), PuzzleBoardLetter).btnLetter.BackgroundImage = My.Resources.PremiereLetterRevealTurn
+                                puzzleBoardLetterInteger = Nothing
+                            End If
+                        Next
+                    Next
+                Catch ex As Exception
+                    MsgBox("The crossword puzzle is invalid, please go to the customizer and re-enter the puzzle. Remember to follow the crossword format exactly as mistakes will cause the crossword to not load.", vbCritical, "Wheel of Fortune")
+                End Try
             End If
-        Next
-        puzzleLoaded = True
-        revealCategory()
+            'For i As Integer = 1 To lastLetter
+            '    If CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & i), PuzzleBoardLetter).Visible = True Then
+            '        solveTypedList.Add(i)
+            '    End If
+            'Next
+            'For Each myLetterControl As PuzzleBoardLetter In frmPuzzleBoard.PuzzleBoard1.Controls
+            '    If myLetterControl.Visible = True Then
+            '        solveTypedList.Add(myLetterControl.Name.Replace("PuzzleBoardLetter", ""))
+            '    End If
+            'Next
+            For Each item As KeyValuePair(Of Integer, String) In solveSortedList
+                If item.Key = solveSortedList.Last.Key Then
+
+                End If
+            Next
+            puzzleLoaded = True
+            revealCategory()
+        'Catch ex As Exception
+        '    MsgBox("An error occurred while loading the puzzle. Heading back to the main menu.", vbCritical, "Wheel of Fortune")
+        '    frmMain.Show()
+        '    frmScore.Close()
+        '    frmPuzzleBoard.Close()
+        'End Try
     End Sub
     Public Shared Sub loadTrillonOffset(item As KeyValuePair(Of Integer, String), trillonPreset As Integer, trillonOffset As Integer, row1Count As Integer)
         If item.Key >= 13 And item.Key <= 26 And letterControlSortedList1.Count = 0 And letterControlSortedList4.Count > 0 Then
             trillonPreset = 13
         End If
         If trillonOffset > 1 Then
-            If item.Value = "'" Or item.Value = "?" Or item.Value = "." Or item.Value = "!" Or item.Value = "-" Or item.Value = "/" Or item.Value = ":" Or item.Value = "\" Or item.Value = "&" Then
+            If item.Value.Replace(" ", "") = "'" Or item.Value.Replace(" ", "") = "?" Or item.Value.Replace(" ", "") = "." Or item.Value.Replace(" ", "") = "!" Or item.Value.Replace(" ", "") = "-" Or item.Value.Replace(" ", "") = "/" Or item.Value.Replace(" ", "") = ":" Or item.Value.Replace(" ", "") = "\" Or item.Value.Replace(" ", "") = "&" Then
                 CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & ((item.Key - trillonPreset) + trillonOffset)), PuzzleBoardLetter).Show()
-                CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & ((item.Key - trillonPreset) + trillonOffset)), PuzzleBoardLetter).letterBehind = item.Value
+                CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & ((item.Key - trillonPreset) + trillonOffset)), PuzzleBoardLetter).letterBehind = item.Value.Replace(" ", "")
                 CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & ((item.Key - trillonPreset) + trillonOffset)), PuzzleBoardLetter).revealLetter()
             ElseIf item.Value = " " Then
-                If item.Key <> 53 Then
+                If item.Key <> 53 And (item.Key + 1) <> 53 Then
                     CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & ((item.Key - trillonPreset) + trillonOffset)), PuzzleBoardLetter).Hide()
                 End If
             Else
@@ -1053,14 +1233,14 @@ Public MustInherit Class WheelController
                 'solveTypedList.Add((item.Key - trillonPreset) + trillonOffset)
             End If
         Else
-            If item.Value = "'" Or item.Value = "?" Or item.Value = "." Or item.Value = "!" Or item.Value = "-" Or item.Value = "/" Or item.Value = ":" Or item.Value = "\" Or item.Value = "&" Then
-                If item.Key <= 40 Then
+            If item.Value.Replace(" ", "") = "'" Or item.Value.Replace(" ", "") = "?" Or item.Value.Replace(" ", "") = "." Or item.Value.Replace(" ", "") = "!" Or item.Value.Replace(" ", "") = "-" Or item.Value.Replace(" ", "") = "/" Or item.Value.Replace(" ", "") = ":" Or item.Value.Replace(" ", "") = "\" Or item.Value.Replace(" ", "") = "&" Then
+                If item.Key <= 40 And trillonOffset >= 1 Then
                     CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & ((item.Key - trillonPreset) + 1)), PuzzleBoardLetter).Show()
-                    CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & ((item.Key - trillonPreset) + 1)), PuzzleBoardLetter).letterBehind = item.Value
+                    CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & ((item.Key - trillonPreset) + 1)), PuzzleBoardLetter).letterBehind = item.Value.Replace(" ", "")
                     CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & ((item.Key - trillonPreset) + 1)), PuzzleBoardLetter).revealLetter()
                 Else
                     CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & (item.Key - trillonPreset)), PuzzleBoardLetter).Show()
-                    CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & (item.Key - trillonPreset)), PuzzleBoardLetter).letterBehind = item.Value
+                    CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & (item.Key - trillonPreset)), PuzzleBoardLetter).letterBehind = item.Value.Replace(" ", "")
                     CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & (item.Key - trillonPreset)), PuzzleBoardLetter).revealLetter()
                 End If
             ElseIf item.Value = " " Then
@@ -1084,6 +1264,11 @@ Public MustInherit Class WheelController
             End If
         End If
     End Sub
+#End Region
+#Region "Return String Without Punctuation"
+    Public Shared Function removePunctuation(str As String)
+        Return str.Replace("'", "").Replace("?", "").Replace(".", "").Replace("!", "").Replace("-", "").Replace("/", "").Replace(":", "").Replace("\", "").Replace(" &", "")
+    End Function
 #End Region
 #Region "Load Bonus Round"
     Public Shared Sub loadBonusRound()
@@ -1447,6 +1632,7 @@ Public MustInherit Class WheelController
                         btn.Enabled = False
                         frmPuzzleBoard.logoExpress.Hide()
                         frmPuzzleBoard.wheelTilt.Enabled = True
+                        frmAudio.playExpress(False)
                         expressStatus = False
                     ElseIf expressStatus = False Or finalSpin = False Then
                         spinResult = 0
@@ -1487,11 +1673,11 @@ Public MustInherit Class WheelController
                 End If
                 If currentLetter = sameLetter And category = "SAME LETTER" Then
                     Dim currentPlayer1Value = CInt(frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text.Replace("$", ""))
-                    If currentPlayer1Value = "" Then
+                    If currentPlayer1Value.ToString() = "" Then
                         currentPlayer1Value = 0
                     End If
                     currentPlayer1Value += 1000
-                    frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text = ""
+                    frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text = FormatCurrency(currentPlayer1Value, 0)
                     If virtualHost = True Then
                         SAPI.Speak("That's the Same Letter. You get an extra $1,000.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
                     End If
@@ -1788,22 +1974,25 @@ Public MustInherit Class WheelController
         For i As Integer = lastLetter To 1 Step -1
             CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & i), PuzzleBoardLetter).btnLetter.BackColor = Color.White
         Next
-        For i As Integer = currentSolveLetter To 1 Step -1
-            If CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & i - 1), PuzzleBoardLetter).Visible = True And CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & i - 1), PuzzleBoardLetter).letterRevealed = False Then
-                CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & i), PuzzleBoardLetter).btnLetter.BackColor = Color.White
-                'CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & i), PuzzleBoardLetter).btnLetter.BackgroundImage = Nothing
-                currentSolveLetter = i - 1
-                CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & i - 1), PuzzleBoardLetter).btnLetter.BackgroundImage = Nothing
-                CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & i - 1), PuzzleBoardLetter).btnLetter.BackColor = Color.FromArgb(19, 28, 255)
-                Exit For
-                'ElseIf CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & i + 1), PuzzleBoardLetter).letterRevealed = True Then
-                '    currentSolveLetter = i + 1
-                '    CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & currentSolveLetter), PuzzleBoardLetter).btnLetter.BackColor = SystemColors.HotTrack
-                '    Exit For
-            Else
-                Continue For
-            End If
-        Next
+        Try
+            For i As Integer = currentSolveLetter To 1 Step -1
+                If CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & i - 1), PuzzleBoardLetter).Visible = True And CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & i - 1), PuzzleBoardLetter).letterRevealed = False Then
+                    CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & i), PuzzleBoardLetter).btnLetter.BackColor = Color.White
+                    'CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & i), PuzzleBoardLetter).btnLetter.BackgroundImage = Nothing
+                    currentSolveLetter = i - 1
+                    CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & i - 1), PuzzleBoardLetter).btnLetter.BackgroundImage = Nothing
+                    CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & i - 1), PuzzleBoardLetter).btnLetter.BackColor = Color.FromArgb(19, 28, 255)
+                    Exit For
+                    'ElseIf CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & i + 1), PuzzleBoardLetter).letterRevealed = True Then
+                    '    currentSolveLetter = i + 1
+                    '    CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & currentSolveLetter), PuzzleBoardLetter).btnLetter.BackColor = SystemColors.HotTrack
+                    '    Exit For
+                Else
+                    Continue For
+                End If
+            Next
+        Catch ex As Exception
+        End Try
     End Sub
 #End Region
 #Region "Disable Current Vowel"
@@ -2073,7 +2262,7 @@ Public MustInherit Class WheelController
                 End If
             ElseIf (selectedBonusLetters.Count = 4 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = True) And lettersSelected = False Then
                 frmPuzzleBoard.pboxWild.Show()
-                SAPI.Speak("Because of this Wild card, you can pick an extra consonant.")
+                'SAPI.Speak("Because of this Wild card, you can pick an extra consonant.")
                 showUsedLettersInBonus()
                 If bonusVowelsEnabled = True Then
                     enableBonusVowels(False)
@@ -2215,19 +2404,18 @@ Public MustInherit Class WheelController
                     frmScore.pnlScore.Controls("lblPlayer2").Text = ""
                 End If
                 If puzzleSolver = i And currentPlayerWinner.getWedges(Player.Wedges.HalfCar1) = True And currentPlayerWinner.getWedges(Player.Wedges.HalfCar2) = True Then
-                    Dim currentValue = frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text + 25000
+                    Dim currentValue = frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text + 28000
                     frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text = FormatCurrency(currentValue, 0)
-                    currentPlayerWinner.total += 25000
+                    currentPlayerWinner.total += 28000
+                    carAwarded = True
                     If numberOfPrizes = 0 Then
                         If virtualHost = True Then
                             SAPI.Speak("You just won a brand new car that is worth $25,000!", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
-                            carAwarded = True
                         End If
                         houseMinimumMet = True
                     Else
                         If virtualHost = True Then
                             SAPI.Speak("You also just won a brand new car that is worth $25,000!", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
-                            carAwarded = True
                         End If
                     End If
                     player1.addCardsOrWedges(Player.Wedges.HalfCar1, False)
@@ -2498,6 +2686,11 @@ Public MustInherit Class WheelController
         '    '    player3.total += 10000
         '    'End If
         'End If
+        puzzleString = puzzle
+    End Sub
+#End Region
+#Region "Re-Enable All Letters"
+    Private Shared Sub reEnableLetters()
         aEnabled = True
         eEnabled = True
         iEnabled = True
@@ -2524,7 +2717,6 @@ Public MustInherit Class WheelController
         frmScore.btnX.Enabled = True
         frmScore.btnY.Enabled = True
         frmScore.btnZ.Enabled = True
-        puzzleString = puzzle
     End Sub
 #End Region
 #Region "Enable Consonants"
@@ -2778,7 +2970,7 @@ Public MustInherit Class WheelController
 #End Region
 #Region "Solve Puzzle"
     Public Shared Sub solvePuzzle(preview As Boolean)
-        If solveMode = False And revealed = False And typeToSolve = True And solved = False Then
+        If solveMode = False And revealed = False And typeToSolve = True And solved = False And bonusSolved = True Then
             If round = PuzzleType.BR Then
                 frmScore.wmpBonus.Ctlcontrols.pause()
                 frmPuzzleBoard.tmrBonus.Stop()
@@ -2800,10 +2992,13 @@ Public MustInherit Class WheelController
             currentSolveLetter = 0
             solveMode = False
             lastLetter = 0
-            If solveAttempt.Replace(" ", "") = puzzle.Replace(" ", "") Or typeToSolve = False Then
+            If removePunctuation(solveAttempt.Replace(" ", "")) = removePunctuation(puzzle.Replace(" ", "")) Or typeToSolve = False Or bonusSolved = False Then
+                frmScore.wmpBonus.Ctlcontrols.stop()
                 solved = False
                 puzzleSolver = currentPlayer
                 frmAudio.playSpeedUp(False)
+                frmAudio.playExpress(False)
+                frmAudio.playAudClap(True)
                 For Each lettersControls As Control In dlgPuzzleBoard.MiniPuzzleBoard1.Controls
                     If lettersControls.GetType() Is GetType(PuzzleBoardLetter) Then
                         CType(lettersControls, PuzzleBoardLetter).letterBehind = ""
@@ -3011,7 +3206,7 @@ Public MustInherit Class WheelController
                             Else
                                 My.Computer.Audio.Play(My.Resources.toss_up_solved, AudioPlayMode.WaitToComplete)
                                 resetPuzzle()
-
+                                reEnableLetters()
                             End If
                         ElseIf round = PuzzleType.BR Then
                             If bonusSolved = False Then
@@ -3024,6 +3219,7 @@ Public MustInherit Class WheelController
                                     SAPI.Speak("Congratulations on solving the bonus round! " & CType(frmScore.Controls("NameTag" & currentPlayer), NameTag).lblName.Text & " Here's what you won.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
                                 End If
                                 resetPuzzle()
+                                reEnableLetters()
                                 'frmScore.BonusCardEnvelope1.Show()
                                 bonusPuzzleRevealed = True
                             End If
@@ -3032,6 +3228,7 @@ Public MustInherit Class WheelController
                             End If
                         ElseIf numberOfTurns = 0 Then
                             My.Computer.Audio.Play(My.Resources.bankrupt, AudioPlayMode.WaitToComplete)
+                            frmAudio.playAudDisapp(True)
                             My.Computer.Audio.Play(My.Resources.double_buzz, AudioPlayMode.Background)
                             'numberOfTurns = 0
                             'frmScore.lblNumberOfTurns.Text = 0
@@ -3039,11 +3236,14 @@ Public MustInherit Class WheelController
                                 SAPI.Speak("Here is the puzzle solution.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
                             End If
                             revealed = True
+                            reEnableLetters()
                             'frmPuzzleBoard.tmrCheckTurns.Start()
                             Exit Sub
                         Else
+                            frmAudio.playAudClap(True)
                             My.Computer.Audio.Play(My.Resources.puzzle_solved_new, AudioPlayMode.WaitToComplete)
                             resetPuzzle()
+                            reEnableLetters()
                             currentPlayer = GetRandomPlayer(1, numberOfPlayers + 1)
                         End If
                         If currentPlayer = 1 Then
@@ -3171,7 +3371,6 @@ Public MustInherit Class WheelController
                                 frmScore.usedLetterBoard.Enabled = True
                                 frmPuzzleBoard.wheelTilt.Enabled = True
                                 frmScore.tmrCheckVowels.Start()
-
                             ElseIf round = PuzzleType.R4 Then
                                 If finalSpin = False Then
                                     puzzleSolved = False
@@ -3281,12 +3480,15 @@ Public MustInherit Class WheelController
                         If round = PuzzleType.TU1 Or round = PuzzleType.TU2 Or round = PuzzleType.TU3 Then
                             My.Computer.Audio.Play(My.Resources.toss_up_solved, AudioPlayMode.WaitToComplete)
                             resetPuzzle()
+                            reEnableLetters()
                         ElseIf round = PuzzleType.BR Then
                             My.Computer.Audio.Play(My.Resources.music_bonus_win_vamp_new, AudioPlayMode.BackgroundLoop)
                             resetPuzzle()
+                            reEnableLetters()
                         Else
                             My.Computer.Audio.Play(My.Resources.puzzle_solved_new, AudioPlayMode.WaitToComplete)
                             resetPuzzle()
+                            reEnableLetters()
                         End If
                         revealed = True
                     End If
@@ -3512,12 +3714,22 @@ Public MustInherit Class WheelController
             For i As Integer = 0 To categoryList.Count - 1
                 CType(frmScore.flpBonusCategories.Controls("CategoryStrip" & (i + 1)), CategoryStrip).lblCategory.Text = categoryList(i).category
             Next
-        Else
+        ElseIf puzzleMode = wheelMode.Classic Then
             For i As Integer = 0 To bonusCategoriesList.Count - 1
                 CType(frmScore.flpBonusCategories.Controls("CategoryStrip" & (i + 1)), CategoryStrip).lblCategory.Text = bonusCategoriesList(i)
             Next
+        ElseIf puzzleMode = wheelMode.Daily Then
+            For Each puzzleListItem As List(Of String) In dailyPuzzleList
+                If puzzleListItem(0) = "BR" Then
+                    category = puzzleListItem(1)
+                    puzzle = puzzleListItem(2)
+                    Exit For
+                End If
+            Next
         End If
-        frmScore.flpBonusCategories.Show()
+        If puzzleMode <> wheelMode.Daily Then
+            frmScore.flpBonusCategories.Show()
+        End If
         frmScore.lblNumberOfTurns.Hide()
         frmPuzzleBoard.wheelTilt.Enabled = True
         frmPuzzleBoard.btnRedRingIn.Hide()
@@ -3961,6 +4173,7 @@ Public MustInherit Class WheelController
 #End Region
 #Region "Bankrupt"
     Public Shared Sub bankrupt()
+        frmAudio.playAudDisapp(True)
         spinResult = 0
         previousValue = "Bankrupt"
         frmPuzzleBoard.logoExpress.Hide()
@@ -4003,6 +4216,9 @@ Public MustInherit Class WheelController
 #End Region
 #Region "Lose a Turn"
     Public Shared Sub LoseATurn()
+        If finalSpin = False Then
+            frmAudio.playAudDisapp(True)
+        End If
         If previousValue <> "Bankrupt" And finalSpin = False Then
             If isNoLetters = False Then
                 If virtualHost = True Then
@@ -4012,7 +4228,7 @@ Public MustInherit Class WheelController
                         SAPI.Speak("You're sitting on a Lose a Turn.")
                     End If
                 End If
-                End If
+            End If
             previousValue = "Lose A Turn"
             spun = False
         ElseIf finalSpin = True Then
@@ -4074,7 +4290,7 @@ Public MustInherit Class WheelController
             End If
 
         End If
-            If GetConsonants(puzzleString) = 0 Then
+        If GetConsonants(puzzleString) = 0 Then
             frmPuzzleBoard.wheelTilt.Enabled = False
         Else
             frmPuzzleBoard.wheelTilt.Enabled = True
@@ -4095,6 +4311,7 @@ Public MustInherit Class WheelController
 #End Region
 #Region "Reveal Number of Letters"
     Public Shared Function revealNumberOfLetters() As String
+        frmPuzzleBoard.btnSolve.Enabled = False
         letterSortedList.Clear()
         letterList.Clear()
         ''Dim controlList As New List(Of Integer)
@@ -4121,6 +4338,9 @@ Public MustInherit Class WheelController
             End If
         Next
         If letterSortedList.Count > 0 And revealed = False Then
+            If finalSpin = False Then
+                frmAudio.playAudClap(True)
+            End If
             For Each item As KeyValuePair(Of String, Integer) In letterSortedList
                 If item.Value = 1 Then
                     If virtualHost = True Then
@@ -4147,6 +4367,7 @@ Public MustInherit Class WheelController
         Else
             If finalSpin = False Then
                 My.Computer.Audio.Play(My.Resources.Buzzer, AudioPlayMode.Background)
+                frmAudio.playAudDisapp(True)
             End If
             If currentLetter <> "U" Then
                 If virtualHost = True Then

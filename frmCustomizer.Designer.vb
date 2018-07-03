@@ -48,6 +48,7 @@ Partial Class frmCustomizer
         Me.lblPackSelect = New System.Windows.Forms.Label()
         Me.toolTipCrosswordClue = New System.Windows.Forms.ToolTip(Me.components)
         Me.toolTipPuzzle = New System.Windows.Forms.ToolTip(Me.components)
+        Me.chk80sPuzzle = New System.Windows.Forms.CheckBox()
         Me.pnlCreator.SuspendLayout()
         CType(Me.btnClose, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pboxBoard, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -57,6 +58,7 @@ Partial Class frmCustomizer
         'pnlCreator
         '
         Me.pnlCreator.BackColor = System.Drawing.Color.Black
+        Me.pnlCreator.Controls.Add(Me.chk80sPuzzle)
         Me.pnlCreator.Controls.Add(Me.btnPlay)
         Me.pnlCreator.Controls.Add(Me.chkCrosswordModify)
         Me.pnlCreator.Controls.Add(Me.txtCrosswordClue)
@@ -77,7 +79,7 @@ Partial Class frmCustomizer
         Me.pnlCreator.Controls.Add(Me.lblCreatorTitle)
         Me.pnlCreator.Location = New System.Drawing.Point(245, 271)
         Me.pnlCreator.Name = "pnlCreator"
-        Me.pnlCreator.Size = New System.Drawing.Size(1505, 554)
+        Me.pnlCreator.Size = New System.Drawing.Size(1505, 576)
         Me.pnlCreator.TabIndex = 0
         '
         'btnPlay
@@ -95,7 +97,7 @@ Partial Class frmCustomizer
         Me.chkCrosswordModify.AutoSize = True
         Me.chkCrosswordModify.Font = New System.Drawing.Font("Gotham Bold", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkCrosswordModify.ForeColor = System.Drawing.Color.White
-        Me.chkCrosswordModify.Location = New System.Drawing.Point(515, 381)
+        Me.chkCrosswordModify.Location = New System.Drawing.Point(517, 406)
         Me.chkCrosswordModify.Name = "chkCrosswordModify"
         Me.chkCrosswordModify.Size = New System.Drawing.Size(239, 21)
         Me.chkCrosswordModify.TabIndex = 16
@@ -120,7 +122,7 @@ Partial Class frmCustomizer
         Me.flpPuzzleList.Dock = System.Windows.Forms.DockStyle.Left
         Me.flpPuzzleList.Location = New System.Drawing.Point(0, 0)
         Me.flpPuzzleList.Name = "flpPuzzleList"
-        Me.flpPuzzleList.Size = New System.Drawing.Size(503, 554)
+        Me.flpPuzzleList.Size = New System.Drawing.Size(503, 576)
         Me.flpPuzzleList.TabIndex = 14
         '
         'btnClose
@@ -163,7 +165,7 @@ Partial Class frmCustomizer
         Me.cboRound.Font = New System.Drawing.Font("Gotham Bold", 10.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboRound.FormattingEnabled = True
         Me.cboRound.Items.AddRange(New Object() {"TOSS-UP 1", "TOSS-UP 2", "ROUND 1", "ROUND 2", "ROUND 3", "TOSS-UP 3", "ROUND 4", "ROUND 5", "ROUND 6", "ROUND 7", "ROUND 8", "ROUND 9", "TIEBREAKER TOSS-UP", "BONUS ROUND OPTION 1", "BONUS ROUND OPTION 2", "BONUS ROUND OPTION 3"})
-        Me.cboRound.Location = New System.Drawing.Point(514, 435)
+        Me.cboRound.Location = New System.Drawing.Point(516, 460)
         Me.cboRound.Name = "cboRound"
         Me.cboRound.Size = New System.Drawing.Size(386, 29)
         Me.cboRound.TabIndex = 4
@@ -173,7 +175,7 @@ Partial Class frmCustomizer
         Me.lblRound.AutoSize = True
         Me.lblRound.Font = New System.Drawing.Font("Gotham Bold", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblRound.ForeColor = System.Drawing.Color.White
-        Me.lblRound.Location = New System.Drawing.Point(511, 407)
+        Me.lblRound.Location = New System.Drawing.Point(513, 432)
         Me.lblRound.Name = "lblRound"
         Me.lblRound.Size = New System.Drawing.Size(74, 19)
         Me.lblRound.TabIndex = 9
@@ -184,7 +186,7 @@ Partial Class frmCustomizer
         Me.btnCreate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.btnCreate.Font = New System.Drawing.Font("Gotham Bold", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnCreate.ForeColor = System.Drawing.Color.Black
-        Me.btnCreate.Location = New System.Drawing.Point(607, 472)
+        Me.btnCreate.Location = New System.Drawing.Point(609, 497)
         Me.btnCreate.Name = "btnCreate"
         Me.btnCreate.Size = New System.Drawing.Size(152, 65)
         Me.btnCreate.TabIndex = 6
@@ -226,7 +228,7 @@ Partial Class frmCustomizer
         Me.lblPuzzle.AutoSize = True
         Me.lblPuzzle.Font = New System.Drawing.Font("Gotham Bold", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblPuzzle.ForeColor = System.Drawing.Color.White
-        Me.lblPuzzle.Location = New System.Drawing.Point(513, 317)
+        Me.lblPuzzle.Location = New System.Drawing.Point(515, 342)
         Me.lblPuzzle.Name = "lblPuzzle"
         Me.lblPuzzle.Size = New System.Drawing.Size(79, 19)
         Me.lblPuzzle.TabIndex = 4
@@ -237,7 +239,7 @@ Partial Class frmCustomizer
         Me.cboCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboCategory.Font = New System.Drawing.Font("Gotham Bold", 10.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboCategory.FormattingEnabled = True
-        Me.cboCategory.Items.AddRange(New Object() {"AROUND THE HOUSE", "BEFORE & AFTER", "CHARACTER", "CHARACTERS", "CLASSIC TV", "COLLEGE LIFE", "EVENT", "FOOD & DRINK", "FUN & GAMES", "HEADLINE", "IN THE KITCHEN", "LANDMARK", "LANDMARKS", "LIVING THING", "LIVING THINGS", "MOVIE QUOTE", "MOVIE TITLE", "OCCUPATION", "ON THE MAP", "PEOPLE", "PERSON", "PHRASE", "PLACE", "PLACES", "PROPER NAME", "QUOTATION", "RHYME TIME", "SAME LETTER", "SAME NAME", "SHOW BIZ", "SONG/ARTIST", "SONG LYRICS", "SONG TITLE", "STAR & ROLE", "THE 60's", "THE 70's", "THE 80's", "THE 90's", "THING", "THINGS", "TITLE", "TITLE/AUTHOR", "TV TITLE", "WHAT ARE YOU DOING?", "WHAT ARE YOU WEARING?", "CROSSWORD"})
+        Me.cboCategory.Items.AddRange(New Object() {"AROUND THE HOUSE", "BEFORE & AFTER", "CHARACTER", "CHARACTERS", "CLASSIC TV", "COLLEGE LIFE", "EVENT", "FAMILY", "FOOD & DRINK", "FUN & GAMES", "HEADLINE", "IN THE KITCHEN", "LANDMARK", "LANDMARKS", "LIVING THING", "LIVING THINGS", "MOVIE QUOTE", "MOVIE TITLE", "OCCUPATION", "ON THE MAP", "PEOPLE", "PERSON", "PHRASE", "PLACE", "PLACES", "PROPER NAME", "QUOTATION", "RHYME TIME", "SAME LETTER", "SAME NAME", "SHOW BIZ", "SONG/ARTIST", "SONG LYRICS", "SONG TITLE", "STAR & ROLE", "THE 60's", "THE 70's", "THE 80's", "THE 90's", "THING", "THINGS", "TITLE", "TITLE/AUTHOR", "TV TITLE", "WHAT ARE YOU DOING?", "WHAT ARE YOU WEARING?", "CROSSWORD"})
         Me.cboCategory.Location = New System.Drawing.Point(514, 238)
         Me.cboCategory.Name = "cboCategory"
         Me.cboCategory.Size = New System.Drawing.Size(386, 29)
@@ -257,7 +259,7 @@ Partial Class frmCustomizer
         'txtPuzzle
         '
         Me.txtPuzzle.Font = New System.Drawing.Font("Helvetica-Condensed-Black-Se", 13.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPuzzle.Location = New System.Drawing.Point(515, 344)
+        Me.txtPuzzle.Location = New System.Drawing.Point(517, 369)
         Me.txtPuzzle.Name = "txtPuzzle"
         Me.txtPuzzle.Size = New System.Drawing.Size(385, 31)
         Me.txtPuzzle.TabIndex = 3
@@ -281,7 +283,7 @@ Partial Class frmCustomizer
         Me.pnlPackSelect.Controls.Add(Me.lblPackSelect)
         Me.pnlPackSelect.Location = New System.Drawing.Point(245, 271)
         Me.pnlPackSelect.Name = "pnlPackSelect"
-        Me.pnlPackSelect.Size = New System.Drawing.Size(1502, 554)
+        Me.pnlPackSelect.Size = New System.Drawing.Size(1502, 576)
         Me.pnlPackSelect.TabIndex = 15
         '
         'cboPackSelect
@@ -313,6 +315,18 @@ Partial Class frmCustomizer
         'toolTipPuzzle
         '
         Me.toolTipPuzzle.ToolTipTitle = "Puzzle"
+        '
+        'chk80sPuzzle
+        '
+        Me.chk80sPuzzle.AutoSize = True
+        Me.chk80sPuzzle.Font = New System.Drawing.Font("Gotham Bold", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chk80sPuzzle.ForeColor = System.Drawing.Color.White
+        Me.chk80sPuzzle.Location = New System.Drawing.Point(514, 312)
+        Me.chk80sPuzzle.Name = "chk80sPuzzle"
+        Me.chk80sPuzzle.Size = New System.Drawing.Size(122, 21)
+        Me.chk80sPuzzle.TabIndex = 18
+        Me.chk80sPuzzle.Text = "80's PUZZLE"
+        Me.chk80sPuzzle.UseVisualStyleBackColor = True
         '
         'frmCustomizer
         '
@@ -363,4 +377,5 @@ Partial Class frmCustomizer
     Friend WithEvents toolTipPuzzle As ToolTip
     Friend WithEvents chkCrosswordModify As CheckBox
     Friend WithEvents btnPlay As Button
+    Friend WithEvents chk80sPuzzle As CheckBox
 End Class

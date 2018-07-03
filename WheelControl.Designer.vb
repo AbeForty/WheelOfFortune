@@ -24,7 +24,6 @@ Partial Class WheelSpinControl
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(WheelSpinControl))
-        Me.wmpWheel = New AxWMPLib.AxWindowsMediaPlayer()
         Me.btnStopSpin = New System.Windows.Forms.Button()
         Me.pbarWheel = New System.Windows.Forms.ProgressBar()
         Me.tmrSpinner = New System.Windows.Forms.Timer(Me.components)
@@ -35,21 +34,14 @@ Partial Class WheelSpinControl
         Me.tmrFinalSpinDisable = New System.Windows.Forms.Timer(Me.components)
         Me.lblWMPTime = New System.Windows.Forms.Label()
         Me.lblRandomNumber = New System.Windows.Forms.Label()
-        CType(Me.wmpWheel, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.wmpWheelSpin = New AxWMPLib.AxWindowsMediaPlayer()
+        Me.wmpWheel = New AxWMPLib.AxWindowsMediaPlayer()
         CType(Me.trkWheel, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.trkBonusWheel, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.wheelCover.SuspendLayout()
+        CType(Me.wmpWheelSpin, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.wmpWheel, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
-        '
-        'wmpWheel
-        '
-        Me.wmpWheel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.wmpWheel.Enabled = True
-        Me.wmpWheel.Location = New System.Drawing.Point(0, 0)
-        Me.wmpWheel.Name = "wmpWheel"
-        Me.wmpWheel.OcxState = CType(resources.GetObject("wmpWheel.OcxState"), System.Windows.Forms.AxHost.State)
-        Me.wmpWheel.Size = New System.Drawing.Size(1902, 1092)
-        Me.wmpWheel.TabIndex = 199
-        Me.wmpWheel.Visible = False
         '
         'btnStopSpin
         '
@@ -97,6 +89,7 @@ Partial Class WheelSpinControl
         'wheelCover
         '
         Me.wheelCover.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.wheelCover.Controls.Add(Me.wmpWheelSpin)
         Me.wheelCover.Dock = System.Windows.Forms.DockStyle.Fill
         Me.wheelCover.Location = New System.Drawing.Point(0, 0)
         Me.wheelCover.Name = "wheelCover"
@@ -133,6 +126,27 @@ Partial Class WheelSpinControl
         Me.lblRandomNumber.Text = "RandomNumber"
         Me.lblRandomNumber.Visible = False
         '
+        'wmpWheelSpin
+        '
+        Me.wmpWheelSpin.Enabled = True
+        Me.wmpWheelSpin.Location = New System.Drawing.Point(564, 407)
+        Me.wmpWheelSpin.Name = "wmpWheelSpin"
+        Me.wmpWheelSpin.OcxState = CType(resources.GetObject("wmpWheelSpin.OcxState"), System.Windows.Forms.AxHost.State)
+        Me.wmpWheelSpin.Size = New System.Drawing.Size(225, 45)
+        Me.wmpWheelSpin.TabIndex = 0
+        Me.wmpWheelSpin.Visible = False
+        '
+        'wmpWheel
+        '
+        Me.wmpWheel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.wmpWheel.Enabled = True
+        Me.wmpWheel.Location = New System.Drawing.Point(0, 0)
+        Me.wmpWheel.Name = "wmpWheel"
+        Me.wmpWheel.OcxState = CType(resources.GetObject("wmpWheel.OcxState"), System.Windows.Forms.AxHost.State)
+        Me.wmpWheel.Size = New System.Drawing.Size(1902, 1092)
+        Me.wmpWheel.TabIndex = 199
+        Me.wmpWheel.Visible = False
+        '
         'WheelSpinControl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
@@ -148,9 +162,11 @@ Partial Class WheelSpinControl
         Me.Controls.Add(Me.wmpWheel)
         Me.Name = "WheelSpinControl"
         Me.Size = New System.Drawing.Size(1902, 1092)
-        CType(Me.wmpWheel, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.trkWheel, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.trkBonusWheel, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.wheelCover.ResumeLayout(False)
+        CType(Me.wmpWheelSpin, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.wmpWheel, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -166,4 +182,5 @@ Partial Class WheelSpinControl
     Friend WithEvents tmrFinalSpinDisable As Timer
     Friend WithEvents lblWMPTime As Label
     Friend WithEvents lblRandomNumber As Label
+    Friend WithEvents wmpWheelSpin As AxWindowsMediaPlayer
 End Class

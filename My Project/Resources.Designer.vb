@@ -91,6 +91,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        '''</summary>
+        Friend ReadOnly Property aud_cheer1() As System.IO.UnmanagedMemoryStream
+            Get
+                Return ResourceManager.GetStream("aud_cheer1", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        '''</summary>
+        Friend ReadOnly Property aud_cheer2() As System.IO.UnmanagedMemoryStream
+            Get
+                Return ResourceManager.GetStream("aud_cheer2", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
         Friend ReadOnly Property b() As System.Drawing.Bitmap
@@ -126,6 +144,24 @@ Namespace My.Resources
             Get
                 Dim obj As Object = ResourceManager.GetObject("BlueArrow", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        '''</summary>
+        Friend ReadOnly Property bonus_spin() As System.IO.UnmanagedMemoryStream
+            Get
+                Return ResourceManager.GetStream("bonus_spin", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        '''</summary>
+        Friend ReadOnly Property bonus_transition() As System.IO.UnmanagedMemoryStream
+            Get
+                Return ResourceManager.GetStream("bonus_transition", resourceCulture)
             End Get
         End Property
         
@@ -597,6 +633,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        '''</summary>
+        Friend ReadOnly Property music_express() As System.IO.UnmanagedMemoryStream
+            Get
+                Return ResourceManager.GetStream("music_express", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
         Friend ReadOnly Property Mystery_10000_2014() As System.Drawing.Bitmap
@@ -814,9 +859,9 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         '''</summary>
-        Friend ReadOnly Property R_S_T_L_N_E_new() As System.IO.UnmanagedMemoryStream
+        Friend ReadOnly Property R_S_T_L_N_E_New() As System.IO.UnmanagedMemoryStream
             Get
-                Return ResourceManager.GetStream("R_S_T_L_N_E_new", resourceCulture)
+                Return ResourceManager.GetStream("R_S_T_L_N_E_New", resourceCulture)
             End Get
         End Property
         
@@ -1083,6 +1128,16 @@ Namespace My.Resources
         Friend ReadOnly Property wheel_spin() As System.IO.UnmanagedMemoryStream
             Get
                 Return ResourceManager.GetStream("wheel_spin", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property WheelBlurBKG() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("WheelBlurBKG", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
         

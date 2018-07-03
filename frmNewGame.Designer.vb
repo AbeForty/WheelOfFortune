@@ -126,8 +126,8 @@ Partial Class frmNewGame
         'btnQuickStart
         '
         Me.btnQuickStart.BackColor = System.Drawing.Color.White
-        Me.btnQuickStart.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.HotTrack
-        Me.btnQuickStart.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.HotTrack
+        Me.btnQuickStart.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnQuickStart.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.btnQuickStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnQuickStart.Font = New System.Drawing.Font("Gotham Bold", 13.0!)
         Me.btnQuickStart.Location = New System.Drawing.Point(444, 548)
@@ -245,8 +245,8 @@ Partial Class frmNewGame
         'btnStartGame
         '
         Me.btnStartGame.BackColor = System.Drawing.Color.White
-        Me.btnStartGame.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.HotTrack
-        Me.btnStartGame.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.HotTrack
+        Me.btnStartGame.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnStartGame.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.btnStartGame.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnStartGame.Font = New System.Drawing.Font("Gotham Bold", 13.0!)
         Me.btnStartGame.Location = New System.Drawing.Point(120, 548)

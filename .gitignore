@@ -1,2 +1,4 @@
 *.exe
 *.resources
+/NewDB
+/OldDB

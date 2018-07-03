@@ -6,6 +6,9 @@ Public Class frmCustomizer
     Dim bonusRoundIndex = 0
     Private Sub btnPreview_Click(sender As Object, e As EventArgs) Handles btnPreview.Click
         preview()
+        If cboRound.SelectedItem = Nothing Then
+            Exit Sub
+        End If
         frmPuzzleBoard.Show()
         WheelController.round = currentRound
         WheelController.previewMode = True
@@ -17,11 +20,15 @@ Public Class frmCustomizer
     End Sub
     Private Sub btnPlay_Click(sender As Object, e As EventArgs) Handles btnPlay.Click
         preview()
+        If cboRound.SelectedItem = Nothing Then
+            Exit Sub
+        End If
         frmPuzzleBoard.Show()
         WheelController.round = currentRound
         WheelController.previewMode = True
         WheelController.previewPlay = True
         frmPuzzleBoard.btnPreview.Show()
+        VariableTesting.Show()
         'frmPuzzleBoard.CategoryStrip1.Show()
     End Sub
     Private Sub preview()
@@ -262,10 +269,15 @@ Public Class frmCustomizer
         Dim categoryParam As SqlParameter
         Dim crosswordParam As SqlParameter
         If cboCategory.SelectedItem <> "CROSSWORD" Then
-            categoryParam = New SqlParameter("@Category", cboCategory.SelectedItem.ToString)
-            crosswordParam = New SqlParameter("@CrosswordStatus", 0)
+            If chk80sPuzzle.Checked = False Then
+                categoryParam = New SqlParameter("@Category", cboCategory.SelectedItem.ToString)
+                crosswordParam = New SqlParameter("@CrosswordStatus", 0)
+            Else
+                categoryParam = New SqlParameter("@Category", ("80's " & cboCategory.SelectedItem.ToString))
+                crosswordParam = New SqlParameter("@CrosswordStatus", 0)
+            End If
         Else
-            If cboRound.SelectedItem = "ROUND 1" Or cboRound.SelectedItem = "ROUND 2" Or cboRound.SelectedItem = "ROUND 3" Then
+                If cboRound.SelectedItem = "ROUND 1" Or cboRound.SelectedItem = "ROUND 2" Or cboRound.SelectedItem = "ROUND 3" Then
                 categoryParam = New SqlParameter("@Category", txtCrosswordClue.Text)
                 crosswordParam = New SqlParameter("@CrosswordStatus", 1)
             Else
@@ -367,8 +379,13 @@ Public Class frmCustomizer
             Dim categoryParam As SqlParameter
             Dim crosswordParam As SqlParameter
             If cboCategory.SelectedItem <> "CROSSWORD" Then
-                categoryParam = New SqlParameter("@Category", cboCategory.SelectedItem.ToString)
-                crosswordParam = New SqlParameter("@CrosswordStatus", 0)
+                If chk80sPuzzle.Checked = False Then
+                    categoryParam = New SqlParameter("@Category", cboCategory.SelectedItem.ToString)
+                    crosswordParam = New SqlParameter("@CrosswordStatus", 0)
+                Else
+                    categoryParam = New SqlParameter("@Category", ("80's " & cboCategory.SelectedItem.ToString))
+                    crosswordParam = New SqlParameter("@CrosswordStatus", 0)
+                End If
             Else
                 If cboRound.SelectedItem = "ROUND 1" Or cboRound.SelectedItem = "ROUND 2" Or cboRound.SelectedItem = "ROUND 3" Then
                     categoryParam = New SqlParameter("@Category", txtCrosswordClue.Text)
@@ -495,8 +512,6 @@ Public Class frmCustomizer
             cboRound.Enabled = True
         End If
     End Sub
-
-
     Private Sub cboCategory_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboCategory.SelectedIndexChanged
         If CType(sender, ComboBox).SelectedItem = "CROSSWORD" And cboPack.Text.ToUpper <> "DISNEY WHEEL OF FORTUNE" Then
             txtCrosswordClue.Show()
@@ -510,6 +525,7 @@ Public Class frmCustomizer
         Else
             txtCrosswordClue.Hide()
             txtCrosswordClue.Clear()
+            txtPuzzle.ReadOnly = False
             txtPuzzle.Enabled = True
             chkCrosswordModify.Checked = True
             chkCrosswordModify.ForeColor = Color.White

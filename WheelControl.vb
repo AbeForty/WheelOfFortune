@@ -17,7 +17,9 @@ Public Class WheelSpinControl
         BR
     End Enum
     Private Sub spinWheel(length As Integer)
-        My.Computer.Audio.Play(My.Resources.wheelspinlong, AudioPlayMode.Background)
+        If WheelController.round <> WheelController.PuzzleType.BR Then
+            My.Computer.Audio.Play(My.Resources.wheelspinlong, AudioPlayMode.Background)
+        End If
         tmrSpinTest.Start()
     End Sub
     Private Sub trkWheel_ValueChanged(sender As Object, e As EventArgs) Handles trkWheel.ValueChanged
@@ -82,6 +84,7 @@ Public Class WheelSpinControl
                     ElseIf WheelController.wheelWedges.Item(trkWheel.Value) = "Mystery 1" Or WheelController.wheelWedges.Item(trkWheel.Value) = "Mystery 2" Then
                         If WheelController.mysteryStatus = False Then
                             My.Computer.Audio.Play(My.Resources.snd_mystery_wedge, AudioPlayMode.Background)
+                            frmAudio.playAudCheer(True)
                             WheelController.spinResult = 1000
                         ElseIf WheelController.mysteryStatus = True Then
                             WheelController.spinResult = 1000
@@ -121,28 +124,50 @@ Public Class WheelSpinControl
                         frmScore.lblCurrentValue.Text = WheelController.spinResult
                         frmPuzzleBoard.wheelTilt.Enabled = False
                         readDollarAmount()
-                        frmAudio.Show()
-                        frmAudio.playSpeedUp(True)
                     End If
                 End If
             End If
         ElseIf WheelController.round = WheelController.PuzzleType.BR Then
             If spinTimer < spinStrength Then
+                If wmpWheelSpin.URL = Nothing Then
+                    wmpWheelSpin.URL = Application.StartupPath & "\Resources\wheel_spin_start.wav"
+                    wmpWheelSpin.Ctlcontrols.play()
+                End If
+                'If wmpWheelSpin.playState = WMPPlayState.wmppsStopped Then
+                If wmpWheelSpin.playState = WMPPlayState.wmppsPlaying Then
+                    VariableTesting.lblPlayState.Text = "Play State: 1 " & wmpWheel.playState.ToString()
+                    wmpWheelSpin.URL = Application.StartupPath & "\Resources\wheel_spin_mid.wav"
+                    wmpWheelSpin.settings.setMode("Loop", True)
+                    wmpWheelSpin.Ctlcontrols.play()
+                Else
+                    VariableTesting.lblPlayState.Text = "Play State: 1 Playing " & wmpWheel.playState.ToString()
+                End If
+                'End If
                 spinTimer += 1
-                trkBonusWheel.Value += 1
+                    trkBonusWheel.Value += 1
                 If spinTimer = spinStrength - (0.25 * spinStrength) Then
                     tmrSpinTest.Interval = 300
+                    If wmpWheelSpin.playState = WMPPlayState.wmppsPlaying Then
+                        VariableTesting.lblPlayState.Text = "Play State: 2 " & wmpWheel.playState.ToString()
+                        wmpWheelSpin.URL = Application.StartupPath & "\Resources\wheel_spin_single.wav"
+                        wmpWheelSpin.settings.setMode("Loop", True)
+                        wmpWheelSpin.Ctlcontrols.play()
+                    Else
+                        VariableTesting.lblPlayState.Text = "Play State: 2 Playing " & wmpWheel.playState.ToString()
+                    End If
                 End If
             Else
-                spinTimer = spinStrength
+                    spinTimer = spinStrength
                 spinPaused = False
                 wmpWheel.Ctlcontrols.pause()
+                wmpWheelSpin.settings.setMode("Loop", False)
+                wmpWheelSpin.Ctlcontrols.stop()
                 If WheelController.wheelWedges.Item(trkBonusWheel.Value) <> "Car" Then
                     WheelController.spinResult = WheelController.wheelWedges.Item(trkBonusWheel.Value)
                     WheelController.spinResult = WheelController.wheelWedges.Item(trkBonusWheel.Value)
                 Else
-                    WheelController.spinResult = 25000
-                    WheelController.spinResult = 25000
+                    WheelController.spinResult = 33000
+                    WheelController.spinResult = 33000
                 End If
                 frmScore.lblCurrentValue.Text = WheelController.spinResult
                 WheelController.disableRSTLNE()
@@ -216,27 +241,34 @@ Public Class WheelSpinControl
         If pbarWheel.Visible = True Then
             stopSpin()
         Else
-            Me.Hide()
-            frmScore.Show()
-            dlgPuzzleBoard.Close()
-            If WheelController.round = WheelController.PuzzleType.R1 And WheelController.millionStatus = True Then
-                wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR1.mp4"
-            ElseIf WheelController.round = WheelController.PuzzleType.R1 And WheelController.millionStatus = False Then
-                wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR1Million.mp4"
-            ElseIf WheelController.round = WheelController.PuzzleType.R2 And WheelController.millionStatus = True Then
-                wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR2.mp4"
-            ElseIf WheelController.round = WheelController.PuzzleType.R2 And WheelController.millionStatus = False Then
-                wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR2Million.mp4"
-            ElseIf WheelController.round = WheelController.PuzzleType.R3 And WheelController.millionStatus = True Then
-                wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR3.mp4"
-            ElseIf WheelController.round = WheelController.PuzzleType.R3 And WheelController.millionStatus = False Then
-                wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR3Million.mp4"
-            ElseIf WheelController.round = WheelController.PuzzleType.BR Then
-                wmpWheel.URL = Application.StartupPath & "\Resources\WheelSpinBonus.mp4"
-            Else
-                wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR4.mp4"
+            If WheelController.round = WheelController.PuzzleType.BR And WheelController.revealed = False Then
+                My.Computer.Audio.Play(My.Resources.bonus_transition, AudioPlayMode.BackgroundLoop)
             End If
-        End If
+            If WheelController.finalSpin = True Then
+                frmAudio.Show()
+                frmAudio.playSpeedUp(True)
+            End If
+            Me.Hide()
+                frmScore.Show()
+                dlgPuzzleBoard.Close()
+                If WheelController.round = WheelController.PuzzleType.R1 And WheelController.millionStatus = True Then
+                    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR1.mp4"
+                ElseIf WheelController.round = WheelController.PuzzleType.R1 And WheelController.millionStatus = False Then
+                    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR1Million.mp4"
+                ElseIf WheelController.round = WheelController.PuzzleType.R2 And WheelController.millionStatus = True Then
+                    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR2.mp4"
+                ElseIf WheelController.round = WheelController.PuzzleType.R2 And WheelController.millionStatus = False Then
+                    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR2Million.mp4"
+                ElseIf WheelController.round = WheelController.PuzzleType.R3 And WheelController.millionStatus = True Then
+                    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR3.mp4"
+                ElseIf WheelController.round = WheelController.PuzzleType.R3 And WheelController.millionStatus = False Then
+                    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR3Million.mp4"
+                ElseIf WheelController.round = WheelController.PuzzleType.BR Then
+                    wmpWheel.URL = Application.StartupPath & "\Resources\WheelSpinBonus.mp4"
+                Else
+                    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR4.mp4"
+                End If
+            End If
     End Sub
     Private Sub WheelSpinControl_VisibleChanged(sender As Object, e As EventArgs) Handles Me.VisibleChanged
         If Me.Visible = True Then
@@ -252,6 +284,7 @@ Public Class WheelSpinControl
             If WheelController.round = WheelController.PuzzleType.BR Then
                 firstSpin = True
                 If WheelController.bonusPuzzleRevealed = False Then
+                    My.Computer.Audio.Play(My.Resources.bonus_spin, AudioPlayMode.BackgroundLoop)
                     If WheelController.virtualHost = True Then
                         Dim SAPI
                         SAPI = CreateObject("SAPI.spvoice")
@@ -321,13 +354,17 @@ Public Class WheelSpinControl
                         End If
                     End If
                 Else
-                    If WheelController.virtualHost = True Then
-                        SAPI = CreateObject("SAPI.spvoice")
-                        SAPI.Speak("A chance to score big here. All right. Let's have a letter.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
+                    If WheelController.finalSpin = False Then
+                        frmAudio.playAudCheer(True)
                     End If
-                End If
+                    If WheelController.virtualHost = True Then
+                            SAPI = CreateObject("SAPI.spvoice")
+                            SAPI.Speak("A chance to score big here. All right. Let's have a letter.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
+                        End If
+                    End If
             Catch ex As Exception
                 If spinResult.Contains("Mystery") And WheelController.mysteryStatus = False Or spinResult = "Express" Then
+                    'frmAudio.playAudCheer(True)
                     If WheelController.virtualHost = True Then
                         Dim SAPI
                         SAPI = CreateObject("SAPI.spvoice")
