@@ -62,10 +62,14 @@ Public Class MysteryDialog
             WheelController.wheelWedges(58) = 600
             WheelController.wheelWedges(59) = 600
             WheelController.wheelWedges(60) = 600
+            WheelController.mystery1Status = True
+            WheelController.loadMysteryWheel()
         ElseIf frmScore.lblCurrentValue.Text = "Mystery 2" Then
             WheelController.wheelWedges(22) = 700
             WheelController.wheelWedges(23) = 700
             WheelController.wheelWedges(24) = 700
+            WheelController.mystery2Status = True
+            WheelController.loadMysteryWheel()
         End If
         WheelController.mysteryStatus = True
         Me.Close()
@@ -104,7 +108,7 @@ Public Class MysteryDialog
         Else
             currentPlayerValue = CInt(CType(frmScore.pnlScore.Controls("lblPlayer" & WheelController.currentPlayer), Label).Text.Replace("$", ""))
         End If
-        currentPlayerValue -= WheelController.moneyValue
+        currentPlayerValue += WheelController.moneyValue
         'If WheelController.currentPlayer = 1 Then
         '    If frmScore.lblPlayer1.Text.Replace("$", "") = "" Then
         '        currentPlayerValue = 0
@@ -130,7 +134,7 @@ Public Class MysteryDialog
         If currentPlayerValue.ToString() = "" Then
             currentPlayerValue = 0
         End If
-        Dim total = currentPlayerValue + WheelController.moneyValue
+        Dim total = currentPlayerValue
         If WheelController.virtualHost = True Then
             Dim SAPI
             SAPI = CreateObject("SAPI.spvoice")

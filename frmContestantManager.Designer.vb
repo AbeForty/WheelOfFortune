@@ -24,6 +24,8 @@ Partial Class frmContestantManager
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmContestantManager))
         Me.pnlSettings = New System.Windows.Forms.Panel()
+        Me.lblSelectContestant = New System.Windows.Forms.Label()
+        Me.lblNoGames = New System.Windows.Forms.Label()
         Me.lblNewContestant = New System.Windows.Forms.Label()
         Me.btnClose = New System.Windows.Forms.PictureBox()
         Me.splNewGame = New System.Windows.Forms.SplitContainer()
@@ -34,8 +36,6 @@ Partial Class frmContestantManager
         Me.lblDate = New System.Windows.Forms.Label()
         Me.lblPackName = New System.Windows.Forms.Label()
         Me.flpStatistics = New System.Windows.Forms.FlowLayoutPanel()
-        Me.lblSelectContestant = New System.Windows.Forms.Label()
-        Me.lblNoGames = New System.Windows.Forms.Label()
         Me.lblStats = New System.Windows.Forms.Label()
         Me.lblSettings = New System.Windows.Forms.Label()
         Me.pnlSettings.SuspendLayout()
@@ -61,6 +61,29 @@ Partial Class frmContestantManager
         Me.pnlSettings.Name = "pnlSettings"
         Me.pnlSettings.Size = New System.Drawing.Size(1538, 884)
         Me.pnlSettings.TabIndex = 1
+        '
+        'lblSelectContestant
+        '
+        Me.lblSelectContestant.AutoSize = True
+        Me.lblSelectContestant.Font = New System.Drawing.Font("Gotham Bold", 13.0!)
+        Me.lblSelectContestant.ForeColor = System.Drawing.Color.White
+        Me.lblSelectContestant.Location = New System.Drawing.Point(588, 220)
+        Me.lblSelectContestant.Name = "lblSelectContestant"
+        Me.lblSelectContestant.Size = New System.Drawing.Size(480, 25)
+        Me.lblSelectContestant.TabIndex = 22
+        Me.lblSelectContestant.Text = "SELECT A CONTESTANT FROM THE LEFT"
+        '
+        'lblNoGames
+        '
+        Me.lblNoGames.AutoSize = True
+        Me.lblNoGames.Font = New System.Drawing.Font("Gotham Bold", 13.0!)
+        Me.lblNoGames.ForeColor = System.Drawing.Color.White
+        Me.lblNoGames.Location = New System.Drawing.Point(588, 245)
+        Me.lblNoGames.Name = "lblNoGames"
+        Me.lblNoGames.Size = New System.Drawing.Size(387, 25)
+        Me.lblNoGames.TabIndex = 21
+        Me.lblNoGames.Text = "NO GAMES HAVE BEEN PLAYED."
+        Me.lblNoGames.Visible = False
         '
         'lblNewContestant
         '
@@ -165,34 +188,10 @@ Partial Class frmContestantManager
         'flpStatistics
         '
         Me.flpStatistics.AutoScroll = True
-        Me.flpStatistics.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
         Me.flpStatistics.Location = New System.Drawing.Point(14, 114)
         Me.flpStatistics.Name = "flpStatistics"
         Me.flpStatistics.Size = New System.Drawing.Size(1007, 624)
         Me.flpStatistics.TabIndex = 22
-        '
-        'lblSelectContestant
-        '
-        Me.lblSelectContestant.AutoSize = True
-        Me.lblSelectContestant.Font = New System.Drawing.Font("Gotham Bold", 13.0!)
-        Me.lblSelectContestant.ForeColor = System.Drawing.Color.White
-        Me.lblSelectContestant.Location = New System.Drawing.Point(588, 220)
-        Me.lblSelectContestant.Name = "lblSelectContestant"
-        Me.lblSelectContestant.Size = New System.Drawing.Size(480, 25)
-        Me.lblSelectContestant.TabIndex = 22
-        Me.lblSelectContestant.Text = "SELECT A CONTESTANT FROM THE LEFT"
-        '
-        'lblNoGames
-        '
-        Me.lblNoGames.AutoSize = True
-        Me.lblNoGames.Font = New System.Drawing.Font("Gotham Bold", 13.0!)
-        Me.lblNoGames.ForeColor = System.Drawing.Color.White
-        Me.lblNoGames.Location = New System.Drawing.Point(588, 245)
-        Me.lblNoGames.Name = "lblNoGames"
-        Me.lblNoGames.Size = New System.Drawing.Size(387, 25)
-        Me.lblNoGames.TabIndex = 21
-        Me.lblNoGames.Text = "NO GAMES HAVE BEEN PLAYED."
-        Me.lblNoGames.Visible = False
         '
         'lblStats
         '

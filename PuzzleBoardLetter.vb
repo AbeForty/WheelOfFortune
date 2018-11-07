@@ -162,6 +162,8 @@ Public Class PuzzleBoardLetter
             btnLetter.BackgroundImage = My.Resources.y
         ElseIf letter = "Z" Then
             btnLetter.BackgroundImage = My.Resources.z
+        ElseIf letter = "#" Then
+            btnLetter.BackgroundImage = My.Resources.num
         End If
     End Sub
     Private Sub btnLetter_Click(sender As Object, e As EventArgs) Handles btnLetter.Click
@@ -180,8 +182,17 @@ Public Class PuzzleBoardLetter
             btnLetter.BackColor = Color.FromArgb(19, 28, 255)
             WheelController.currentSolveLetter = Name.Replace("PuzzleBoardLetter", "")
         End If
-        If btnLetter.BackColor = Color.FromArgb(19, 28, 255) And Not WheelController.solveMode = True Then
+        If Not String.IsNullOrEmpty(letterBehind) And Not String.IsNullOrEmpty(WheelController.puzzleString) Or (WheelController.round = WheelController.PuzzleType.BR And (letterBehind = "R" Or letterBehind = "S" Or letterBehind = "T" Or letterBehind = "L" Or letterBehind = "N" Or letterBehind = "E")) Then
+            If WheelController.puzzleString.Contains(letterBehind) = False And Not btnLetter.BackColor = Color.FromArgb(19, 28, 255) And letterRevealed = False Then
+                btnLetter.BackColor = Color.FromArgb(19, 28, 255)
+                If WheelController.finalSpin = False Then
+                    playDing()
+                End If
+            End If
+        End If
+        If (btnLetter.BackColor = Color.FromArgb(19, 28, 255) And Not WheelController.solveMode = True) Then
             revealLetter()
+            WheelController.letterControlList.Remove(Name.Replace("PuzzleBoardLetter", ""))
             WheelController.letterControlTappedList.Remove(Name.Replace("PuzzleBoardLetter", ""))
             If WheelController.letterControlTappedList.Count = 0 Then
                 'If finalSpin = True Then

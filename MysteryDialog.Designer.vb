@@ -71,9 +71,9 @@ Partial Class MysteryDialog
         '
         Me.lblMessage.Font = New System.Drawing.Font("Gotham Bold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblMessage.ForeColor = System.Drawing.Color.White
-        Me.lblMessage.Location = New System.Drawing.Point(106, 69)
+        Me.lblMessage.Location = New System.Drawing.Point(118, 69)
         Me.lblMessage.Name = "lblMessage"
-        Me.lblMessage.Size = New System.Drawing.Size(268, 189)
+        Me.lblMessage.Size = New System.Drawing.Size(256, 189)
         Me.lblMessage.TabIndex = 122
         Me.lblMessage.Text = "You've landed on the Mystery Wedge. The back either contains a bankrupt or a $10," &
     "000 prize. Do you want to reveal the mystery?"
@@ -101,7 +101,7 @@ Partial Class MysteryDialog
         Me.DoubleBuffered = True
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "MysteryDialog"

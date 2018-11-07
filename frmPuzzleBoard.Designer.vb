@@ -310,7 +310,7 @@ Partial Class frmPuzzleBoard
         'wheelTilt
         '
         Me.wheelTilt.BackColor = System.Drawing.Color.Transparent
-        Me.wheelTilt.Image = Global.WheelOfFortune.My.Resources.Resources.WheelTiltedSmall
+        Me.wheelTilt.Image = Global.WheelOfFortune.My.Resources.Resources.WheelTiltedSmallR1Million
         Me.wheelTilt.Location = New System.Drawing.Point(1, 758)
         Me.wheelTilt.Name = "wheelTilt"
         Me.wheelTilt.Size = New System.Drawing.Size(2082, 239)

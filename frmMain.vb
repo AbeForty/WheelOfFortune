@@ -12,6 +12,11 @@
         Else
 
         End If
+        If My.Settings.animationOn = True Then
+            pboxWheelAnim.Show()
+        Else
+            pboxWheelAnim.Hide()
+        End If
     End Sub
 
     Private Sub btnPlay_Click(sender As Object, e As EventArgs) Handles btnPlay.Click
@@ -41,5 +46,19 @@
         Else
             My.Computer.Audio.Play(My.Resources.wof_theme, AudioPlayMode.BackgroundLoop)
         End If
+    End Sub
+
+    Private Sub pboxWheelAnim_DoubleClick(sender As Object, e As EventArgs) Handles pboxWheelAnim.DoubleClick
+        CType(sender, PictureBox).Hide()
+        My.Settings.animationOn = False
+    End Sub
+
+    Private Sub frmMain_DoubleClick(sender As Object, e As EventArgs) Handles Me.DoubleClick
+        pboxWheelAnim.Show()
+        My.Settings.animationOn = True
+    End Sub
+
+    Private Sub frmMain_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+        My.Computer.Audio.Stop()
     End Sub
 End Class

@@ -197,13 +197,13 @@ Public Class WheelSpinControl
     End Sub
     Private Sub tmrSpinner_Tick(sender As Object, e As EventArgs) Handles tmrSpinner.Tick
         If SpinStart = False Then
-            pbarWheel.Increment(10)
-            If pbarWheel.Value = 100 Then
+            pbarWheel.Increment(5)
+            If pbarWheel.Value = pbarWheel.Maximum Then
                 SpinStart = True
             End If
         ElseIf SpinStart = True Then
-            pbarWheel.Increment(-10)
-            If pbarWheel.Value = 0 Then
+            pbarWheel.Increment(-5)
+            If pbarWheel.Value = 5 Then
                 SpinStart = False
             End If
         End If
@@ -249,28 +249,34 @@ Public Class WheelSpinControl
                 frmAudio.playSpeedUp(True)
             End If
             Me.Hide()
-                frmScore.Show()
-                dlgPuzzleBoard.Close()
-                If WheelController.round = WheelController.PuzzleType.R1 And WheelController.millionStatus = True Then
-                    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR1.mp4"
-                ElseIf WheelController.round = WheelController.PuzzleType.R1 And WheelController.millionStatus = False Then
-                    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR1Million.mp4"
-                ElseIf WheelController.round = WheelController.PuzzleType.R2 And WheelController.millionStatus = True Then
-                    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR2.mp4"
-                ElseIf WheelController.round = WheelController.PuzzleType.R2 And WheelController.millionStatus = False Then
-                    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR2Million.mp4"
-                ElseIf WheelController.round = WheelController.PuzzleType.R3 And WheelController.millionStatus = True Then
-                    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR3.mp4"
-                ElseIf WheelController.round = WheelController.PuzzleType.R3 And WheelController.millionStatus = False Then
-                    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR3Million.mp4"
-                ElseIf WheelController.round = WheelController.PuzzleType.BR Then
-                    wmpWheel.URL = Application.StartupPath & "\Resources\WheelSpinBonus.mp4"
-                Else
-                    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR4.mp4"
-                End If
-            End If
+            frmScore.Show()
+            dlgPuzzleBoard.Close()
+            WheelController.loadMillionWheel()
+            WheelController.loadMysteryWheel()
+            'If WheelController.round = WheelController.PuzzleType.BR Then
+            '    wmpWheel.URL = Application.StartupPath & "\Resources\WheelSpinBonus.mp4"
+            'End If
+            'If WheelController.round = WheelController.PuzzleType.R1 And WheelController.millionStatus = True Then
+            '    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR1.mp4"
+            'ElseIf WheelController.round = WheelController.PuzzleType.R1 And WheelController.millionStatus = False Then
+            '    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR1Million.mp4"
+            'ElseIf WheelController.round = WheelController.PuzzleType.R2 And WheelController.millionStatus = True Then
+            '    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR2.mp4"
+            'ElseIf WheelController.round = WheelController.PuzzleType.R2 And WheelController.millionStatus = False Then
+            '    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR2Million.mp4"
+            'ElseIf WheelController.round = WheelController.PuzzleType.R3 And WheelController.millionStatus = True Then
+            '    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR3.mp4"
+            'ElseIf WheelController.round = WheelController.PuzzleType.R3 And WheelController.millionStatus = False Then
+            '    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR3Million.mp4"
+            'ElseIf WheelController.round = WheelController.PuzzleType.BR Then
+            '    wmpWheel.URL = Application.StartupPath & "\Resources\WheelSpinBonus.mp4"
+            'Else
+            '    wmpWheel.URL = Application.StartupPath & "\Resources\WheelZoomR4.mp4"
+            'End If
+        End If
     End Sub
     Private Sub WheelSpinControl_VisibleChanged(sender As Object, e As EventArgs) Handles Me.VisibleChanged
+        pbarWheel.Value = 10
         If Me.Visible = True Then
             dlgPuzzleBoard.Show()
             WheelController.previousValue = ""
@@ -335,7 +341,16 @@ Public Class WheelSpinControl
         tmrFinalSpinDisable.Start()
     End Sub
     Public Sub resetWheel()
-        trkWheel.Value = 0
+        If WheelController.currentPlayer = 1 Then
+            trkWheel.Value = 71
+            wmpWheel.Ctlcontrols.currentPosition = 71
+        ElseIf WheelController.currentPlayer = 2 Then
+            trkWheel.Value = 64
+            wmpWheel.Ctlcontrols.currentPosition = 64
+        ElseIf WheelController.currentPlayer = 3 Then
+            trkWheel.Value = 7
+            wmpWheel.Ctlcontrols.currentPosition = 7
+        End If
     End Sub
     Private Sub readDollarAmount()
         If WheelController.finalSpin = False And Not WheelController.round = WheelController.PuzzleType.BR Then

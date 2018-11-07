@@ -26,8 +26,8 @@ Partial Class ContestantDisplay
         Me.NameTag1 = New WheelOfFortune.NameTag()
         Me.lblTotal = New System.Windows.Forms.Label()
         Me.txtPlayer = New System.Windows.Forms.TextBox()
-        Me.btnClose = New System.Windows.Forms.PictureBox()
-        CType(Me.btnClose, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.btnDelete = New System.Windows.Forms.PictureBox()
+        CType(Me.btnDelete, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'NameTag1
@@ -62,29 +62,29 @@ Partial Class ContestantDisplay
         Me.txtPlayer.TabIndex = 23
         Me.txtPlayer.Visible = False
         '
-        'btnClose
+        'btnDelete
         '
-        Me.btnClose.Image = Global.WheelOfFortune.My.Resources.Resources.Delete
-        Me.btnClose.Location = New System.Drawing.Point(402, 0)
-        Me.btnClose.Name = "btnClose"
-        Me.btnClose.Size = New System.Drawing.Size(24, 23)
-        Me.btnClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
-        Me.btnClose.TabIndex = 24
-        Me.btnClose.TabStop = False
-        Me.btnClose.Visible = False
+        Me.btnDelete.Image = Global.WheelOfFortune.My.Resources.Resources.Delete
+        Me.btnDelete.Location = New System.Drawing.Point(402, 0)
+        Me.btnDelete.Name = "btnDelete"
+        Me.btnDelete.Size = New System.Drawing.Size(24, 23)
+        Me.btnDelete.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.btnDelete.TabIndex = 24
+        Me.btnDelete.TabStop = False
+        Me.btnDelete.Visible = False
         '
         'ContestantDisplay
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.Transparent
-        Me.Controls.Add(Me.btnClose)
+        Me.Controls.Add(Me.btnDelete)
         Me.Controls.Add(Me.txtPlayer)
         Me.Controls.Add(Me.lblTotal)
         Me.Controls.Add(Me.NameTag1)
         Me.Name = "ContestantDisplay"
         Me.Size = New System.Drawing.Size(426, 90)
-        CType(Me.btnClose, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.btnDelete, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -93,5 +93,5 @@ Partial Class ContestantDisplay
     Friend WithEvents NameTag1 As NameTag
     Friend WithEvents lblTotal As Label
     Friend WithEvents txtPlayer As TextBox
-    Friend WithEvents btnClose As PictureBox
+    Friend WithEvents btnDelete As PictureBox
 End Class

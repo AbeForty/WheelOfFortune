@@ -25,6 +25,7 @@ Partial Class frmCustomizer
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmCustomizer))
         Me.pnlCreator = New System.Windows.Forms.Panel()
+        Me.chk80sPuzzle = New System.Windows.Forms.CheckBox()
         Me.btnPlay = New System.Windows.Forms.Button()
         Me.chkCrosswordModify = New System.Windows.Forms.CheckBox()
         Me.txtCrosswordClue = New System.Windows.Forms.TextBox()
@@ -48,7 +49,6 @@ Partial Class frmCustomizer
         Me.lblPackSelect = New System.Windows.Forms.Label()
         Me.toolTipCrosswordClue = New System.Windows.Forms.ToolTip(Me.components)
         Me.toolTipPuzzle = New System.Windows.Forms.ToolTip(Me.components)
-        Me.chk80sPuzzle = New System.Windows.Forms.CheckBox()
         Me.pnlCreator.SuspendLayout()
         CType(Me.btnClose, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pboxBoard, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -82,6 +82,18 @@ Partial Class frmCustomizer
         Me.pnlCreator.Size = New System.Drawing.Size(1505, 576)
         Me.pnlCreator.TabIndex = 0
         '
+        'chk80sPuzzle
+        '
+        Me.chk80sPuzzle.AutoSize = True
+        Me.chk80sPuzzle.Font = New System.Drawing.Font("Gotham Bold", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chk80sPuzzle.ForeColor = System.Drawing.Color.White
+        Me.chk80sPuzzle.Location = New System.Drawing.Point(514, 312)
+        Me.chk80sPuzzle.Name = "chk80sPuzzle"
+        Me.chk80sPuzzle.Size = New System.Drawing.Size(122, 21)
+        Me.chk80sPuzzle.TabIndex = 18
+        Me.chk80sPuzzle.Text = "80's PUZZLE"
+        Me.chk80sPuzzle.UseVisualStyleBackColor = True
+        '
         'btnPlay
         '
         Me.btnPlay.Font = New System.Drawing.Font("Gotham Bold", 7.8!)
@@ -106,6 +118,7 @@ Partial Class frmCustomizer
         '
         'txtCrosswordClue
         '
+        Me.txtCrosswordClue.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
         Me.txtCrosswordClue.Font = New System.Drawing.Font("Gotham Bold", 13.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtCrosswordClue.Location = New System.Drawing.Point(514, 273)
         Me.txtCrosswordClue.MaxLength = 52
@@ -258,6 +271,7 @@ Partial Class frmCustomizer
         '
         'txtPuzzle
         '
+        Me.txtPuzzle.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
         Me.txtPuzzle.Font = New System.Drawing.Font("Helvetica-Condensed-Black-Se", 13.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtPuzzle.Location = New System.Drawing.Point(517, 369)
         Me.txtPuzzle.Name = "txtPuzzle"
@@ -315,18 +329,6 @@ Partial Class frmCustomizer
         'toolTipPuzzle
         '
         Me.toolTipPuzzle.ToolTipTitle = "Puzzle"
-        '
-        'chk80sPuzzle
-        '
-        Me.chk80sPuzzle.AutoSize = True
-        Me.chk80sPuzzle.Font = New System.Drawing.Font("Gotham Bold", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chk80sPuzzle.ForeColor = System.Drawing.Color.White
-        Me.chk80sPuzzle.Location = New System.Drawing.Point(514, 312)
-        Me.chk80sPuzzle.Name = "chk80sPuzzle"
-        Me.chk80sPuzzle.Size = New System.Drawing.Size(122, 21)
-        Me.chk80sPuzzle.TabIndex = 18
-        Me.chk80sPuzzle.Text = "80's PUZZLE"
-        Me.chk80sPuzzle.UseVisualStyleBackColor = True
         '
         'frmCustomizer
         '

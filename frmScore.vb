@@ -40,9 +40,9 @@
                     'CType(frmPuzzleBoard.PuzzleBoard1.Controls("PuzzleBoardLetter" & WheelController.currentSolveLetter), PuzzleBoardLetter).btnLetter.BackColor = SystemColors.HotTrack
                 End If
             End If
-        ElseIf ((e.KeyChar <> ChrW(Keys.Space)) And Char.IsLetter(e.KeyChar.ToString)) Then
+        ElseIf ((e.KeyChar <> ChrW(Keys.Space)) And Char.IsLetter(e.KeyChar.ToString))  Then
             WheelController.backspace = False
-            If usedLetterBoard.Controls("btn" & e.KeyChar.ToString).Enabled = True Then
+            If usedLetterBoard.Controls("btn" & e.KeyChar.ToString).Enabled = True Or (WheelController.puzzle.Contains(e.KeyChar.ToString) And usedLetterBoard.Controls("btn" & e.KeyChar.ToString).Enabled = False) Then
                 WheelController.loadLetters(usedLetterBoard.Controls("btn" & e.KeyChar.ToString))
             End If
         ElseIf e.KeyChar = ChrW(Keys.Space) And Not wheelcontroller.revealed = True And WheelController.round <> WheelController.PuzzleType.TU1 And WheelController.round <> WheelController.PuzzleType.TU2 And WheelController.round <> WheelController.PuzzleType.TU3 And WheelController.round <> WheelController.PuzzleType.TBTU Then
@@ -173,6 +173,7 @@
             tmrFinalSpin.Stop()
             WheelController.LoseATurn()
             WheelController.previousValue = ""
+            WheelController.finalSpinTimesUp = True
             My.Computer.Audio.Play(My.Resources.Buzzer, AudioPlayMode.Background)
             usedLetterBoard.Enabled = True
             WheelController.numberOfTurns += 1

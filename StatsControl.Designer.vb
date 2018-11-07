@@ -37,7 +37,7 @@ Partial Class StatsControl
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel2.Location = New System.Drawing.Point(0, 0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(1001, 41)
+        Me.Panel2.Size = New System.Drawing.Size(975, 41)
         Me.Panel2.TabIndex = 24
         '
         'lblWinnings
@@ -80,7 +80,7 @@ Partial Class StatsControl
         Me.BackColor = System.Drawing.Color.Transparent
         Me.Controls.Add(Me.Panel2)
         Me.Name = "StatsControl"
-        Me.Size = New System.Drawing.Size(1001, 41)
+        Me.Size = New System.Drawing.Size(975, 41)
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
         Me.ResumeLayout(False)

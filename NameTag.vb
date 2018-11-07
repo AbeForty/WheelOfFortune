@@ -60,6 +60,8 @@
             ContestantControl.contestantID = contestantID
             ContestantControl.contestantName = contestantName
             ContestantControl.DialogResult = DialogResult.OK
+        ElseIf TypeOf (Parent) Is ContestantDisplay Then
+            OnClick(e)
         End If
     End Sub
 End Class

@@ -60,6 +60,7 @@ Partial Class frmScore
         Me.btnC = New System.Windows.Forms.Button()
         Me.btnD = New System.Windows.Forms.Button()
         Me.btnE = New System.Windows.Forms.Button()
+        Me.flpUsedLetterBoard = New System.Windows.Forms.FlowLayoutPanel()
         Me.usedLetterBoard = New System.Windows.Forms.FlowLayoutPanel()
         Me.btnF = New System.Windows.Forms.Button()
         Me.btnG = New System.Windows.Forms.Button()
@@ -76,8 +77,8 @@ Partial Class frmScore
         Me.btnR = New System.Windows.Forms.Button()
         Me.btnS = New System.Windows.Forms.Button()
         Me.btnT = New System.Windows.Forms.Button()
-        Me.btnU = New System.Windows.Forms.Button()
         Me.btnV = New System.Windows.Forms.Button()
+        Me.btnU = New System.Windows.Forms.Button()
         Me.btnW = New System.Windows.Forms.Button()
         Me.btnX = New System.Windows.Forms.Button()
         Me.btnY = New System.Windows.Forms.Button()
@@ -116,6 +117,7 @@ Partial Class frmScore
         CType(Me.player2LeftArrow, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.player1RightArrow, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.player1LeftArrow, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.flpUsedLetterBoard.SuspendLayout()
         Me.usedLetterBoard.SuspendLayout()
         CType(Me.wmpBonus, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.flpBonusCategories.SuspendLayout()
@@ -163,7 +165,7 @@ Partial Class frmScore
         '
         'btnPause
         '
-        Me.btnPause.BackgroundImage = Global.WheelOfFortune.My.Resources.Resources.wof_logo
+        Me.btnPause.BackgroundImage = Global.WheelOfFortune.My.Resources.Resources.WOFLogo35
         Me.btnPause.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.btnPause.Location = New System.Drawing.Point(1783, 42)
         Me.btnPause.Name = "btnPause"
@@ -572,9 +574,19 @@ Partial Class frmScore
         Me.btnE.Text = "E"
         Me.btnE.UseVisualStyleBackColor = False
         '
+        'flpUsedLetterBoard
+        '
+        Me.flpUsedLetterBoard.BackColor = System.Drawing.Color.Red
+        Me.flpUsedLetterBoard.Controls.Add(Me.usedLetterBoard)
+        Me.flpUsedLetterBoard.Controls.Add(Me.btnLoseATurn)
+        Me.flpUsedLetterBoard.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.flpUsedLetterBoard.Location = New System.Drawing.Point(0, 1017)
+        Me.flpUsedLetterBoard.Name = "flpUsedLetterBoard"
+        Me.flpUsedLetterBoard.Size = New System.Drawing.Size(1932, 75)
+        Me.flpUsedLetterBoard.TabIndex = 32
+        '
         'usedLetterBoard
         '
-        Me.usedLetterBoard.BackColor = System.Drawing.Color.Red
         Me.usedLetterBoard.Controls.Add(Me.btnA)
         Me.usedLetterBoard.Controls.Add(Me.btnB)
         Me.usedLetterBoard.Controls.Add(Me.btnC)
@@ -595,18 +607,16 @@ Partial Class frmScore
         Me.usedLetterBoard.Controls.Add(Me.btnR)
         Me.usedLetterBoard.Controls.Add(Me.btnS)
         Me.usedLetterBoard.Controls.Add(Me.btnT)
-        Me.usedLetterBoard.Controls.Add(Me.btnU)
         Me.usedLetterBoard.Controls.Add(Me.btnV)
+        Me.usedLetterBoard.Controls.Add(Me.btnU)
         Me.usedLetterBoard.Controls.Add(Me.btnW)
         Me.usedLetterBoard.Controls.Add(Me.btnX)
         Me.usedLetterBoard.Controls.Add(Me.btnY)
         Me.usedLetterBoard.Controls.Add(Me.btnZ)
-        Me.usedLetterBoard.Controls.Add(Me.btnLoseATurn)
-        Me.usedLetterBoard.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.usedLetterBoard.Location = New System.Drawing.Point(0, 1021)
+        Me.usedLetterBoard.Location = New System.Drawing.Point(3, 3)
         Me.usedLetterBoard.Name = "usedLetterBoard"
-        Me.usedLetterBoard.Size = New System.Drawing.Size(1932, 71)
-        Me.usedLetterBoard.TabIndex = 32
+        Me.usedLetterBoard.Size = New System.Drawing.Size(1794, 68)
+        Me.usedLetterBoard.TabIndex = 39
         '
         'btnF
         '
@@ -820,6 +830,20 @@ Partial Class frmScore
         Me.btnT.Text = "T"
         Me.btnT.UseVisualStyleBackColor = False
         '
+        'btnV
+        '
+        Me.btnV.BackColor = System.Drawing.Color.White
+        Me.btnV.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.btnV.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnV.Font = New System.Drawing.Font("Helvetica-Condensed-Black-Se", 36.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnV.ForeColor = System.Drawing.Color.Black
+        Me.btnV.Location = New System.Drawing.Point(1383, 3)
+        Me.btnV.Name = "btnV"
+        Me.btnV.Size = New System.Drawing.Size(63, 64)
+        Me.btnV.TabIndex = 35
+        Me.btnV.Text = "V"
+        Me.btnV.UseVisualStyleBackColor = False
+        '
         'btnU
         '
         Me.btnU.BackColor = System.Drawing.Color.White
@@ -828,26 +852,12 @@ Partial Class frmScore
         Me.btnU.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnU.Font = New System.Drawing.Font("Helvetica-Condensed-Black-Se", 36.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnU.ForeColor = System.Drawing.Color.Black
-        Me.btnU.Location = New System.Drawing.Point(1383, 3)
+        Me.btnU.Location = New System.Drawing.Point(1452, 3)
         Me.btnU.Name = "btnU"
         Me.btnU.Size = New System.Drawing.Size(63, 64)
         Me.btnU.TabIndex = 34
         Me.btnU.Text = "U"
         Me.btnU.UseVisualStyleBackColor = False
-        '
-        'btnV
-        '
-        Me.btnV.BackColor = System.Drawing.Color.White
-        Me.btnV.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.btnV.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnV.Font = New System.Drawing.Font("Helvetica-Condensed-Black-Se", 36.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnV.ForeColor = System.Drawing.Color.Black
-        Me.btnV.Location = New System.Drawing.Point(1452, 3)
-        Me.btnV.Name = "btnV"
-        Me.btnV.Size = New System.Drawing.Size(63, 64)
-        Me.btnV.TabIndex = 35
-        Me.btnV.Text = "V"
-        Me.btnV.UseVisualStyleBackColor = False
         '
         'btnW
         '
@@ -911,7 +921,7 @@ Partial Class frmScore
         Me.btnLoseATurn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.btnLoseATurn.Font = New System.Drawing.Font("Gotham Bold", 7.8!)
         Me.btnLoseATurn.ForeColor = System.Drawing.Color.White
-        Me.btnLoseATurn.Location = New System.Drawing.Point(3, 73)
+        Me.btnLoseATurn.Location = New System.Drawing.Point(3, 77)
         Me.btnLoseATurn.Name = "btnLoseATurn"
         Me.btnLoseATurn.Size = New System.Drawing.Size(154, 64)
         Me.btnLoseATurn.TabIndex = 38
@@ -1012,6 +1022,7 @@ Partial Class frmScore
         Me.NameTag1.BackColor = System.Drawing.Color.Transparent
         Me.NameTag1.BackgroundImage = CType(resources.GetObject("NameTag1.BackgroundImage"), System.Drawing.Image)
         Me.NameTag1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.NameTag1.contestantID = 0
         Me.NameTag1.contestantName = "NAME"
         Me.NameTag1.Location = New System.Drawing.Point(637, 134)
         Me.NameTag1.Name = "NameTag1"
@@ -1023,6 +1034,7 @@ Partial Class frmScore
         Me.NameTag2.BackColor = System.Drawing.Color.Transparent
         Me.NameTag2.BackgroundImage = CType(resources.GetObject("NameTag2.BackgroundImage"), System.Drawing.Image)
         Me.NameTag2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.NameTag2.contestantID = 0
         Me.NameTag2.contestantName = "NAME"
         Me.NameTag2.Location = New System.Drawing.Point(935, 135)
         Me.NameTag2.Name = "NameTag2"
@@ -1034,6 +1046,7 @@ Partial Class frmScore
         Me.NameTag3.BackColor = System.Drawing.Color.Transparent
         Me.NameTag3.BackgroundImage = CType(resources.GetObject("NameTag3.BackgroundImage"), System.Drawing.Image)
         Me.NameTag3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.NameTag3.contestantID = 0
         Me.NameTag3.contestantName = "NAME"
         Me.NameTag3.Location = New System.Drawing.Point(1239, 135)
         Me.NameTag3.Name = "NameTag3"
@@ -1052,7 +1065,7 @@ Partial Class frmScore
         Me.Controls.Add(Me.NameTag2)
         Me.Controls.Add(Me.NameTag1)
         Me.Controls.Add(Me.wmpBonus)
-        Me.Controls.Add(Me.usedLetterBoard)
+        Me.Controls.Add(Me.flpUsedLetterBoard)
         Me.Controls.Add(Me.pnlScore)
         Me.Controls.Add(Me.flpBonusCategories)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
@@ -1079,6 +1092,7 @@ Partial Class frmScore
         CType(Me.player2LeftArrow, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.player1RightArrow, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.player1LeftArrow, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.flpUsedLetterBoard.ResumeLayout(False)
         Me.usedLetterBoard.ResumeLayout(False)
         CType(Me.wmpBonus, System.ComponentModel.ISupportInitialize).EndInit()
         Me.flpBonusCategories.ResumeLayout(False)
@@ -1100,7 +1114,7 @@ Partial Class frmScore
     Friend WithEvents btnC As Button
     Friend WithEvents btnD As Button
     Friend WithEvents btnE As Button
-    Friend WithEvents usedLetterBoard As FlowLayoutPanel
+    Friend WithEvents flpUsedLetterBoard As FlowLayoutPanel
     Friend WithEvents btnF As Button
     Friend WithEvents btnG As Button
     Friend WithEvents btnH As Button
@@ -1163,4 +1177,5 @@ Partial Class frmScore
     Friend WithEvents NameTag1 As NameTag
     Friend WithEvents NameTag2 As NameTag
     Friend WithEvents NameTag3 As NameTag
+    Friend WithEvents usedLetterBoard As FlowLayoutPanel
 End Class

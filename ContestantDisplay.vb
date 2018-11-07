@@ -67,6 +67,9 @@ Public Class ContestantDisplay
         If NameTag1.lblName.Text = "NAME" Then
             txtPlayer.Show()
         End If
+        If ParentForm Is frmContestantManager Then
+            btnDelete.Show()
+        End If
     End Sub
 
     Private Sub txtPlayer_TextChanged(sender As Object, e As EventArgs) Handles txtPlayer.TextChanged
@@ -116,28 +119,31 @@ Public Class ContestantDisplay
             Dim connPuzzle As SqlConnection
             connPuzzle = New SqlConnection("Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" & Application.StartupPath & "\WheelPuzzles.mdf;Integrated Security=True")
             Dim strSQL As String
-            strSQL = "Delete * From Contestant WHERE Contestant_ID = @Contestant_ID"
+            strSQL = "Delete From Contestant WHERE Id = @Contestant_ID"
             Dim cmd As SqlCommand
+            Dim gamePlayerCmd As SqlCommand
             connPuzzle.Open()
             Dim contestantIDParam As SqlParameter = New SqlParameter("@Contestant_ID", ContestantID)
+            Dim contestantID2Param As SqlParameter = New SqlParameter("@Contestant_ID", ContestantID)
             cmd = New SqlCommand(strSQL, connPuzzle)
             cmd.CommandType = CommandType.Text
             cmd.Parameters.Add(contestantIDParam)
             cmd.ExecuteNonQuery()
             connPuzzle.Close()
             Dim myStrSQL As String
-            myStrSQL = "Delete * From GamePlayer WHERE Contestant_ID = @Contestant_ID"
+            myStrSQL = "Delete From GamePlayer WHERE Contestant_ID = @Contestant_ID"
             Dim gamescmd As SqlCommand
             connPuzzle.Open()
-            cmd = New SqlCommand(myStrSQL, connPuzzle)
-            cmd.CommandType = CommandType.Text
-            cmd.Parameters.Add(contestantIDParam)
-            cmd.ExecuteNonQuery()
+            gamePlayerCmd = New SqlCommand(myStrSQL, connPuzzle)
+            gamePlayerCmd.CommandType = CommandType.Text
+            gamePlayerCmd.Parameters.Add(contestantID2Param)
+            gamePlayerCmd.ExecuteNonQuery()
             connPuzzle.Close()
+            frmContestantManager.flpContestants.Controls.Remove(Me)
         Else
         End If
     End Sub
-    Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
+    Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
         Dim result As Integer = MessageBox.Show("Are you sure you want to delete this contestant? All winnings will be lost and any current games with this contestant will be deleted. This action cannot be undone.", "Wheel of Fortune", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
         If result = DialogResult.No Then
             Exit Sub

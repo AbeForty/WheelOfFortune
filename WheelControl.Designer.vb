@@ -31,10 +31,10 @@ Partial Class WheelSpinControl
         Me.trkWheel = New System.Windows.Forms.TrackBar()
         Me.trkBonusWheel = New System.Windows.Forms.TrackBar()
         Me.wheelCover = New System.Windows.Forms.Panel()
+        Me.wmpWheelSpin = New AxWMPLib.AxWindowsMediaPlayer()
         Me.tmrFinalSpinDisable = New System.Windows.Forms.Timer(Me.components)
         Me.lblWMPTime = New System.Windows.Forms.Label()
         Me.lblRandomNumber = New System.Windows.Forms.Label()
-        Me.wmpWheelSpin = New AxWMPLib.AxWindowsMediaPlayer()
         Me.wmpWheel = New AxWMPLib.AxWindowsMediaPlayer()
         CType(Me.trkWheel, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.trkBonusWheel, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -56,9 +56,11 @@ Partial Class WheelSpinControl
         'pbarWheel
         '
         Me.pbarWheel.Location = New System.Drawing.Point(1655, 562)
+        Me.pbarWheel.Maximum = 100
         Me.pbarWheel.Name = "pbarWheel"
         Me.pbarWheel.Size = New System.Drawing.Size(213, 47)
         Me.pbarWheel.TabIndex = 200
+        Me.pbarWheel.Value = 10
         Me.pbarWheel.Visible = False
         '
         'tmrSpinner
@@ -97,6 +99,16 @@ Partial Class WheelSpinControl
         Me.wheelCover.TabIndex = 213
         Me.wheelCover.Visible = False
         '
+        'wmpWheelSpin
+        '
+        Me.wmpWheelSpin.Enabled = True
+        Me.wmpWheelSpin.Location = New System.Drawing.Point(564, 407)
+        Me.wmpWheelSpin.Name = "wmpWheelSpin"
+        Me.wmpWheelSpin.OcxState = CType(resources.GetObject("wmpWheelSpin.OcxState"), System.Windows.Forms.AxHost.State)
+        Me.wmpWheelSpin.Size = New System.Drawing.Size(225, 45)
+        Me.wmpWheelSpin.TabIndex = 0
+        Me.wmpWheelSpin.Visible = False
+        '
         'tmrFinalSpinDisable
         '
         '
@@ -125,16 +137,6 @@ Partial Class WheelSpinControl
         Me.lblRandomNumber.TabIndex = 214
         Me.lblRandomNumber.Text = "RandomNumber"
         Me.lblRandomNumber.Visible = False
-        '
-        'wmpWheelSpin
-        '
-        Me.wmpWheelSpin.Enabled = True
-        Me.wmpWheelSpin.Location = New System.Drawing.Point(564, 407)
-        Me.wmpWheelSpin.Name = "wmpWheelSpin"
-        Me.wmpWheelSpin.OcxState = CType(resources.GetObject("wmpWheelSpin.OcxState"), System.Windows.Forms.AxHost.State)
-        Me.wmpWheelSpin.Size = New System.Drawing.Size(225, 45)
-        Me.wmpWheelSpin.TabIndex = 0
-        Me.wmpWheelSpin.Visible = False
         '
         'wmpWheel
         '

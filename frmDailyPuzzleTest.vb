@@ -3,6 +3,7 @@
     Private Sub frmDailyPuzzleTest_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'loadDailyPuzzles()
         'getDailyPuzzles()
+        'wbPuzzle.Navigate("file:///C:/Users/ac765/Desktop/Test/bonuspuzzle.html")
         wbPuzzle.Navigate("www.wheeloffortunesolutions.com/bonuspuzzle.html")
     End Sub
     Private Sub getDailyPuzzles()
@@ -11,7 +12,7 @@
                 lblDownloadingPuzzles.Text = "Extracting Puzzles..."
                 Dim tossUpNumber = 1
                 Dim roundNumber = 1
-                Dim trillonNumber = 1
+                Dim trillonNumber = 0
                 For Each item As HtmlElement In wbPuzzle.Document.GetElementsByTagName("Table")
                     For Each subitem As HtmlElement In item.Children
                         For Each subitem2 As HtmlElement In subitem.Children
@@ -52,7 +53,6 @@
                                     Next
                                 Next
                                 puzzleList.Add(crosswordString)
-
                             End If
                             If puzzleList.Count > 0 Then
                                 Dim newListViewItem As New ListViewItem
@@ -88,7 +88,7 @@
                 lblDownloadingPuzzles.Text = "Extracting Puzzles..."
                 Dim tossUpNumber = 1
                 Dim roundNumber = 1
-                Dim trillonNumber = 1
+                Dim trillonNumber = 0
                 Dim roundString = ""
                 For Each item As HtmlElement In wbPuzzle.Document.GetElementsByTagName("Table")
                     For Each subitem As HtmlElement In item.Children
@@ -123,9 +123,18 @@
                                     For Each subitem6 As HtmlElement In subitem5.GetElementsByTagName("Tr")
                                         For Each subitem7 As HtmlElement In subitem6.GetElementsByTagName("Td")
                                             If subitem7.InnerText <> "" Then
+                                                'If trillonNumber < 14 Then
                                                 crosswordString &= subitem7.InnerText & trillonNumber & " "
+                                                'ElseIf trillonNumber >= 14 And trillonNumber < 42 Then
+                                                '    crosswordString &= subitem7.InnerText & trillonNumber - 1 & " "
+                                                'Else
+                                                '    crosswordString &= subitem7.InnerText & trillonNumber & " "
+                                                'End If
                                             End If
+                                            'If (trillonNumber = 13 Or trillonNumber = 27 Or trillonNumber = 41) And subitem7.InnerText = "" Then
+                                            'Else
                                             trillonNumber += 1
+                                            'End If
                                         Next
                                         If currentRow = 2 Then
                                             trillonNumber += 1

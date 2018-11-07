@@ -144,13 +144,15 @@ Public Class frmNewGame
                 End If
             Loop
             connPuzzle.Close()
-            cboPack.Items.Add("RANDOM")
+            'cboPack.Items.Add("RANDOM")
             cboPack.Items.Add("TODAY'S WHEEL EPISODE")
+            cboPack.Items.Add("FLASHBACK")
         Catch ex As Exception
             MsgBox("An error occurred while loading pack names.", vbCritical, "WHEEL OF FORTUNE")
         End Try
     End Sub
     Private Sub startGame()
+        numOfPlayers = 0
         For i As Integer = 1 To 3
             If CType(pnlNewGame.Controls("NameTag" & i), NameTag).contestantID <> Nothing Then
                 numOfPlayers += 1
@@ -176,10 +178,11 @@ Public Class frmNewGame
                     WheelController.player3Name = CType(pnlNewGame.Controls("NameTag" & i), NameTag).contestantName
                 End If
             Next
-            If cboPack.SelectedItem <> Nothing And cboPack.SelectedItem <> "TODAY'S WHEEL EPISODE" And cboPack.SelectedItem.ToString.Contains("DISNEY WHEEL OF FORTUNE") = False And cboPack.SelectedItem <> "RANDOM" Then
+            If cboPack.SelectedItem <> Nothing And cboPack.SelectedItem <> "TODAY'S WHEEL EPISODE" And cboPack.SelectedItem <> "FLASHBACK" And cboPack.SelectedItem.ToString.Contains("DISNEY WHEEL OF FORTUNE") = False And cboPack.SelectedItem <> "RANDOM" Then
                 'Me.DialogResult = System.Windows.Forms.DialogResult.OK
                 WheelController.packName = cboPack.SelectedItem.ToString
                 WheelController.puzzleMode = WheelController.wheelMode.Classic
+                WheelController.season = 36
                 My.Computer.Audio.Stop()
                 frmMain.Close()
                 IntroScreen.Show()
@@ -188,16 +191,26 @@ Public Class frmNewGame
                 'Me.DialogResult = System.Windows.Forms.DialogResult.OK
                 WheelController.puzzleMode = WheelController.wheelMode.Disney
                 WheelController.packName = cboPack.SelectedItem.ToString
+                WheelController.season = 36
                 My.Computer.Audio.Stop()
                 frmMain.Close()
                 IntroScreen.Show()
                 Me.Close()
             ElseIf cboPack.SelectedItem = "RANDOM" Then
-                MsgBox("Random mode not implemented yet.", vbExclamation, "Wheel of Fortune")
+                'Me.DialogResult = System.Windows.Forms.DialogResult.OK
+                WheelController.puzzleMode = WheelController.wheelMode.Random
+                WheelController.packName = cboPack.SelectedItem.ToString
+                WheelController.season = 36
+                My.Computer.Audio.Stop()
+                frmMain.Close()
+                IntroScreen.Show()
+                Me.Close()
+                'MsgBox("Random mode not implemented yet.", vbExclamation, "Wheel of Fortune")
             ElseIf cboPack.SelectedItem = "TODAY'S WHEEL EPISODE" Then
                 If My.Computer.Network.IsAvailable = True Then
                     WheelController.packName = cboPack.SelectedItem.ToString
                     WheelController.puzzleMode = WheelController.wheelMode.Daily
+                    WheelController.season = 36
                     'Dim gotPuzzles = False
                     'Do Until gotPuzzles = True
                     frmDailyPuzzleTest.Show()
@@ -206,6 +219,13 @@ Public Class frmNewGame
                 Else
                     MsgBox("This feature requires an active internet connection. Please try again.", vbExclamation, "Wheel of Fortune")
                 End If
+            ElseIf cboPack.SelectedItem = "FLASHBACK" Then
+                WheelController.packName = cboPack.SelectedItem.ToString
+                WheelController.puzzleMode = WheelController.wheelMode.Compendium
+                My.Computer.Audio.Stop()
+                frmMain.Close()
+                IntroScreen.Show()
+                Me.Close()
             Else
                 MsgBox("Please select a pack before clicking OK.", vbExclamation, "Wheel of Fortune")
             End If
@@ -302,4 +322,25 @@ Public Class frmNewGame
     Private Sub NameTag_Click(sender As Object, e As EventArgs) Handles NameTag1.Click, NameTag2.Click, NameTag3.Click
 
     End Sub
+
+    Private Sub cboPack_SelectedValueChanged(sender As Object, e As EventArgs) Handles cboPack.SelectedValueChanged
+        If cboPack.SelectedItem = "FLASHBACK" Then
+            If My.Computer.Network.IsAvailable = True Then
+                WheelController.packName = cboPack.SelectedItem.ToString
+                WheelController.puzzleMode = WheelController.wheelMode.Compendium
+                'Dim gotPuzzles = False
+                'Do Until gotPuzzles = True
+                frmCompendium.Show()
+                'WheelController.getDailyPuzzles()
+                'Loop
+            Else
+                MsgBox("This feature requires an active internet connection. Please try again.", vbExclamation, "Wheel of Fortune")
+            End If
+        End If
+    End Sub
+
+    'Private Sub pboxWheelBoard_DoubleClick(sender As Object, e As EventArgs) Handles pboxWheelBoard.DoubleClick
+    '    cboPack.Items.Add("RANDOM")
+    '    cboPack.SelectedItem = "RANDOM"
+    'End Sub
 End Class

@@ -363,6 +363,7 @@ Partial Class frmNewGame
         Me.DoubleBuffered = True
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.KeyPreview = True
         Me.Name = "frmNewGame"
         Me.Text = "Wheel of Fortune"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized

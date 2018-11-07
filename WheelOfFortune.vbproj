@@ -64,7 +64,7 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>wof-logo.png.ico</ApplicationIcon>
+    <ApplicationIcon>woflogo35.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AxInterop.WMPLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -190,6 +190,12 @@
     <Compile Include="frmContestantManager.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmCompendium.Designer.vb">
+      <DependentUpon>frmCompendium.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCompendium.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmNewGame.Designer.vb">
       <DependentUpon>frmNewGame.vb</DependentUpon>
     </Compile>
@@ -238,11 +244,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
     </Compile>
-    <Compile Include="My Project\Resources.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb" />
     <Compile Include="My Project\Settings.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -381,6 +383,9 @@
     <EmbeddedResource Include="frmContestantManager.resx">
       <DependentUpon>frmContestantManager.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmCompendium.resx">
+      <DependentUpon>frmCompendium.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmNewGame.resx">
       <DependentUpon>frmNewGame.vb</DependentUpon>
     </EmbeddedResource>
@@ -406,7 +411,7 @@
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
-      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <LastGenOutput>Resources2.Designer.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="ExpressDialog.resx">
       <DependentUpon>ExpressDialog.vb</DependentUpon>
@@ -527,6 +532,33 @@
     <None Include="Resources\wof_twitter_skin_2.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\WOFLogo35.png" />
+    <None Include="Resources\num.png" />
+    <None Include="Resources\WheelTiltedSmallBonusCards.png" />
+    <None Include="Resources\WheelNewGame.PNG" />
+    <None Include="Resources\WheelContestants.PNG" />
+    <None Include="Resources\WheelMenu36.png" />
+    <None Include="Resources\WheelSolveTossUp.PNG" />
+    <None Include="Resources\WheelMidRound.PNG" />
+    <None Include="Resources\Wheel36BonusRSTLNE.png" />
+    <None Include="Resources\WheelBonusLetterReveal.png" />
+    <None Include="Resources\WheelBonusPuzzleSolve.png" />
+    <None Include="Resources\WheelLetterLightUp.PNG" />
+    <None Include="Resources\WheelSpin.PNG" />
+    <None Include="Resources\WheelTiltedSmallR1.png" />
+    <None Include="Resources\WheelTiltedSmallR1Million.png" />
+    <None Include="Resources\WheelTiltedSmallR2.png" />
+    <None Include="Resources\WheelTiltedSmallR2Million.png" />
+    <None Include="Resources\WheelTiltedSmallR2Mystery1.png" />
+    <None Include="Resources\WheelTiltedSmallR2Mystery1Million.png" />
+    <None Include="Resources\WheelTiltedSmallR2Mystery1Mystery2.png" />
+    <None Include="Resources\WheelTiltedSmallR2Mystery1Mystery2Million.png" />
+    <None Include="Resources\WheelTiltedSmallR2Mystery2.png" />
+    <None Include="Resources\WheelTiltedSmallR2Mystery2Million.png" />
+    <None Include="Resources\WheelTiltedSmallR3.png" />
+    <None Include="Resources\WheelTiltedSmallR3Million.png" />
+    <None Include="Resources\WheelTiltedSmallR4.png" />
+    <Content Include="woflogo35.ico" />
     <None Include="Resources\Delete.ico" />
     <None Include="Resources\mystery.wav" />
     <None Include="Resources\WheelCover.png" />
@@ -561,9 +593,6 @@
     <None Include="Resources\wheelCoverHDR2.png" />
     <None Include="Resources\wheelCoverHDR3.png" />
     <None Include="Resources\wheelCoverHDR4.png" />
-    <None Include="Resources\WheelTiltedSmallR2.png" />
-    <None Include="Resources\WheelTiltedSmallR3.png" />
-    <None Include="Resources\WheelTiltedSmallR4.png" />
     <None Include="Resources\toss_up_new.wav" />
     <None Include="Resources\toss_win_eq_new.wav" />
     <None Include="Resources\puzzle_solved_new.wav" />
@@ -599,7 +628,6 @@
     <None Include="Resources\DownChevron.png" />
     <None Include="Resources\WOF_45,000.png" />
     <None Include="Resources\WheelTiltedSmallBonus.png" />
-    <None Include="Resources\WheelTiltedSmallBonusCards.png" />
     <None Include="Resources\wheelCoverHDBonus.png" />
     <None Include="Resources\WheelMainMenu.png" />
     <None Include="Resources\WheelCustomizerPackSelect.png" />
@@ -683,6 +711,9 @@
     <None Include="Resources\aud_cheer2.wav" />
     <None Include="Resources\WheelBlurBKG.png" />
     <None Include="Resources\music_express.wav" />
+    <None Include="Resources\WheelSeason35BKG.png" />
+    <None Include="Resources\WheelSeason35LogoAnim.gif" />
+    <None Include="Resources\WOF_36,000.png" />
     <Content Include="WheelPuzzles.mdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
