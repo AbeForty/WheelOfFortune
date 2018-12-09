@@ -17,13 +17,17 @@ Public Class MysteryDialog
         WheelController.mysteryReveal = True
         If WheelController.currentPlayer = 1 Then
             If frmScore.lblCurrentValue.Text = "Mystery 1" And WheelController.mysteryStatus = False And WheelController.mystery2value = False AndAlso WheelController.mysteryReveal = True Then
-                WheelController.player1.addCardsOrWedges(Player.Wedges.Mystery, True)
+                For Each myPlayer As Player In WheelController.Player1List
+                    myPlayer.addCardsOrWedges(Player.Wedges.Mystery, True)
+                Next
                 frmPuzzleBoard.mysteryReveal.Image = My.Resources.Mystery_10000_2014
             ElseIf frmScore.lblCurrentValue.Text = "Mystery 1" And WheelController.mysteryStatus = False And WheelController.mystery2value = True AndAlso WheelController.mysteryReveal = True Then
                 WheelController.bankrupt()
                 frmPuzzleBoard.mysteryReveal.Image = My.Resources.Mystery_2014_Bankrupt
             ElseIf frmScore.lblCurrentValue.Text = "Mystery 2" And WheelController.mysteryStatus = False And WheelController.mystery2value = True AndAlso WheelController.mysteryReveal = True Then
-                WheelController.player1.addCardsOrWedges(Player.Wedges.Mystery, True)
+                For Each myPlayer As Player In WheelController.Player1List
+                    myPlayer.addCardsOrWedges(Player.Wedges.Mystery, True)
+                Next
                 frmPuzzleBoard.mysteryReveal.Image = My.Resources.Mystery_10000_2014
             ElseIf frmScore.lblCurrentValue.Text = "Mystery 2" And WheelController.mysteryStatus = False And WheelController.mystery2value = False AndAlso WheelController.mysteryReveal = True Then
                 WheelController.bankrupt()
@@ -31,13 +35,17 @@ Public Class MysteryDialog
             End If
         ElseIf WheelController.currentPlayer = 2 Then
             If frmScore.lblCurrentValue.Text = "Mystery 1" And WheelController.mysteryStatus = False And WheelController.mystery2value = False AndAlso WheelController.mysteryReveal = True Then
-                WheelController.player2.addCardsOrWedges(Player.Wedges.Mystery, True)
+                For Each myPlayer As Player In WheelController.Player2List
+                    myPlayer.addCardsOrWedges(Player.Wedges.Mystery, True)
+                Next
                 frmPuzzleBoard.mysteryReveal.Image = My.Resources.Mystery_10000_2014
             ElseIf frmScore.lblCurrentValue.Text = "Mystery 1" And WheelController.mysteryStatus = False And WheelController.mystery2value = True AndAlso WheelController.mysteryReveal = True Then
                 WheelController.bankrupt()
                 frmPuzzleBoard.mysteryReveal.Image = My.Resources.Mystery_2014_Bankrupt
             ElseIf frmScore.lblCurrentValue.Text = "Mystery 2" And WheelController.mysteryStatus = False And WheelController.mystery2value = True AndAlso WheelController.mysteryReveal = True Then
-                WheelController.player2.addCardsOrWedges(Player.Wedges.Mystery, True)
+                For Each myPlayer As Player In WheelController.Player2List
+                    myPlayer.addCardsOrWedges(Player.Wedges.Mystery, True)
+                Next
                 frmPuzzleBoard.mysteryReveal.Image = My.Resources.Mystery_10000_2014
             ElseIf frmScore.lblCurrentValue.Text = "Mystery 2" And WheelController.mysteryStatus = False And WheelController.mystery2value = False AndAlso WheelController.mysteryReveal = True Then
                 WheelController.bankrupt()
@@ -45,13 +53,17 @@ Public Class MysteryDialog
             End If
         ElseIf WheelController.currentPlayer = 3 Then
             If frmScore.lblCurrentValue.Text = "Mystery 1" And WheelController.mysteryStatus = False And WheelController.mystery2value = False AndAlso WheelController.mysteryReveal = True Then
-                WheelController.player3.addCardsOrWedges(Player.Wedges.Mystery, True)
+                For Each myPlayer As Player In WheelController.Player3List
+                    myPlayer.addCardsOrWedges(Player.Wedges.Mystery, True)
+                Next
                 frmPuzzleBoard.mysteryReveal.Image = My.Resources.Mystery_10000_2014
             ElseIf frmScore.lblCurrentValue.Text = "Mystery 1" And WheelController.mysteryStatus = False And WheelController.mystery2value = True AndAlso WheelController.mysteryReveal = True Then
                 WheelController.bankrupt()
                 frmPuzzleBoard.mysteryReveal.Image = My.Resources.Mystery_2014_Bankrupt
             ElseIf frmScore.lblCurrentValue.Text = "Mystery 2" And WheelController.mysteryStatus = False And WheelController.mystery2value = True AndAlso WheelController.mysteryReveal = True Then
-                WheelController.player3.addCardsOrWedges(Player.Wedges.Mystery, True)
+                For Each myPlayer As Player In WheelController.Player3List
+                    myPlayer.addCardsOrWedges(Player.Wedges.Mystery, True)
+                Next
                 frmPuzzleBoard.mysteryReveal.Image = My.Resources.Mystery_10000_2014
             ElseIf frmScore.lblCurrentValue.Text = "Mystery 2" And WheelController.mysteryStatus = False And WheelController.mystery2value = False AndAlso WheelController.mysteryReveal = True Then
                 WheelController.bankrupt()

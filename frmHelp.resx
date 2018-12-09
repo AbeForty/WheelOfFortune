@@ -128,13 +128,14 @@
     <value>Click on a letter on the used letter board at the bottom of the screen to reveal the letter on the screen (if there are any in the puzzle). If the letter appears in the puzzle, click the all of the blue letters to reveal them. If the letter doesn't appear on the puzzle, the game will move on to the next player.</value>
   </data>
   <data name="Label20.Text" xml:space="preserve">
-    <value>After 15 minutes of gameplay, the final spin bells will be heard. When this happens, the host will make a "final spin" of the game. The player will give a letter, and if the letter is in the puzzle, they will have 3 seconds to solve the puzzle. Vowels are worth nothing, consonants will be worth $1000 plus whatever the host lands on.</value>
+    <value>After 15 minutes of gameplay, the final spin bells will be heard. When this happens, make the "Final Spin" of the game. The player will give a letter, and if the letter is in the puzzle, they will have 3 seconds to solve the puzzle. Vowels are worth nothing, consonants will be worth $1000 plus the value of the "Final Spin."</value>
   </data>
   <data name="Label23.Text" xml:space="preserve">
     <value>If a player lands on a card, tag, or wedge (e.g. Wild Card, Million Dollar Wedge, 1/2 Car), it will be added to their bank. They will be only able to keep the prize if they can solve the puzzle (with the exception of the Wild Card).</value>
   </data>
   <data name="Label24.Text" xml:space="preserve">
-    <value>Before you begin playing, it is recommended to obtain 3 keyboards to act as buzzers for the toss-up rounds (you can use the on-screen buttons if you do not have 3 keyboards). The game has been programmed to recognize the CTRL, ALT, and SHIFT keys. Buzz! controllers can be used, but will require the extra hardware along with extra 3rd-party keyboard mapping tools to work.</value>
+    <value>Before you begin playing, it is recommended to obtain 3 keyboards to act as buzzers for the toss-up rounds (you can use the on-screen buttons if you do not have 3 keyboards). The game has been programmed to recognize the CTRL, ALT, and SHIFT keys.
+</value>
   </data>
   <data name="Label26.Text" xml:space="preserve">
     <value>Players will repeat the spin and letter calling process until they solve the puzzle. If the player possesses a Wild Card, they can call another letter without spinning again for the same amount as the previous spin.</value>
@@ -146,7 +147,7 @@
     <value>Click on the puzzleboard to reveal the bonus puzzle. Click the puzzleboard to reveal R, S, T, L, N, and E in the puzzle. The player will then choose 3 consonants (4 if they possess a Wild Card) and 1 vowel. After the letters are revealed, click the arrow on the top to start the 10 second timer. If the player solves the puzzle within the 10 seconds, they will win the prize. When the round is over, click the envelope to reveal the prize.</value>
   </data>
   <data name="Label29.Text" xml:space="preserve">
-    <value>If the player has more than $250 in their bank, they can choose to buy a vowel for $250. If not, they will be required to either spin or solve. If the player is on the Free Play wedge, they call a vowel for free, take $500 per appearing consonant, or even solve the puzzle without the risk of losing their turn. Players can choose to solve the puzzle at any time (without having spun already unless on the Free Play wedge). </value>
+    <value>If the player has more than $250 in their bank, players also have the option to buy a vowel for $250. If not, players can only spin or solve. If the player is on the Free Play wedge, they call a vowel for free, take $500 per appearing consonant, or even solve the puzzle without the risk of losing their turn. Players can choose to solve the puzzle at any time, if they haven't already spun (unless on the Free Play wedge). </value>
   </data>
   <data name="Label30.Text" xml:space="preserve">
     <value>Once the toss-ups have been completed, click the wheel image below to display the wheel on the screen. Click the wheel to stop the spin strength meter when you are ready to start spinning the wheel. Beware of the bankrupts and lose a turns.</value>

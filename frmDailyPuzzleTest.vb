@@ -1,9 +1,6 @@
 ﻿Public Class frmDailyPuzzleTest
     Dim numberOfTries As Integer = 0
     Private Sub frmDailyPuzzleTest_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'loadDailyPuzzles()
-        'getDailyPuzzles()
-        'wbPuzzle.Navigate("file:///C:/Users/ac765/Desktop/Test/bonuspuzzle.html")
         wbPuzzle.Navigate("www.wheeloffortunesolutions.com/bonuspuzzle.html")
     End Sub
     Private Sub getDailyPuzzles()
@@ -68,18 +65,11 @@
                         Next
                     Next
                 Next
-                'ElseIf (wbPuzzle.ReadyState = WebBrowserReadyState.Interactive Or wbPuzzle.ReadyState = WebBrowserReadyState.Uninitialized) And numberOfTries < 5 Then
-                '    lblDownloadingPuzzles.Text = "The operation timed out. Trying again."
-                '    numberOfTries += 1
-                '    wbPuzzle.Refresh()
-                'ElseIf numberOfTries = 5 Then
-                '    lblDownloadingPuzzles.Text = "Refreshed too many times. Closing..."
-                '    Me.Close()
             Else
                 lblDownloadingPuzzles.Text = "Waiting for server..."
             End If
         Catch ex As Exception
-            MsgBox("Today's puzzles failed to load. Please try again.", vbExclamation, "Wheel of Fortune")
+            MsgBox("Today's puzzles failed to load. The server may be experiencing issues.", vbExclamation, "Wheel of Fortune")
         End Try
     End Sub
     Private Sub loadDailyPuzzles()
@@ -162,8 +152,8 @@
                 lblDownloadingPuzzles.Text = "Done"
                 My.Computer.Audio.Stop()
                 frmMain.Close()
-                IntroScreen.Show()
                 frmNewGame.Close()
+                IntroScreen.Show()
                 Me.Close()
                 'ElseIf (wbPuzzle.ReadyState = WebBrowserReadyState.Interactive Or wbPuzzle.ReadyState = WebBrowserReadyState.Uninitialized) And numberOfTries < 5 Then
                 '    lblDownloadingPuzzles.Text = "The operation timed out. Trying again."
@@ -176,6 +166,7 @@
                 lblDownloadingPuzzles.Text = "Waiting for server..."
             End If
         Catch ex As Exception
+            MsgBox("Today's puzzles failed to load. The server may be experiencing issues.", vbExclamation, "Wheel of Fortune")
         End Try
     End Sub
     Private Sub btnGetPuzzles_Click(sender As Object, e As EventArgs) Handles btnGetPuzzles.Click

@@ -51,7 +51,9 @@ Public MustInherit Class WheelController
     Public Shared timeLeft As Integer = 15
     Public Shared finalSpin As Boolean = False
     Public Shared finalSpinQueued As Boolean = False
-    Public Shared numberOfPlayers As Integer = 3
+    Public Shared numberOfPlayers As Integer = 0
+    Public Shared numberOfPlayersTotal As Integer = 0
+    Public Shared teamDisplayInt As Integer = 0
     Public Shared teams As Boolean = False
     Public Shared finalSpinSpun As Boolean = False
     Public Shared bonusSolved As Boolean = True
@@ -66,17 +68,21 @@ Public MustInherit Class WheelController
     Private Shared isVowel As Boolean = False
     Public Shared wildUsed As Boolean = False
     Public Shared timeStart As Integer
-    Public Shared player1 As New Player
-    Public Shared player2 As New Player
-    Public Shared player3 As New Player
-    Public Shared bonusRoundPlayer As Player
+    'Public Shared player1 As New Player
+    'Public Shared player2 As New Player
+    'Public Shared player3 As New Player
+    Public Shared Player1List As New List(Of Player)
+    Public Shared Player2List As New List(Of Player)
+    Public Shared Player3List As New List(Of Player)
+    Public Shared bonusRoundPlayer As List(Of Player)
+    'Public Shared bonusRoundPlayer As Player
     Public Shared puzzleString As String
     Public Shared noMoreVowelsShown As Boolean = False
     Public Shared noMoreConsonantsShown As Boolean = False
     Public Shared prizePuzzleStatus As Boolean = False
-    Public Shared player1Score As Integer
-    Public Shared player2Score As Integer
-    Public Shared player3Score As Integer
+    'Public Shared player1Score As Integer
+    'Public Shared player2Score As Integer
+    'Public Shared player3Score As Integer
     'Private Shared bonusSolved As Boolean = True
     Public Shared round As New PuzzleType
     Public Shared revealed As Boolean = False
@@ -92,7 +98,7 @@ Public MustInherit Class WheelController
     Public Shared boardStyleEnum As boardStyle = boardStyle.Modern
     Public Shared puzzleBoardName = "PuzzleBoard1"
     Public Shared bonusPuzzleRevealed As Boolean = False
-    Public Shared currentPlayerObject As Player
+    Public Shared currentPlayerObject As List(Of Player)
     Public Shared puzzleMode As wheelMode
     Public Shared categoryListPrelim As New List(Of clsPuzzle)
     Public Shared categoryList As New List(Of clsPuzzle)
@@ -132,6 +138,13 @@ Public MustInherit Class WheelController
     Public Shared season As Integer = 36
     Public Shared mystery1Status As Boolean = False
     Public Shared mystery2Status As Boolean = False
+    Public Shared puzzleID As Integer
+    Private Shared loadGameLetterRevealList As New List(Of String)
+    Public Shared quickGame As Boolean = True
+    Public Shared loadGame As Boolean = False
+    Public Shared currentLoadGame As Boolean = False
+    Private Shared tossUpSolved = False
+    Public Shared checkVowelRunning = False
 #End Region
 #Region "Enum Types"
     Public Enum PuzzleType
@@ -167,9 +180,60 @@ Public MustInherit Class WheelController
         frmScore.lblPlayer1.Text = ""
         frmScore.lblPlayer2.Text = ""
         frmScore.lblPlayer3.Text = ""
-        player1.total = 0
-        player2.total = 0
-        player3.total = 0
+        For Each myPlayer As Player In Player1List
+            myPlayer.total = 0
+        Next
+        For Each myPlayer As Player In Player2List
+            myPlayer.total = 0
+        Next
+        For Each myPlayer As Player In Player3List
+            myPlayer.total = 0
+        Next
+    End Sub
+#End Region
+#Region "Team Play Methods"
+    Public Shared Sub clearTeams()
+        Player1List.Clear()
+        Player2List.Clear()
+        Player3List.Clear()
+    End Sub
+    Public Shared Function checkID(ID As Integer) As Boolean
+        For Each player As Player In Player1List
+            If player.contestantID = ID Then
+                Return True
+            End If
+        Next
+        For Each player As Player In Player2List
+            If player.contestantID = ID Then
+                Return True
+            End If
+        Next
+        For Each player As Player In Player3List
+            If player.contestantID = ID Then
+                Return True
+            End If
+        Next
+        Return False
+    End Function
+    Public Shared Sub removeByID(ID As Integer)
+        For Each player As Player In Player1List
+            If player.contestantID = ID Then
+                Player1List.Remove(player)
+                Exit For
+            End If
+        Next
+        For Each player As Player In Player2List
+            If player.contestantID = ID Then
+                Player2List.Remove(player)
+                Exit For
+            End If
+        Next
+        For Each player As Player In Player3List
+            If player.contestantID = ID Then
+                Player3List.Remove(player)
+                Exit For
+            End If
+        Next
     End Sub
 #End Region
 #Region "Check for Symbols"
@@ -288,6 +352,8 @@ Public MustInherit Class WheelController
 #End Region
 #Region "Check Vowels"
     Public Shared Sub checkVowels()
+        checkVowelRunning = True
+        'If round <> PuzzleType.TU1 And round <> PuzzleType.TU2 And round <> PuzzleType.TU3 And round <> PuzzleType.TBTU And round <> PuzzleType.BR Then
         If letterControlList.Count = 0 Then
             If Not puzzleString.Contains("A") And Not puzzleString.Contains("E") And Not puzzleString.Contains("I") And Not puzzleString.Contains("O") And Not puzzleString.Contains("U") Then
                 If noMoreVowelsShown = False Then
@@ -296,6 +362,7 @@ Public MustInherit Class WheelController
                     noMoreVowelsShown = True
                     enableVowels(False)
                     frmScore.tmrCheckVowels.Stop()
+                    checkVowelRunning = False
                     If virtualHost = True Then
                         Dim vowelMessage = GetRandomPlayer(0, 4)
                         If vowelMessage = 0 Then
@@ -321,6 +388,7 @@ Public MustInherit Class WheelController
                     enableConsonants(False)
                     frmPuzzleBoard.wheelTilt.Enabled = False
                     frmScore.tmrCheckVowels.Stop()
+                    checkVowelRunning = False
                     frmPuzzleBoard.btnWild.Enabled = False
                     If virtualHost = True Then
                         SAPI.Speak("The rest of the letters are vowels.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
@@ -329,6 +397,7 @@ Public MustInherit Class WheelController
                 End If
             End If
         End If
+        'End If
     End Sub
 #End Region
 #Region "Load Bonus Categories"
@@ -414,43 +483,49 @@ Public MustInherit Class WheelController
 #End Region
 #Region "Load Puzzle"
     Public Shared Sub loadPuzzle(round As PuzzleType, mode As wheelMode, preview As Boolean)
+        frmScore.tmrCheckVowels.Start()
+        tossUpSolved = False
         'Try
-        frmScore.lblPlayer1.Text = ""
+        If currentLoadGame = False Then
+            frmScore.lblPlayer1.Text = ""
             frmScore.lblPlayer2.Text = ""
             frmScore.lblPlayer3.Text = ""
-            solveMode = False
-        solveAttempt = ""
+            solveAttempt = ""
+            solveSortedList.Clear()
+        End If
+        puzzleString = ""
+        solveMode = False
         letterControlList.Clear()
-        solveSortedList.Clear()
-            lastLetter = 0
-            'solveSortedList.Clear()
-            'solveTypedList.Clear()
-            If (round = PuzzleType.TU1 Or round = PuzzleType.TU2 Or round = PuzzleType.TU3 Or round = PuzzleType.TBTU) And preview = False Then
-                If virtualHost = True Then
-                    tossUpIntroComplete = False
-                Else
-                    tossUpIntroComplete = True
-                End If
-                If numberOfPlayers = 3 Then
-                    frmPuzzleBoard.btnRedRingIn.Show()
-                    frmPuzzleBoard.btnYellowRingIn.Show()
-                    frmPuzzleBoard.btnBlueRingIn.Show()
-                    player3RingIn = True
-                ElseIf numberOfPlayers = 2 Then
-                    frmPuzzleBoard.btnRedRingIn.Show()
-                    frmPuzzleBoard.btnYellowRingIn.Show()
-                    frmPuzzleBoard.btnBlueRingIn.Hide()
-                    player3RingIn = True
-                ElseIf numberOfPlayers = 1 Then
-                    frmPuzzleBoard.btnRedRingIn.Show()
-                    frmPuzzleBoard.btnYellowRingIn.Hide()
-                    player2RingIn = True
-                    frmPuzzleBoard.btnBlueRingIn.Hide()
-                    player3RingIn = True
-                End If
+        lastLetter = 0
+        'solveSortedList.Clear()
+        'solveTypedList.Clear()
+        If (round = PuzzleType.TU1 Or round = PuzzleType.TU2 Or round = PuzzleType.TU3 Or round = PuzzleType.TBTU) And preview = False Then
+            If virtualHost = True Then
+                tossUpIntroComplete = False
+            Else
+                tossUpIntroComplete = True
+            End If
+            If Player1List.Count > 0 Then
+                frmPuzzleBoard.btnRedRingIn.Show()
+            Else
+                frmPuzzleBoard.btnRedRingIn.Hide()
                 player1RingIn = True
+            End If
+            If Player2List.Count > 0 Then
+                frmPuzzleBoard.btnYellowRingIn.Show()
+            Else
+                frmPuzzleBoard.btnYellowRingIn.Hide()
                 player2RingIn = True
+            End If
+            If Player3List.Count > 0 Then
+                frmPuzzleBoard.btnBlueRingIn.Show()
+            Else
+                frmPuzzleBoard.btnBlueRingIn.Hide()
                 player3RingIn = True
+            End If
+            player1RingIn = True
+            player2RingIn = True
+            player3RingIn = True
             frmScore.usedLetterBoard.Enabled = False
             frmPuzzleBoard.btnSolve.Enabled = False
         Else
@@ -579,6 +654,52 @@ Public MustInherit Class WheelController
                         drProduct = cmdProduct.ExecuteReader(CommandBehavior.CloseConnection)
                         While drProduct.Read()
                             Dim myPuzzle As New clsPuzzle
+                            myPuzzle.ID = Trim(drProduct("Id"))
+                            myPuzzle.category = Trim(drProduct("Category"))
+                            myPuzzle.puzzle = Trim(drProduct("Puzzle"))
+                            myPuzzle.puzzleTypeInt = CInt(Trim(drProduct("Type")))
+                            myPuzzle.crosswordStatus = CInt(Trim(drProduct("Crossword")))
+                            categoryListPrelim.Add(myPuzzle)
+                        End While
+                    End If
+                    Dim myNewPuzzle = categoryListPrelim(GetRandomPlayer(1, categoryListPrelim.Count))
+                    categoryListPrelim.Remove(myNewPuzzle)
+                    puzzleID = myNewPuzzle.ID
+                    category = myNewPuzzle.category
+                    puzzle = myNewPuzzle.puzzle
+                    puzzleTypeInt = myNewPuzzle.puzzleTypeInt
+                    crosswordStatus = myNewPuzzle.crosswordStatus
+                Else
+                End If
+            ElseIf mode = wheelMode.Random Then
+                If round = PuzzleType.TU1 Or round = PuzzleType.TU2 Or round = PuzzleType.TU3 Or round = PuzzleType.TBTU Or round = PuzzleType.BR Or round = PuzzleType.R1 Or round = PuzzleType.R2 Then
+                    strSQL = "Select * From Puzzle WHERE Type = 0 and PackName != 'Disney Wheel of Fortune' and PackName != 'Disney Wheel of Fortune 2' and Type = @type"
+                Else
+                    strSQL = "Select * From Puzzle WHERE Type = 0 and PackName != 'Disney Wheel of Fortune' and PackName != 'Disney Wheel of Fortune 2' and Type = @type and CrosswordStatus = 0"
+                End If
+                Dim roundTypeNumber As Integer
+                If round = PuzzleType.TU1 Or round = PuzzleType.TU2 Or round = PuzzleType.TU3 Or round = PuzzleType.TBTU Then
+                    roundTypeNumber = 0
+                ElseIf (round <> PuzzleType.TU1 Or round <> PuzzleType.TU2 Or round <> PuzzleType.TU3 Or round <> PuzzleType.TBTU) And round <> PuzzleType.BR Then
+                    roundTypeNumber = 1
+                Else
+                    roundTypeNumber = 2
+                End If
+                If round <> PuzzleType.BR Then
+                    If categoryListPrelim.Count = 0 Then
+                        Dim categoryParam As SqlParameter = New SqlParameter("@Category", category)
+                        Dim roundParam As SqlParameter = New SqlParameter("@type", roundTypeNumber)
+                        Dim drProduct As SqlDataReader
+                        Dim cmdProduct As SqlCommand
+                        connPuzzle.Open()
+                        cmdProduct = New SqlCommand(strSQL, connPuzzle)
+                        If round = PuzzleType.BR Then
+                            cmdProduct.Parameters.Add(categoryParam)
+                        End If
+                        cmdProduct.Parameters.Add(roundParam)
+                        drProduct = cmdProduct.ExecuteReader(CommandBehavior.CloseConnection)
+                        While drProduct.Read()
+                            Dim myPuzzle As New clsPuzzle
                             myPuzzle.category = Trim(drProduct("Category"))
                             myPuzzle.puzzle = Trim(drProduct("Puzzle"))
                             myPuzzle.puzzleTypeInt = CInt(Trim(drProduct("Type")))
@@ -594,68 +715,24 @@ Public MustInherit Class WheelController
                     crosswordStatus = myNewPuzzle.crosswordStatus
                 Else
                 End If
-            ElseIf mode = wheelMode.Random Then
-                If round = PuzzleType.TU1 Or round = PuzzleType.TU2 Or round = PuzzleType.TU3 Or round = PuzzleType.TBTU Or round = PuzzleType.BR Or round = PuzzleType.R1 Or round = PuzzleType.R2 Then
-                    strSQL = "Select * From Puzzle WHERE Type = 0 and PackName != 'Disney Wheel of Fortune' and PackName != 'Disney Wheel of Fortune 2' and Type = @type"
-                Else
-                    strSQL = "Select * From Puzzle WHERE Type = 0 and PackName != 'Disney Wheel of Fortune' and PackName != 'Disney Wheel of Fortune 2' and Type = @type and CrosswordStatus = 0"
-                End If
-                Dim roundTypeNumber As Integer
-                    If round = PuzzleType.TU1 Or round = PuzzleType.TU2 Or round = PuzzleType.TU3 Or round = PuzzleType.TBTU Then
-                        roundTypeNumber = 0
-                    ElseIf (round <> PuzzleType.TU1 Or round <> PuzzleType.TU2 Or round <> PuzzleType.TU3 Or round <> PuzzleType.TBTU) And round <> PuzzleType.BR Then
-                        roundTypeNumber = 1
-                    Else
-                        roundTypeNumber = 2
-                    End If
-                    If round <> PuzzleType.BR Then
-                        If categoryListPrelim.Count = 0 Then
-                            Dim categoryParam As SqlParameter = New SqlParameter("@Category", category)
-                            Dim roundParam As SqlParameter = New SqlParameter("@type", roundTypeNumber)
-                            Dim drProduct As SqlDataReader
-                            Dim cmdProduct As SqlCommand
-                            connPuzzle.Open()
-                            cmdProduct = New SqlCommand(strSQL, connPuzzle)
-                            If round = PuzzleType.BR Then
-                                cmdProduct.Parameters.Add(categoryParam)
-                            End If
-                            cmdProduct.Parameters.Add(roundParam)
-                            drProduct = cmdProduct.ExecuteReader(CommandBehavior.CloseConnection)
-                            While drProduct.Read()
-                                Dim myPuzzle As New clsPuzzle
-                                myPuzzle.category = Trim(drProduct("Category"))
-                                myPuzzle.puzzle = Trim(drProduct("Puzzle"))
-                                myPuzzle.puzzleTypeInt = CInt(Trim(drProduct("Type")))
-                                myPuzzle.crosswordStatus = CInt(Trim(drProduct("Crossword")))
-                                categoryListPrelim.Add(myPuzzle)
-                            End While
+            ElseIf mode = wheelMode.Daily Then
+                For Each puzzleListItem As List(Of String) In dailyPuzzleList
+                    If puzzleListItem(0) = roundString Then
+                        If roundString = highestRoundString Then
+                            finalSpinQueued = True
                         End If
-                        Dim myNewPuzzle = categoryListPrelim(GetRandomPlayer(1, categoryListPrelim.Count))
-                        categoryListPrelim.Remove(myNewPuzzle)
-                        category = myNewPuzzle.category
-                        puzzle = myNewPuzzle.puzzle
-                        puzzleTypeInt = myNewPuzzle.puzzleTypeInt
-                        crosswordStatus = myNewPuzzle.crosswordStatus
-                    Else
-                    End If
-                ElseIf mode = wheelMode.Daily Then
-                    For Each puzzleListItem As List(Of String) In dailyPuzzleList
-                        If puzzleListItem(0) = roundString Then
-                            If roundString = highestRoundString Then
-                                finalSpinQueued = True
-                            End If
-                            category = puzzleListItem(1)
-                            puzzle = puzzleListItem(2)
-                            If System.Text.RegularExpressions.Regex.IsMatch(puzzleListItem(2), "\d+") Then
-                                crosswordStatus = 1
-                            Else
-                                crosswordStatus = 0
-                            End If
-                            Exit For
+                        category = puzzleListItem(1)
+                        puzzle = puzzleListItem(2)
+                        If System.Text.RegularExpressions.Regex.IsMatch(puzzleListItem(2), "\d+") Then
+                            crosswordStatus = 1
+                        Else
+                            crosswordStatus = 0
                         End If
-                    Next
-                ElseIf mode = wheelMode.Compendium Then
-                    For Each puzzleListItem As List(Of String) In dailyPuzzleList
+                        Exit For
+                    End If
+                Next
+            ElseIf mode = wheelMode.Compendium Then
+                For Each puzzleListItem As List(Of String) In dailyPuzzleList
                     If puzzleListItem(3) = roundString Then
                         If roundString = highestRoundString Then
                             finalSpinQueued = True
@@ -809,7 +886,7 @@ Public MustInherit Class WheelController
         '    '    threeRowPuzzle = True
         '    'End If
         'End If
-        If category = "SAME LETTER" Or (category = "BEFORE & AFTER" And myWords.Count <= 4) Then
+        If category = "SAME LETTER" Or (category = "BEFORE & AFTER" And myWords.Count <= 4 And checkTwoLetterWord(myWords) = False) Then
             If category = "SAME LETTER" Then
                 sameLetter = puzzle.Substring(0, 1)
             End If
@@ -821,7 +898,9 @@ Public MustInherit Class WheelController
         'HUNCHBACK OF THE NOTRE DAME
         'FOR EACH WORD IN PUZZLE 
         'PUZZLE.LENGTH
-        puzzleString = puzzle
+        If String.IsNullOrEmpty(puzzleString) Then
+            puzzleString = puzzle
+        End If
         Dim numberOfLengths As Integer = 0
         Dim numberOfLengths2 As Integer = 0
         Dim numberOfLengths3 As Integer = 0
@@ -830,6 +909,7 @@ Public MustInherit Class WheelController
         Dim row2 As Boolean = False
         Dim row3 As Boolean = False
         Dim row4 As Boolean = False
+        Dim firstInstanceTwoLetter As Boolean = True
         Dim wordCount = 0
         Dim wordLengths As New List(Of Integer)
         Dim lastWordMatch As Boolean = False
@@ -841,7 +921,6 @@ Public MustInherit Class WheelController
                         For myLetter = 0 To word.Length - 1
                             If word.Chars(myLetter).ToString() <> " " Then
                                 letterControlSortedList2.Add(((numberOfLengths) + 13), word.Chars(myLetter).ToString())
-
                                 numberOfLengths += 1
                             ElseIf word.Chars(myLetter).ToString() = " " Then
                                 letterControlSortedList2.Add((((numberOfLengths) + 13)), word.Chars(myLetter).ToString())
@@ -940,7 +1019,19 @@ Public MustInherit Class WheelController
                             End If
                         End If
                     End If
-                    If (word.Replace(" ", "").Length <= (maxLength) - numberOfLengths And row2 = False) Then
+                    If word.Replace(" ", "").Length <= 2 And firstInstanceTwoLetter = False And row2 = True Then
+                        firstInstanceTwoLetter = True
+                    ElseIf word.Replace(" ", "").Length <= 2 And firstInstanceTwoLetter = True And row2 = True Then
+                        firstInstanceTwoLetter = False
+                        If row1 = True And row2 = False And row3 = False And row4 = False Then
+                            row2 = True
+                        ElseIf row1 = True And row2 = True And row3 = False And row4 = False Then
+                            row3 = True
+                        ElseIf row1 = True And row2 = True And row3 = True And row4 = False Then
+                            row4 = True
+                        End If
+                    End If
+                    If (word.Replace(" ", "").Length <= (maxLength) - numberOfLengths And Not (word.Replace(" ", "").Length <= 2 And numberOfLengths <> 0 And category = "BEFORE & AFTER") And row2 = False) Then
                         row1 = True
                         For myLetter = 0 To word.Length - 1
                             If word.Chars(myLetter).ToString() <> " " Then
@@ -951,7 +1042,7 @@ Public MustInherit Class WheelController
                                 numberOfLengths += 1
                             End If
                         Next
-                    ElseIf ((word.Replace(" ", "").Length > (maxLength) - numberOfLengths And row1 = True And row2 = False) Or (word.Replace(" ", "").Length <= (maxLength) - numberOfLengths2 And row2 = True And row3 = False)) Then
+                    ElseIf (((word.Replace(" ", "").Length > (maxLength) - numberOfLengths Or (word.Replace(" ", "").Length <= 2 And firstInstanceTwoLetter = True And category = "BEFORE & AFTER")) And row1 = True And row2 = False) Or (word.Replace(" ", "").Length <= (maxLength) - numberOfLengths2 And row2 = True And row3 = False)) Then
                         row2 = True
                         For myLetter = 0 To word.Length - 1
                             If word.Chars(myLetter).ToString() <> " " Then
@@ -962,7 +1053,7 @@ Public MustInherit Class WheelController
                                 numberOfLengths2 += 1
                             End If
                         Next
-                    ElseIf word.Replace(" ", "").Length > (maxLength) - numberOfLengths2 And row2 = True And row3 = False Or (word.Replace(" ", "").Length <= (maxLength) - numberOfLengths3 And row3 = True And row4 = False) Then
+                    ElseIf ((word.Replace(" ", "").Length > (maxLength) - numberOfLengths2 Or (word.Replace(" ", "").Length <= 2 And firstInstanceTwoLetter = True And category = "BEFORE & AFTER")) And row2 = True And row3 = False) Or (word.Replace(" ", "").Length <= (maxLength) - numberOfLengths3 And row3 = True And row4 = False) Then
                         row3 = True
                         For myLetter = 0 To word.Length - 1
                             If word.Chars(myLetter).ToString() <> " " Then
@@ -973,7 +1064,7 @@ Public MustInherit Class WheelController
                                 numberOfLengths3 += 1
                             End If
                         Next
-                    ElseIf word.Replace(" ", "").Length > (maxLength) - numberOfLengths3 And row3 = True And row4 = False Or (word.Replace(" ", "").Length <= (maxLength) - numberOfLengths4 And row4 = True) Then
+                    ElseIf ((word.Replace(" ", "").Length > (maxLength) - numberOfLengths3 Or (word.Replace(" ", "").Length <= 2 And firstInstanceTwoLetter = True And category = "BEFORE & AFTER")) And row3 = True And row4 = False) Or (word.Replace(" ", "").Length <= (maxLength) - numberOfLengths4 And row4 = True) Then
                         row4 = True
                         Try
                             For myLetter = 0 To word.Length - 1
@@ -1096,6 +1187,9 @@ Public MustInherit Class WheelController
         Next
         puzzleLoaded = True
         revealCategory()
+        If quickGame = False Then
+            saveToDB()
+        End If
     End Sub
     Public Shared Sub loadTrillonOffset(item As KeyValuePair(Of Integer, String), trillonPreset As Integer, trillonOffset As Integer, row1Count As Integer)
         If item.Key >= 13 And item.Key <= 26 And letterControlSortedList1.Count = 0 And letterControlSortedList4.Count > 0 Then
@@ -1201,6 +1295,7 @@ Public MustInherit Class WheelController
                 End If
             End If
         Next
+        frmPuzzleBoard.btnSolve.Enabled = False
         timeStart = DateTime.Now.Second
         frmScore.tmrLetterReveal.Start()
     End Sub
@@ -1252,19 +1347,28 @@ Public MustInherit Class WheelController
             frmPuzzleBoard.btnSolve.Enabled = True
         Else
             If currentPlayer = 1 Then
-                frmPuzzleBoard.btnRedRingIn.Enabled = False
-                frmPuzzleBoard.btnYellowRingIn.Enabled = True
-                frmPuzzleBoard.btnBlueRingIn.Enabled = True
+                player1RingIn = True
             ElseIf currentPlayer = 2 Then
-                frmPuzzleBoard.btnRedRingIn.Enabled = True
-                frmPuzzleBoard.btnYellowRingIn.Enabled = True
-                frmPuzzleBoard.btnBlueRingIn.Enabled = True
+                player2RingIn = True
             ElseIf currentPlayer = 3 Then
-                frmPuzzleBoard.btnRedRingIn.Enabled = True
-                frmPuzzleBoard.btnYellowRingIn.Enabled = True
-                frmPuzzleBoard.btnBlueRingIn.Enabled = False
+                player3RingIn = True
             End If
-            If numberOfPlayers <> 1 Then
+            If player1RingIn = True Then
+                frmPuzzleBoard.btnRedRingIn.Enabled = False
+            ElseIf player1RingIn = False Then
+                frmPuzzleBoard.btnRedRingIn.Enabled = True
+            End If
+            If player2RingIn = True Then
+                frmPuzzleBoard.btnYellowRingIn.Enabled = False
+            ElseIf player2RingIn = False Then
+                frmPuzzleBoard.btnYellowRingIn.Enabled = True
+            End If
+            If player3RingIn = True Then
+                frmPuzzleBoard.btnBlueRingIn.Enabled = False
+            ElseIf player3RingIn = False Then
+                frmPuzzleBoard.btnBlueRingIn.Enabled = True
+            End If
+            If numberOfPlayers <> 1 And (round = PuzzleType.TU1 Or round = PuzzleType.TU2 Or round = PuzzleType.TU3 Or round = PuzzleType.TBTU) And (player1RingIn = False Or player2RingIn = False Or player3RingIn = False) And allRungIn = False Then
                 startTossUp()
                 frmPuzzleBoard.tmrTossUpRingIn.Start()
             End If
@@ -1281,16 +1385,120 @@ Public MustInherit Class WheelController
         solveTypedList.Clear()
         frmPuzzleBoard.btnSolvePass.Hide()
         My.Computer.Audio.Play(My.Resources.Buzzer, AudioPlayMode.Background)
-        If (round = PuzzleType.TU1 Or round = PuzzleType.TU2 Or round = PuzzleType.TU3 Or round = PuzzleType.TBTU) And numberOfPlayers <> 1 And tossUpLetterControlList.Count > 0 Then
+        If (round = PuzzleType.TU1 Or round = PuzzleType.TU2 Or round = PuzzleType.TU3 Or round = PuzzleType.TBTU) And numberOfPlayers <> 1 And (player1RingIn = False Or player2RingIn = False Or player3RingIn = False Or allRungIn = True) And tossUpLetterControlList.Count > 0 Then
             My.Computer.Audio.Play(My.Resources.toss_up_new, AudioPlayMode.BackgroundLoop)
         ElseIf (round = PuzzleType.TU1 Or round = PuzzleType.TU2 Or round = PuzzleType.TU3 Or round = PuzzleType.TBTU) And numberOfPlayers = 1 Then
-            solveAttempt = puzzle
+            'solveAttempt = puzzle
+            'solved = True
+            tossUpSolved = True
         End If
+    End Sub
+#End Region
+#Region "Load Letters from Puzzle String"
+    Public Shared Sub loadLettersFromPuzzleString()
+        loadPuzzle(round, puzzleMode, False)
+        If puzzle <> puzzleString Then
+            Dim currentPuzzleArray As Char() = puzzle.ToCharArray()
+            For Each letter As Char In currentPuzzleArray
+                If Not puzzleString.Contains(letter) Then
+                    If Not loadGameLetterRevealList.Contains(letter.ToString()) Then
+                        loadGameLetterRevealList.Add(letter.ToString())
+                    End If
+                End If
+            Next
+            If loadGameLetterRevealList.Count <> 0 Then
+                For i As Integer = 0 To loadGameLetterRevealList.Count - 1
+                    For Each boardLetter As PuzzleBoardLetter In frmPuzzleBoard.Controls(puzzleBoardName).Controls
+                        If boardLetter.letterBehind = loadGameLetterRevealList(i).ToString() Then
+                            Select Case loadGameLetterRevealList(i).ToString()
+                                Case "A"
+                                    aEnabled = False
+                                Case "E"
+                                    eEnabled = False
+                                Case "I"
+                                    iEnabled = False
+                                Case "O"
+                                    oEnabled = False
+                                Case "U"
+                                    uEnabled = False
+                            End Select
+                            If Not (round = PuzzleType.TU1 Or round = PuzzleType.TU2 Or round = PuzzleType.TU3 Or round = PuzzleType.TBTU) Then
+                                CType(frmScore.usedLetterBoard.Controls("btn" & loadGameLetterRevealList(i).ToString()), Button).Enabled = False
+                            End If
+                            boardLetter.revealLetter()
+                            boardLetter.letterRevealed = True
+                        End If
+                    Next
+                Next
+            End If
+        End If
+        If round = PuzzleType.TU1 Or round = PuzzleType.TU2 Or round = PuzzleType.TU3 Or round = PuzzleType.TBTU Then
+            If Player1List.Count > 0 Then
+                frmPuzzleBoard.btnRedRingIn.Show()
+            End If
+            If Player2List.Count > 0 Then
+                frmPuzzleBoard.btnYellowRingIn.Show()
+            End If
+            If Player3List.Count > 0 Then
+                frmPuzzleBoard.btnBlueRingIn.Show()
+            End If
+        End If
+        addToSolve()
+        loadGameLetterRevealList.Clear()
+    End Sub
+#End Region
+#Region "Add to Solve List"
+    Public Shared Sub addToSolve(btn As Button)
+        For Each myLetter As PuzzleBoardLetter In frmPuzzleBoard.PuzzleBoard1.Controls
+            If myLetter.letterRevealed = False And myLetter.Visible = True Then
+                'If IsNothing(myLetter.btnLetter.BackgroundImage) = False And myLetter.Name.Replace("PuzzleBoardLetter", "") <> currentSolveLetter Then
+                '    solveSortedList(myLetter.Name.Replace("PuzzleBoardLetter", "")) = myLetter.letterBehind
+                'Else
+                If IsNothing(myLetter.btnLetter.BackgroundImage) = False And myLetter.Name.Replace("PuzzleBoardLetter", "") = currentSolveLetter Then
+                    solveSortedList(myLetter.Name.Replace("PuzzleBoardLetter", "")) = btn.Text
+                End If
+                'ElseIf myLetter.Visible = False And CInt(myLetter.Name.Replace("PuzzleBoardLetter", "")) > firstLetter And CInt(myLetter.Name.Replace("PuzzleBoardLetter", "")) < lastLetter Then
+                '    'solveAttempt &= " "
+            ElseIf myLetter.letterRevealed = True Then
+                solveSortedList(myLetter.Name.Replace("PuzzleBoardLetter", "")) = myLetter.letterBehind
+            End If
+        Next
+        For Each item As KeyValuePair(Of Integer, String) In solveSortedList
+            If crosswordStatus = 0 Then
+                solveAttempt &= item.Value
+            Else
+                If item.Key <> solveSortedList.Last.Key Then
+                    solveAttempt &= item.Value & item.Key & " "
+                Else
+                    solveAttempt &= item.Value & item.Key
+                End If
+            End If
+        Next
+    End Sub
+    Public Shared Sub addToSolve()
+        For Each myLetter As PuzzleBoardLetter In frmPuzzleBoard.PuzzleBoard1.Controls
+            If myLetter.letterRevealed = True Then
+                solveSortedList(myLetter.Name.Replace("PuzzleBoardLetter", "")) = myLetter.letterBehind
+            End If
+        Next
+        For Each item As KeyValuePair(Of Integer, String) In solveSortedList
+            If crosswordStatus = 0 Then
+                solveAttempt &= item.Value
+            Else
+                If item.Key <> solveSortedList.Last.Key Then
+                    solveAttempt &= item.Value & item.Key & " "
+                Else
+                    solveAttempt &= item.Value & item.Key
+                End If
+            End If
+        Next
     End Sub
 #End Region
 #Region "Load Letters"
     Public Shared Sub loadLetters(ByRef btn As Button)
-        frmPuzzleBoard.btnSolve.Enabled = True
+        If round <> PuzzleType.BR Then
+            frmPuzzleBoard.btnSolve.Enabled = True
+        End If
         turnTaken = False
         'If finalSpin = True Then
         '    previousValue = ""
@@ -1349,31 +1557,7 @@ Public MustInherit Class WheelController
             '        End If
             '    Next
             'End If
-            For Each myLetter As PuzzleBoardLetter In frmPuzzleBoard.PuzzleBoard1.Controls
-                If myLetter.letterRevealed = False And myLetter.Visible = True Then
-                    'If IsNothing(myLetter.btnLetter.BackgroundImage) = False And myLetter.Name.Replace("PuzzleBoardLetter", "") <> currentSolveLetter Then
-                    '    solveSortedList(myLetter.Name.Replace("PuzzleBoardLetter", "")) = myLetter.letterBehind
-                    'Else
-                    If IsNothing(myLetter.btnLetter.BackgroundImage) = False And myLetter.Name.Replace("PuzzleBoardLetter", "") = currentSolveLetter Then
-                        solveSortedList(myLetter.Name.Replace("PuzzleBoardLetter", "")) = btn.Text
-                    End If
-                    'ElseIf myLetter.Visible = False And CInt(myLetter.Name.Replace("PuzzleBoardLetter", "")) > firstLetter And CInt(myLetter.Name.Replace("PuzzleBoardLetter", "")) < lastLetter Then
-                    '    'solveAttempt &= " "
-                ElseIf myLetter.letterRevealed = True Then
-                    solveSortedList(myLetter.Name.Replace("PuzzleBoardLetter", "")) = myLetter.letterBehind
-                End If
-            Next
-            For Each item As KeyValuePair(Of Integer, String) In solveSortedList
-                If crosswordStatus = 0 Then
-                    solveAttempt &= item.Value
-                Else
-                    If item.Key <> solveSortedList.Last.Key Then
-                        solveAttempt &= item.Value & item.Key & " "
-                    Else
-                        solveAttempt &= item.Value & item.Key
-                    End If
-                End If
-            Next
+            addToSolve(btn)
             'If currentSolveIndex < solveTypedList.Count - 1 Then
             '    currentSolveIndex += 1
             '    currentSolveLetter = solveTypedList(currentSolveIndex)
@@ -1499,7 +1683,7 @@ Public MustInherit Class WheelController
                     If frmScore.lblCurrentValue.Text = "Express" And expressStatus = False Then
                         ExpressDialog.ShowDialog()
                     End If
-                        frmScore.notifyBar.Text = revealNumberOfLetters()
+                    frmScore.notifyBar.Text = revealNumberOfLetters()
                 ElseIf Not puzzle.Contains(currentLetter) Then
                     If frmScore.lblCurrentValue.Text <> "Free Play" Then
                         If finalSpin = True Then
@@ -1542,7 +1726,6 @@ Public MustInherit Class WheelController
                 disableCurrentVowel()
                 timeStart = DateTime.Now.Second
                 frmScore.tmrLetterReveal.Start()
-
                 'If currentPlayer = 1 Then
                 If isVowel = False And Not frmScore.lblCurrentValue.Text = "Mystery 1" AndAlso isVowel = False And Not frmScore.lblCurrentValue.Text = "Mystery 2" And Not frmScore.lblCurrentValue.Text = "Million" And Not frmScore.lblCurrentValue.Text = "Gift" And Not frmScore.lblCurrentValue.Text = "Prize" Then
                     Dim currentPlayerValue = CType(frmScore.pnlScore.Controls("lblPlayer" & currentPlayer), Label).Text.Replace("$", "")
@@ -1604,11 +1787,13 @@ Public MustInherit Class WheelController
                             'SAPI = CreateObject("SAPI.spvoice")
                             If virtualHost = True Then
                                 SAPI.Speak("Pick up the half car.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
-                                If round = PuzzleType.R3 And Not (currentPlayerObject.getWedges(Player.Wedges.HalfCar1) And currentPlayerObject.getWedges(Player.Wedges.HalfCar2)) Then
+                                If round = PuzzleType.R3 And Not (currentPlayerObject(0).getWedges(Player.Wedges.HalfCar1) And currentPlayerObject(0).getWedges(Player.Wedges.HalfCar2)) Then
                                     SAPI.Speak("It's the last round to get the other half.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
                                 End If
                             End If
-                            currentPlayerObject.addCardsOrWedges(Player.Wedges.HalfCar1, True)
+                            For Each myPlayer As Player In currentPlayerObject
+                                myPlayer.addCardsOrWedges(Player.Wedges.HalfCar1, True)
+                            Next
                             halfCar1Status = True
                             wheelWedges(7) = 500
                             wheelWedges(8) = 500
@@ -1625,7 +1810,9 @@ Public MustInherit Class WheelController
                                 '    SAPI.Speak("It's the last round to get the other half.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
                                 'End If
                             End If
-                            currentPlayerObject.addCardsOrWedges(Player.Wedges.HalfCar2, True)
+                            For Each myPlayer As Player In currentPlayerObject
+                                myPlayer.addCardsOrWedges(Player.Wedges.HalfCar2, True)
+                            Next
                             halfCar2Status = True
                             wheelWedges(37) = 500
                             wheelWedges(38) = 500
@@ -1641,7 +1828,9 @@ Public MustInherit Class WheelController
                         If virtualHost = True Then
                             SAPI.Speak("Pick up the million dollars. You still have a long way to go. Don't let it distract you. You can't spend any of that million.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
                         End If
-                        currentPlayerObject.addCardsOrWedges(Player.Wedges.Million, True)
+                        For Each myPlayer As Player In currentPlayerObject
+                            myPlayer.addCardsOrWedges(Player.Wedges.Million, True)
+                        Next
                         wheelWedges(46) = "500"
                         wheelWedges(47) = "500"
                         wheelWedges(48) = "500"
@@ -1654,7 +1843,9 @@ Public MustInherit Class WheelController
                         If virtualHost = True Then
                             SAPI.Speak("Pick up the Wild card.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
                         End If
-                        currentPlayerObject.addCardsOrWedges(Player.Wedges.Wild, True)
+                        For Each myPlayer As Player In currentPlayerObject
+                            myPlayer.addCardsOrWedges(Player.Wedges.Wild, True)
+                        Next
                         frmPuzzleBoard.btnWild.Show()
                         wheelWedges(67) = "500"
                         wheelWedges(68) = "500"
@@ -1667,7 +1858,9 @@ Public MustInherit Class WheelController
                             'SAPI = CreateObject("SAPI.spvoice")
                             SAPI.Speak("Pick up the gift tag. It's a thousand dollars courtesy of our sponsor.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
                         End If
-                        currentPlayerObject.addCardsOrWedges(Player.Wedges.Gift, True)
+                        For Each myPlayer As Player In currentPlayerObject
+                            myPlayer.addCardsOrWedges(Player.Wedges.Gift, True)
+                        Next
                         wheelWedges(52) = "500"
                         wheelWedges(53) = "500"
                         wheelWedges(54) = "500"
@@ -1679,7 +1872,9 @@ Public MustInherit Class WheelController
                             'SAPI = CreateObject("SAPI.spvoice")
                             SAPI.Speak("Pick up the trip. It's worth over $10,000.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
                         End If
-                        currentPlayerObject.addCardsOrWedges(Player.Wedges.Prize, True)
+                        For Each myPlayer As Player In currentPlayerObject
+                            myPlayer.addCardsOrWedges(Player.Wedges.Prize, True)
+                        Next
                         wheelWedges(13) = "500"
                         wheelWedges(14) = "500"
                         wheelWedges(15) = "500"
@@ -1780,7 +1975,7 @@ Public MustInherit Class WheelController
                 btn.Enabled = False
             Else
                 frmPuzzleBoard.lblChosenLetters.Text &= " " & btn.Text
-                If selectedBonusLetters.Count <= 4 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = False OrElse selectedBonusLetters.Count <= 5 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = True Then
+                If selectedBonusLetters.Count <= 4 And bonusRoundPlayer(0).getWedges(Player.Wedges.Wild) = False OrElse selectedBonusLetters.Count <= 5 And bonusRoundPlayer(0).getWedges(Player.Wedges.Wild) = True Then
                     selectedBonusLetters.Add(btn.Text)
                     btn.Enabled = False
                     If currentLetter = "A" Or currentLetter = "E" Or currentLetter = "I" Or currentLetter = "O" Or currentLetter = "U" Then
@@ -1797,10 +1992,10 @@ Public MustInherit Class WheelController
                         End If
                         selectedVowel = currentLetter
                     End If
-                ElseIf selectedBonusLetters.Count = 4 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = False OrElse selectedBonusLetters.Count = 5 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = True Then
+                ElseIf selectedBonusLetters.Count = 4 And bonusRoundPlayer(0).getWedges(Player.Wedges.Wild) = False OrElse selectedBonusLetters.Count = 5 And bonusRoundPlayer(0).getWedges(Player.Wedges.Wild) = True Then
                     btn.Enabled = False
                     frmScore.btnBonusTimerStart.Show()
-                ElseIf selectedBonusLetters.Count = 4 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = True Then
+                ElseIf selectedBonusLetters.Count = 4 And bonusRoundPlayer(0).getWedges(Player.Wedges.Wild) = True Then
                     If virtualHost = True Then
                         SAPI.Speak("Because of this Wild card, you can pick an extra consonant.")
                     End If
@@ -1859,6 +2054,9 @@ Public MustInherit Class WheelController
             solveAttempt = puzzle
             solved = True
         Else
+        End If
+        If quickGame = False Then
+            saveToDB()
         End If
     End Sub
     Public Shared Sub backspaceLetter()
@@ -1942,46 +2140,48 @@ Public MustInherit Class WheelController
                     'showUsedLettersInBonus()
                 End If
             End If
-            If player1.getWedges(Player.Wedges.HalfCar1) = True Then
-                frmScore.halfcar1.Show()
-            ElseIf player1.getWedges(Player.Wedges.HalfCar1) = False Then
-                frmScore.halfcar1.Hide()
-            End If
-            If player1.getWedges(Player.Wedges.HalfCar2) = True Then
-                frmScore.halfcar2.Show()
-            ElseIf player1.getWedges(Player.Wedges.HalfCar2) = False Then
-                frmScore.halfcar2.Hide()
-            End If
-            If player1.getWedges(Player.Wedges.Million) = True Then
-                frmScore.Million.Show()
-            ElseIf player1.getWedges(Player.Wedges.Million) = False Then
-                frmScore.Million.Hide()
-            End If
-            If player1.getWedges(Player.Wedges.Wild) = True Then
-                frmScore.Wild.Show()
-                If round <> PuzzleType.BR Then
-                    frmPuzzleBoard.btnWild.Show()
-                Else
+            If Player1List.Count > 0 Then
+                If Player1List(0).getWedges(Player.Wedges.HalfCar1) = True Then
+                    frmScore.halfcar1.Show()
+                ElseIf Player1List(0).getWedges(Player.Wedges.HalfCar1) = False Then
+                    frmScore.halfcar1.Hide()
+                End If
+                If Player1List(0).getWedges(Player.Wedges.HalfCar2) = True Then
+                    frmScore.halfcar2.Show()
+                ElseIf Player1List(0).getWedges(Player.Wedges.HalfCar2) = False Then
+                    frmScore.halfcar2.Hide()
+                End If
+                If Player1List(0).getWedges(Player.Wedges.Million) = True Then
+                    frmScore.Million.Show()
+                ElseIf Player1List(0).getWedges(Player.Wedges.Million) = False Then
+                    frmScore.Million.Hide()
+                End If
+                If Player1List(0).getWedges(Player.Wedges.Wild) = True Then
+                    frmScore.Wild.Show()
+                    If round <> PuzzleType.BR Then
+                        frmPuzzleBoard.btnWild.Show()
+                    Else
+                        frmPuzzleBoard.btnWild.Hide()
+                    End If
+                ElseIf Player1List(0).getWedges(Player.Wedges.Wild) = False Then
+                    frmScore.Wild.Hide()
                     frmPuzzleBoard.btnWild.Hide()
                 End If
-            ElseIf player1.getWedges(Player.Wedges.Wild) = False Then
-                frmScore.Wild.Hide()
-                frmPuzzleBoard.btnWild.Hide()
-            End If
-            If player1.getWedges(Player.Wedges.Gift) = True Then
-                frmScore.Gift.Show()
-            ElseIf player1.getWedges(Player.Wedges.Gift) = False Then
-                frmScore.Gift.Hide()
-            End If
-            If player1.getWedges(Player.Wedges.Prize) = True Then
-                frmScore.Prize.Show()
-            ElseIf player1.getWedges(Player.Wedges.Prize) = False Then
-                frmScore.Prize.Hide()
-            End If
-            If player1.getWedges(Player.Wedges.Mystery) = True Then
-                frmScore.Mystery.Show()
-            ElseIf player1.getWedges(Player.Wedges.Mystery) = False Then
-                frmScore.Mystery.Hide()
+                If Player1List(0).getWedges(Player.Wedges.Gift) = True Then
+                    frmScore.Gift.Show()
+                ElseIf Player1List(0).getWedges(Player.Wedges.Gift) = False Then
+                    frmScore.Gift.Hide()
+                End If
+                If Player1List(0).getWedges(Player.Wedges.Prize) = True Then
+                    frmScore.Prize.Show()
+                ElseIf Player1List(0).getWedges(Player.Wedges.Prize) = False Then
+                    frmScore.Prize.Hide()
+                End If
+                If Player1List(0).getWedges(Player.Wedges.Mystery) = True Then
+                    frmScore.Mystery.Show()
+                ElseIf Player1List(0).getWedges(Player.Wedges.Mystery) = False Then
+                    frmScore.Mystery.Hide()
+                End If
             End If
         ElseIf currentPlayer = 2 Then
             'frmScore.NameTag1.lblName.Text = player2Name
@@ -2018,61 +2218,63 @@ Public MustInherit Class WheelController
                     'showUsedLettersInBonus()
                 End If
             End If
-            If player2.getWedges(Player.Wedges.HalfCar1) = True Then
-                frmScore.halfcar1.Show()
-            ElseIf player2.getWedges(Player.Wedges.HalfCar1) = False Then
-                frmScore.halfcar1.Hide()
-            End If
-            If player2.getWedges(Player.Wedges.HalfCar2) = True Then
-                frmScore.halfcar2.Show()
-            ElseIf player2.getWedges(Player.Wedges.HalfCar2) = False Then
-                frmScore.halfcar2.Hide()
-            End If
-            If player2.getWedges(Player.Wedges.Million) = True Then
-                frmScore.Million.Show()
-            ElseIf player2.getWedges(Player.Wedges.Million) = False Then
-                frmScore.Million.Hide()
-            End If
-            If player2.getWedges(Player.Wedges.Wild) = True Then
-                frmScore.Wild.Show()
-                If round <> PuzzleType.BR Then
-                    frmPuzzleBoard.btnWild.Show()
-                Else
+            If Player2List.Count > 0 Then
+                If Player2List(0).getWedges(Player.Wedges.HalfCar1) = True Then
+                    frmScore.halfcar1.Show()
+                ElseIf Player2List(0).getWedges(Player.Wedges.HalfCar1) = False Then
+                    frmScore.halfcar1.Hide()
+                End If
+                If Player2List(0).getWedges(Player.Wedges.HalfCar2) = True Then
+                    frmScore.halfcar2.Show()
+                ElseIf Player2List(0).getWedges(Player.Wedges.HalfCar2) = False Then
+                    frmScore.halfcar2.Hide()
+                End If
+                If Player2List(0).getWedges(Player.Wedges.Million) = True Then
+                    frmScore.Million.Show()
+                ElseIf Player2List(0).getWedges(Player.Wedges.Million) = False Then
+                    frmScore.Million.Hide()
+                End If
+                If Player2List(0).getWedges(Player.Wedges.Wild) = True Then
+                    frmScore.Wild.Show()
+                    If round <> PuzzleType.BR Then
+                        frmPuzzleBoard.btnWild.Show()
+                    Else
+                        frmPuzzleBoard.btnWild.Hide()
+                    End If
+                ElseIf Player2List(0).getWedges(Player.Wedges.Wild) = False Then
+                    frmScore.Wild.Hide()
                     frmPuzzleBoard.btnWild.Hide()
                 End If
-            ElseIf player2.getWedges(Player.Wedges.Wild) = False Then
-                frmScore.Wild.Hide()
-                frmPuzzleBoard.btnWild.Hide()
-            End If
-            If player2.getWedges(Player.Wedges.Gift) = True Then
-                frmScore.Gift.Show()
-            ElseIf player2.getWedges(Player.Wedges.Gift) = False Then
-                frmScore.Gift.Hide()
-            End If
-            If player2.getWedges(Player.Wedges.Prize) = True Then
-                frmScore.Prize.Show()
-            ElseIf player2.getWedges(Player.Wedges.Prize) = False Then
-                frmScore.Prize.Hide()
-            End If
-            If player2.getWedges(Player.Wedges.Mystery) = True Then
-                frmScore.Mystery.Show()
-            ElseIf player2.getWedges(Player.Wedges.Mystery) = False Then
-                frmScore.Mystery.Hide()
+                If Player2List(0).getWedges(Player.Wedges.Gift) = True Then
+                    frmScore.Gift.Show()
+                ElseIf Player2List(0).getWedges(Player.Wedges.Gift) = False Then
+                    frmScore.Gift.Hide()
+                End If
+                If Player2List(0).getWedges(Player.Wedges.Prize) = True Then
+                    frmScore.Prize.Show()
+                ElseIf Player2List(0).getWedges(Player.Wedges.Prize) = False Then
+                    frmScore.Prize.Hide()
+                End If
+                If Player2List(0).getWedges(Player.Wedges.Mystery) = True Then
+                    frmScore.Mystery.Show()
+                ElseIf Player2List(0).getWedges(Player.Wedges.Mystery) = False Then
+                    frmScore.Mystery.Hide()
+                End If
             End If
         ElseIf currentPlayer = 3 Then
             'frmScore.NameTag1.lblName.Text = player3Name
             frmScore.usedLetterBoard.BackColor = Color.FromArgb(0, 45, 192)
-            frmScore.flpUsedLetterBoard.BackColor = Color.FromArgb(0, 45, 192)
-            frmScore.player1LeftArrow.Hide()
-            frmScore.player1RightArrow.Hide()
-            frmScore.player2LeftArrow.Hide()
-            frmScore.player2RightArrow.Hide()
-            frmScore.player3LeftArrow.Show()
-            frmScore.player3RightArrow.Show()
-            Dim myPlayer3Score = frmScore.lblPlayer3.Text.Replace("$", "")
-            If myPlayer3Score = "" Then
-                myPlayer3Score = 0
-            End If
+                frmScore.flpUsedLetterBoard.BackColor = Color.FromArgb(0, 45, 192)
+                frmScore.player1LeftArrow.Hide()
+                frmScore.player1RightArrow.Hide()
+                frmScore.player2LeftArrow.Hide()
+                frmScore.player2RightArrow.Hide()
+                frmScore.player3LeftArrow.Show()
+                frmScore.player3RightArrow.Show()
+                Dim myPlayer3Score = frmScore.lblPlayer3.Text.Replace("$", "")
+                If myPlayer3Score = "" Then
+                    myPlayer3Score = 0
+                End If
             If CInt(myPlayer3Score) >= 250 And solveMode = False And spun = False And noMoreVowelsShown = False Or frmScore.lblCurrentValue.Text = "Free Play" And noMoreVowelsShown = False Or finalSpin = True Or bonusVowelsEnabled = True Then
                 If round <> PuzzleType.BR Then
                     enableVowels(True)
@@ -2094,46 +2296,48 @@ Public MustInherit Class WheelController
                     previousValue = "Lose A Turn"
                 End If
             End If
-            If player3.getWedges(Player.Wedges.HalfCar1) = True Then
-                frmScore.halfcar1.Show()
-            ElseIf player3.getWedges(Player.Wedges.HalfCar1) = False Then
-                frmScore.halfcar1.Hide()
-            End If
-            If player3.getWedges(Player.Wedges.HalfCar2) = True Then
-                frmScore.halfcar2.Show()
-            ElseIf player3.getWedges(Player.Wedges.HalfCar2) = False Then
-                frmScore.halfcar2.Hide()
-            End If
-            If player3.getWedges(Player.Wedges.Million) = True Then
-                frmScore.Million.Show()
-            ElseIf player3.getWedges(Player.Wedges.Million) = False Then
-                frmScore.Million.Hide()
-            End If
-            If player3.getWedges(Player.Wedges.Wild) = True Then
-                frmScore.Wild.Show()
-                If round <> PuzzleType.BR Then
-                    frmPuzzleBoard.btnWild.Show()
-                Else
+            If Player3List.Count > 0 Then
+                If Player3List(0).getWedges(Player.Wedges.HalfCar1) = True Then
+                    frmScore.halfcar1.Show()
+                ElseIf Player3List(0).getWedges(Player.Wedges.HalfCar1) = False Then
+                    frmScore.halfcar1.Hide()
+                End If
+                If Player3List(0).getWedges(Player.Wedges.HalfCar2) = True Then
+                    frmScore.halfcar2.Show()
+                ElseIf Player3List(0).getWedges(Player.Wedges.HalfCar2) = False Then
+                    frmScore.halfcar2.Hide()
+                End If
+                If Player3List(0).getWedges(Player.Wedges.Million) = True Then
+                    frmScore.Million.Show()
+                ElseIf Player3List(0).getWedges(Player.Wedges.Million) = False Then
+                    frmScore.Million.Hide()
+                End If
+                If Player3List(0).getWedges(Player.Wedges.Wild) = True Then
+                    frmScore.Wild.Show()
+                    If round <> PuzzleType.BR Then
+                        frmPuzzleBoard.btnWild.Show()
+                    Else
+                        frmPuzzleBoard.btnWild.Hide()
+                    End If
+                ElseIf Player3List(0).getWedges(Player.Wedges.Wild) = False Then
+                    frmScore.Wild.Hide()
                     frmPuzzleBoard.btnWild.Hide()
                 End If
-            ElseIf player3.getWedges(Player.Wedges.Wild) = False Then
-                frmScore.Wild.Hide()
-                frmPuzzleBoard.btnWild.Hide()
-            End If
-            If player3.getWedges(Player.Wedges.Gift) = True Then
-                frmScore.Gift.Show()
-            ElseIf player3.getWedges(Player.Wedges.Gift) = False Then
-                frmScore.Gift.Hide()
-            End If
-            If player3.getWedges(Player.Wedges.Prize) = True Then
-                frmScore.Prize.Show()
-            ElseIf player3.getWedges(Player.Wedges.Prize) = False Then
-                frmScore.Prize.Hide()
-            End If
-            If player3.getWedges(Player.Wedges.Mystery) = True Then
-                frmScore.Mystery.Show()
-            ElseIf player3.getWedges(Player.Wedges.Mystery) = False Then
-                frmScore.Mystery.Hide()
+                If Player3List(0).getWedges(Player.Wedges.Gift) = True Then
+                    frmScore.Gift.Show()
+                ElseIf Player3List(0).getWedges(Player.Wedges.Gift) = False Then
+                    frmScore.Gift.Hide()
+                End If
+                If Player3List(0).getWedges(Player.Wedges.Prize) = True Then
+                    frmScore.Prize.Show()
+                ElseIf Player3List(0).getWedges(Player.Wedges.Prize) = False Then
+                    frmScore.Prize.Hide()
+                End If
+                If Player3List(0).getWedges(Player.Wedges.Mystery) = True Then
+                    frmScore.Mystery.Show()
+                ElseIf Player3List(0).getWedges(Player.Wedges.Mystery) = False Then
+                    frmScore.Mystery.Hide()
+                End If
             End If
         Else
             frmScore.player1LeftArrow.Hide()
@@ -2144,17 +2348,17 @@ Public MustInherit Class WheelController
             frmScore.player3RightArrow.Hide()
         End If
         If roundType = PuzzleType.BR Then
-            If (selectedBonusLetters.Count = 3 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = False) And lettersSelected = False Then
+            If (selectedBonusLetters.Count = 3 And bonusRoundPlayer(0).getWedges(Player.Wedges.Wild) = False) And lettersSelected = False Then
                 If bonusVowelsEnabled = False Then
                     enableBonusVowels(True)
                     'vowelModeEnabled = True
                 End If
-            ElseIf (selectedBonusLetters.Count = 3 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = True) And lettersSelected = False Then
+            ElseIf (selectedBonusLetters.Count = 3 And bonusRoundPlayer(0).getWedges(Player.Wedges.Wild) = True) And lettersSelected = False Then
                 If bonusVowelsEnabled = False Then
                     enableBonusVowels(True)
                     'vowelModeEnabled = True
                 End If
-            ElseIf (selectedBonusLetters.Count = 4 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = True) And lettersSelected = False Then
+            ElseIf (selectedBonusLetters.Count = 4 And bonusRoundPlayer(0).getWedges(Player.Wedges.Wild) = True) And lettersSelected = False Then
                 frmPuzzleBoard.pboxWild.Show()
                 'SAPI.Speak("Because of this Wild card, you can pick an extra consonant.")
                 showUsedLettersInBonus()
@@ -2167,7 +2371,7 @@ Public MustInherit Class WheelController
                     enableBonusVowels(False)
                     vowelModeEnabled = False
                 End If
-            ElseIf (selectedBonusLetters.Count = 4 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = False Or selectedBonusLetters.Count = 5 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = True) And lettersSelected = False Then
+            ElseIf (selectedBonusLetters.Count = 4 And bonusRoundPlayer(0).getWedges(Player.Wedges.Wild) = False Or selectedBonusLetters.Count = 5 And bonusRoundPlayer(0).getWedges(Player.Wedges.Wild) = True) And lettersSelected = False Then
                 'enableBonusVowels(True)
                 'bonusVowelsEnabled = True
                 loadBonusLetters()
@@ -2209,6 +2413,7 @@ Public MustInherit Class WheelController
             player1RingIn = True
             My.Computer.Audio.Play(My.Resources.Ding, AudioPlayMode.Background)
             currentPlayer = 1
+            currentPlayerObject = Player1List
             frmPuzzleBoard.btnYellowRingIn.Enabled = False
             frmPuzzleBoard.btnBlueRingIn.Enabled = False
             frmPuzzleBoard.tmrTossUpRingIn.Stop()
@@ -2224,6 +2429,7 @@ Public MustInherit Class WheelController
             player2RingIn = True
             My.Computer.Audio.Play(My.Resources.Ding, AudioPlayMode.Background)
             currentPlayer = 2
+            currentPlayerObject = Player2List
             frmPuzzleBoard.btnRedRingIn.Enabled = False
             frmPuzzleBoard.btnBlueRingIn.Enabled = False
             frmPuzzleBoard.tmrTossUpRingIn.Stop()
@@ -2239,6 +2445,7 @@ Public MustInherit Class WheelController
             player3RingIn = True
             My.Computer.Audio.Play(My.Resources.Ding, AudioPlayMode.Background)
             currentPlayer = 3
+            currentPlayerObject = Player3List
             frmPuzzleBoard.btnYellowRingIn.Enabled = False
             frmPuzzleBoard.btnRedRingIn.Enabled = False
             frmPuzzleBoard.tmrTossUpRingIn.Stop()
@@ -2251,6 +2458,9 @@ Public MustInherit Class WheelController
                 End If
             End If
         End If
+        setAllRingIn()
+    End Sub
+    Public Shared Sub setAllRingIn()
         If player1RingIn = True And player2RingIn = True And player3RingIn = True And Not numberOfPlayers = 1 Then
             allRungIn = True
             For Each lettersControls As Control In frmPuzzleBoard.Controls(puzzleBoardName).Controls
@@ -2275,17 +2485,23 @@ Public MustInherit Class WheelController
         noMoreConsonantsShown = False
         SAPI = CreateObject("SAPI.spvoice")
         Dim otherPrizes = False
-        Dim currentPlayerWinner As Player
+        Dim currentPlayerWinner As List(Of Player)
         If currentPlayerObject Is Nothing Then
         ElseIf Not currentPlayerObject Is Nothing And round <> PuzzleType.BR Then
             revealPuzzleWinner()
             For i As Integer = 1 To 3
                 If i = 1 Then
-                    currentPlayerWinner = player1
+                    If Player1List.Count > 0 Then
+                        currentPlayerWinner = Player1List
+                    End If
                 ElseIf i = 2 Then
-                    currentPlayerWinner = player2
+                    If Player2List.Count > 0 Then
+                        currentPlayerWinner = Player2List
+                    End If
                 ElseIf i = 3 Then
-                    currentPlayerWinner = player3
+                    If Player3List.Count > 0 Then
+                        currentPlayerWinner = Player3List
+                    End If
                 End If
                 If currentPlayer = 1 Then
                     frmScore.pnlScore.Controls("lblPlayer2").Text = ""
@@ -2297,10 +2513,12 @@ Public MustInherit Class WheelController
                     frmScore.pnlScore.Controls("lblPlayer1").Text = ""
                     frmScore.pnlScore.Controls("lblPlayer2").Text = ""
                 End If
-                If puzzleSolver = i And currentPlayerWinner.getWedges(Player.Wedges.HalfCar1) = True And currentPlayerWinner.getWedges(Player.Wedges.HalfCar2) = True Then
-                    Dim currentValue = frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text + 28000
+                If puzzleSolver = i And currentPlayerWinner(0).getWedges(Player.Wedges.HalfCar1) = True And currentPlayerWinner(0).getWedges(Player.Wedges.HalfCar2) = True Then
+                    Dim currentValue = frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text + 25000
                     frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text = FormatCurrency(currentValue, 0)
-                    currentPlayerWinner.total += 28000
+                    For Each myPlayer As Player In currentPlayerWinner
+                        myPlayer.total += 25000
+                    Next
                     carAwarded = True
                     If numberOfPrizes = 0 Then
                         If virtualHost = True Then
@@ -2312,19 +2530,33 @@ Public MustInherit Class WheelController
                             SAPI.Speak("You also just won a brand new car that is worth $25,000!", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
                         End If
                     End If
-                    player1.addCardsOrWedges(Player.Wedges.HalfCar1, False)
-                    player1.addCardsOrWedges(Player.Wedges.HalfCar2, False)
-                    player2.addCardsOrWedges(Player.Wedges.HalfCar1, False)
-                    player2.addCardsOrWedges(Player.Wedges.HalfCar2, False)
-                    player3.addCardsOrWedges(Player.Wedges.HalfCar1, False)
-                    player3.addCardsOrWedges(Player.Wedges.HalfCar2, False)
+                    For Each myPlayer As Player In Player1List
+                        myPlayer.addCardsOrWedges(Player.Wedges.HalfCar1, False)
+                        myPlayer.addCardsOrWedges(Player.Wedges.HalfCar2, False)
+                    Next
+                    For Each myPlayer As Player In Player2List
+                        myPlayer.addCardsOrWedges(Player.Wedges.HalfCar1, False)
+                        myPlayer.addCardsOrWedges(Player.Wedges.HalfCar2, False)
+                    Next
+                    For Each myPlayer As Player In Player3List
+                        myPlayer.addCardsOrWedges(Player.Wedges.HalfCar1, False)
+                        myPlayer.addCardsOrWedges(Player.Wedges.HalfCar2, False)
+                    Next
+                    'player2.addCardsOrWedges(Player.Wedges.HalfCar1, False)
+                    'player2.addCardsOrWedges(Player.Wedges.HalfCar2, False)
+                    'player3.addCardsOrWedges(Player.Wedges.HalfCar1, False)
+                    'player3.addCardsOrWedges(Player.Wedges.HalfCar2, False)
                 End If
-                If puzzleSolver <> i And currentPlayerWinner.getWedgeRound(Player.Wedges.HalfCar1) = round Then
-                    currentPlayerWinner.addCardsOrWedges(Player.Wedges.HalfCar1, False)
-                ElseIf puzzleSolver <> i And currentPlayerWinner.getWedgeRound(Player.Wedges.HalfCar2) = round Then
-                    currentPlayerWinner.addCardsOrWedges(Player.Wedges.HalfCar2, False)
+                If puzzleSolver <> i And currentPlayerWinner(0).getWedgeRound(Player.Wedges.HalfCar1) = round Then
+                    For Each myPlayer As Player In currentPlayerWinner
+                        myPlayer.addCardsOrWedges(Player.Wedges.HalfCar1, False)
+                    Next
+                ElseIf puzzleSolver <> i And currentPlayerWinner(0).getWedgeRound(Player.Wedges.HalfCar2) = round Then
+                    For Each myPlayer As Player In currentPlayerWinner
+                        myPlayer.addCardsOrWedges(Player.Wedges.HalfCar2, False)
+                    Next
                 End If
-                If puzzleSolver = i And currentPlayerWinner.getWedgeRound(Player.Wedges.Million) = round And currentPlayerWinner.getWedges(Player.Wedges.Million) = True Then
+                If puzzleSolver = i And currentPlayerWinner(0).getWedgeRound(Player.Wedges.Million) = round And currentPlayerWinner(0).getWedges(Player.Wedges.Million) = True Then
                     If numberOfPrizes = 0 Then
                         If virtualHost = True Then
                             SAPI.Speak("You are one step closer to winning the million dollars.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
@@ -2335,45 +2567,58 @@ Public MustInherit Class WheelController
                         End If
                     End If
                     numberOfPrizes += 1
-                ElseIf puzzleSolver <> i And currentPlayerWinner.getWedgeRound(Player.Wedges.Million) = round And currentPlayerWinner.getWedges(Player.Wedges.Million) = True Then
-                    currentPlayerWinner.addCardsOrWedges(Player.Wedges.Million, False)
+                ElseIf puzzleSolver <> i And currentPlayerWinner(0).getWedgeRound(Player.Wedges.Million) = round And currentPlayerWinner(0).getWedges(Player.Wedges.Million) = True Then
+                    For Each myPlayer As Player In currentPlayerWinner
+                        myPlayer.addCardsOrWedges(Player.Wedges.Million, False)
+                    Next
                     If virtualHost = True Then
                         SAPI.Speak("Unfortunately, the million dollar wedge is out of play tonight.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
                     End If
                 Else
                 End If
-                If puzzleSolver = i And currentPlayerWinner.getWedgeRound(Player.Wedges.Gift) = round And currentPlayerWinner.getWedges(Player.Wedges.Gift) = True Then
+                If puzzleSolver = i And currentPlayerWinner(0).getWedgeRound(Player.Wedges.Gift) = round And currentPlayerWinner(0).getWedges(Player.Wedges.Gift) = True Then
                     Dim currentValue = frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text + 1000
                     frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text = FormatCurrency(currentValue, 0)
-                    currentPlayerWinner.total += 1000
+                    For Each myPlayer As Player In currentPlayerWinner
+                        myPlayer.total += 1000
+                    Next
                     If numberOfPrizes = 0 Then
                         If virtualHost = True Then
                             SAPI.Speak("You picked up a gift worth $1,000.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
                         End If
                         houseMinimumMet = True
                     Else
-
                     End If
                     numberOfPrizes += 1
-                    currentPlayerWinner.addCardsOrWedges(Player.Wedges.Gift, False)
-                ElseIf currentPlayerWinner.getWedgeRound(Player.Wedges.Gift) = round And currentPlayerWinner.getWedges(Player.Wedges.Million) = True Then
-                    currentPlayerWinner.addCardsOrWedges(Player.Wedges.Gift, False)
+                    For Each myPlayer As Player In currentPlayerWinner
+                        myPlayer.addCardsOrWedges(Player.Wedges.Gift, False)
+                    Next
+                ElseIf currentPlayerWinner(0).getWedgeRound(Player.Wedges.Gift) = round And currentPlayerWinner(0).getWedges(Player.Wedges.Million) = True Then
+                    For Each myPlayer As Player In currentPlayerWinner
+                        myPlayer.addCardsOrWedges(Player.Wedges.Gift, False)
+                    Next
                 Else
                 End If
-                If currentPlayerWinner.getWedges(Player.Wedges.Mystery) = True And puzzleSolver = i And currentPlayerWinner.getWedges(Player.Wedges.Mystery) = True Then
+                If currentPlayerWinner(0).getWedges(Player.Wedges.Mystery) = True And puzzleSolver = i And currentPlayerWinner(0).getWedges(Player.Wedges.Mystery) = True Then
                     Dim currentValue = frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text + 10000
                     frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text = FormatCurrency(currentValue, 0)
-                    currentPlayerWinner.total += 10000
-                    currentPlayerWinner.addCardsOrWedges(Player.Wedges.Mystery, False)
+                    For Each myPlayer As Player In currentPlayerWinner
+                        myPlayer.total += 10000
+                        myPlayer.addCardsOrWedges(Player.Wedges.Mystery, False)
+                    Next
                     numberOfPrizes += 1
                     houseMinimumMet = True
                 Else
                 End If
-                currentPlayerWinner.addCardsOrWedges(Player.Wedges.Mystery, False)
-                If puzzleSolver = i And currentPlayerWinner.getWedgeRound(Player.Wedges.Prize) = round And currentPlayerWinner.getWedges(Player.Wedges.Prize) = True Then
+                For Each myPlayer As Player In currentPlayerWinner
+                    myPlayer.addCardsOrWedges(Player.Wedges.Mystery, False)
+                Next
+                If puzzleSolver = i And currentPlayerWinner(0).getWedgeRound(Player.Wedges.Prize) = round And currentPlayerWinner(0).getWedges(Player.Wedges.Prize) = True Then
                     Dim currentValue = frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text + 11000
                     frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text = FormatCurrency(currentValue, 0)
-                    currentPlayerWinner.total += 11000
+                    For Each myPlayer As Player In currentPlayerWinner
+                        myPlayer.total += 11000
+                    Next
                     If numberOfPrizes = 0 Then
                         If virtualHost = True Then
                             SAPI.Speak("You won a great trip worth $11,000.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
@@ -2383,30 +2628,42 @@ Public MustInherit Class WheelController
                             SAPI.Speak("You also won a great trip worth $11,000.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
                         End If
                     End If
-                    currentPlayerWinner.addCardsOrWedges(Player.Wedges.Prize, False)
+                    For Each myPlayer As Player In currentPlayerWinner
+                        myPlayer.addCardsOrWedges(Player.Wedges.Prize, False)
+                    Next
                     numberOfPrizes += 1
                     houseMinimumMet = True
-                ElseIf currentPlayerWinner.getWedgeRound(Player.Wedges.Prize) = round And currentPlayerWinner.getWedges(Player.Wedges.Million) = True Then
-                    currentPlayerWinner.addCardsOrWedges(Player.Wedges.Prize, False)
+                ElseIf currentPlayerWinner(0).getWedgeRound(Player.Wedges.Prize) = round And currentPlayerWinner(0).getWedges(Player.Wedges.Million) = True Then
+                    For Each myPlayer As Player In currentPlayerWinner
+                        myPlayer.addCardsOrWedges(Player.Wedges.Prize, False)
+                    Next
                 Else
                 End If
                 If puzzleSolver = i And round = PuzzleType.R3 Then
                     Dim currentValue = frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text + 15000
                     frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text = FormatCurrency(currentValue, 0)
-                    currentPlayerWinner.total += 15000
+                    For Each myPlayer As Player In currentPlayerWinner
+                        myPlayer.total += 15000
+                    Next
                     If virtualHost = True Then
                         SAPI.Speak("Don't forget that this was also a prize puzzle. You won a great trip that is worth over $15,000.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
                     End If
-                    player1.addCardsOrWedges(Player.Wedges.HalfCar1, False)
-                    player1.addCardsOrWedges(Player.Wedges.HalfCar2, False)
-                    player2.addCardsOrWedges(Player.Wedges.HalfCar1, False)
-                    player2.addCardsOrWedges(Player.Wedges.HalfCar2, False)
-                    player3.addCardsOrWedges(Player.Wedges.HalfCar1, False)
-                    player3.addCardsOrWedges(Player.Wedges.HalfCar2, False)
+                    For Each myPlayer As Player In Player1List
+                        myPlayer.addCardsOrWedges(Player.Wedges.HalfCar1, False)
+                        myPlayer.addCardsOrWedges(Player.Wedges.HalfCar2, False)
+                    Next
+                    For Each myPlayer As Player In Player2List
+                        myPlayer.addCardsOrWedges(Player.Wedges.HalfCar1, False)
+                        myPlayer.addCardsOrWedges(Player.Wedges.HalfCar2, False)
+                    Next
+                    For Each myPlayer As Player In Player3List
+                        myPlayer.addCardsOrWedges(Player.Wedges.HalfCar1, False)
+                        myPlayer.addCardsOrWedges(Player.Wedges.HalfCar2, False)
+                    Next
                     numberOfPrizes += 1
                     houseMinimumMet = True
                 End If
-                If puzzleSolver = i And currentPlayerWinner.getWedgeRound(Player.Wedges.Wild) = round And currentPlayerWinner.getWedges(Player.Wedges.Wild) = True Then
+                If puzzleSolver = i And currentPlayerWinner(0).getWedgeRound(Player.Wedges.Wild) = round And currentPlayerWinner(0).getWedges(Player.Wedges.Wild) = True Then
                     numberOfPrizes += 1
                 End If
                 If numberOfPrizes < 2 Then
@@ -2430,34 +2687,50 @@ Public MustInherit Class WheelController
                     End If
                 End If
             Next
-            frmScore.lblPlayer1Total.Show()
-            frmScore.lblPlayer1Total.Text = FormatCurrency(player1.total, 0)
-            frmScore.lblPlayer2Total.Show()
-            frmScore.lblPlayer2Total.Text = FormatCurrency(player2.total, 0)
-            frmScore.lblPlayer3Total.Show()
-            frmScore.lblPlayer3Total.Text = FormatCurrency(player3.total, 0)
-            frmPuzzleBoard.ListBox1.Items.Clear()
-            frmPuzzleBoard.ListBox2.Items.Clear()
-            frmPuzzleBoard.ListBox3.Items.Clear()
-            If virtualHost = True Then
-                SAPI.Speak("You're up to " & frmScore.pnlScore.Controls("lblPlayer" & currentPlayer & "Total").Text, SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
+            If Player1List.Count > 0 Then
+                frmScore.lblPlayer1Total.Show()
+                frmScore.lblPlayer1Total.Text = FormatCurrency(Player1List(0).total, 0)
             End If
-        End If
-        If round = PuzzleType.BR Then
+            If Player2List.Count > 0 Then
+                frmScore.lblPlayer2Total.Show()
+                frmScore.lblPlayer2Total.Text = FormatCurrency(Player2List(0).total, 0)
+            End If
+            If Player3List.Count > 0 Then
+                frmScore.lblPlayer3Total.Show()
+                frmScore.lblPlayer3Total.Text = FormatCurrency(Player3List(0).total, 0)
+            End If
+            frmPuzzleBoard.ListBox1.Items.Clear()
+                    frmPuzzleBoard.ListBox2.Items.Clear()
+                    frmPuzzleBoard.ListBox3.Items.Clear()
+                    If virtualHost = True Then
+                        SAPI.Speak("You're up to " & frmScore.pnlScore.Controls("lblPlayer" & currentPlayer & "Total").Text, SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
+                    End If
+                End If
+                If round = PuzzleType.BR Then
             If bonusSolved = True Then
                 If wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkBonusWheel.Value) <> "Car" Then
-                    bonusRoundPlayer.total += wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkBonusWheel.Value)
+                    For Each myPlayer As Player In bonusRoundPlayer
+                        myPlayer.total += wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkBonusWheel.Value)
+                    Next
                 Else
-                    bonusRoundPlayer.total += 35000
+                    For Each myPlayer As Player In bonusRoundPlayer
+                        myPlayer.total += 35000
+                    Next
                 End If
-                frmScore.lblPlayer1Total.Show()
-                frmScore.lblPlayer1Total.Text = FormatCurrency(player1.total, 0)
-                frmScore.lblPlayer2Total.Show()
-                frmScore.lblPlayer2Total.Text = FormatCurrency(player2.total, 0)
-                frmScore.lblPlayer3Total.Show()
-                frmScore.lblPlayer3Total.Text = FormatCurrency(player3.total, 0)
+                If Player1List.Count > 0 Then
+                    frmScore.lblPlayer1Total.Show()
+                    frmScore.lblPlayer1Total.Text = FormatCurrency(Player1List(0).total, 0)
+                End If
+                If Player2List.Count > 0 Then
+                    frmScore.lblPlayer2Total.Show()
+                    frmScore.lblPlayer2Total.Text = FormatCurrency(Player2List(0).total, 0)
+                End If
+                If Player3List.Count > 0 Then
+                    frmScore.lblPlayer3Total.Show()
+                    frmScore.lblPlayer3Total.Text = FormatCurrency(Player3List(0).total, 0)
+                End If
             End If
-        End If
+            End If
         'If currentPlayer = 1 And player1.getWedges(Player.Wedges.HalfCar1) = True Or currentPlayer = 1 And player1.getWedges(Player.Wedges.HalfCar2) = True Then
         'Else
         '    player1.addCardsOrWedges(Player.Wedges.HalfCar1, False)
@@ -2738,15 +3011,15 @@ Public MustInherit Class WheelController
                 frmScore.btnU.Enabled = False
             End If
             bonusVowelsEnabled = True
-            If selectedBonusLetters.Count = 3 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = False Then
+            If selectedBonusLetters.Count = 3 And bonusRoundPlayer(0).getWedges(Player.Wedges.Wild) = False Then
                 disableConsonants()
-            ElseIf selectedBonusLetters.Count = 3 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = True Then
+            ElseIf selectedBonusLetters.Count = 3 And bonusRoundPlayer(0).getWedges(Player.Wedges.Wild) = True Then
                 disableConsonants()
-            ElseIf selectedBonusLetters.Count = 4 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = True Then
+            ElseIf selectedBonusLetters.Count = 4 And bonusRoundPlayer(0).getWedges(Player.Wedges.Wild) = True Then
                 showUsedLettersInBonus()
             ElseIf selectedBonusLetters.Count < 3 Then
 
-            ElseIf selectedBonusLetters.Count = 4 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = False Or selectedBonusLetters.Count = 5 And bonusRoundPlayer.getWedges(Player.Wedges.Wild) = True Then
+            ElseIf selectedBonusLetters.Count = 4 And bonusRoundPlayer(0).getWedges(Player.Wedges.Wild) = False Or selectedBonusLetters.Count = 5 And bonusRoundPlayer(0).getWedges(Player.Wedges.Wild) = True Then
                 showUsedLettersInBonus()
             End If
         ElseIf value = False Then
@@ -2834,10 +3107,14 @@ Public MustInherit Class WheelController
         For my2i As Integer = 1 To letterControlList.Count
             If DateTime.Now.Second = convertTime(timeStart) Then
                 Dim randomNumber = GetRandomRegular()
-                CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & letterControlList(randomNumber)), PuzzleBoardLetter).displayBlueBKG()
-                If finalSpin <> True Then
-                    CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & letterControlList(randomNumber)), PuzzleBoardLetter).playDing()
-                Else
+                If bonusSolved <> False Then
+                    CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & letterControlList(randomNumber)), PuzzleBoardLetter).displayBlueBKG()
+                    If finalSpin <> True Then
+                        CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & letterControlList(randomNumber)), PuzzleBoardLetter).playDing()
+                    Else
+                    End If
+                ElseIf round = PuzzleType.BR And bonusSolved = False Then
+                    CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & letterControlList(randomNumber)), PuzzleBoardLetter).revealLetter()
                 End If
                 frmPuzzleBoard.ListBox4.Items.Add(randomNumber & CType(frmPuzzleBoard.Controls(puzzleBoardName).Controls("PuzzleBoardLetter" & letterControlList(randomNumber)), PuzzleBoardLetter).letterBehind)
                 letterControlList.Remove(letterControlList(randomNumber))
@@ -2846,13 +3123,13 @@ Public MustInherit Class WheelController
         Next
         If letterControlList.Count = 0 Then
             If round = PuzzleType.BR And frmPuzzleBoard.lblChosenLetters.Visible = False Then
+                frmPuzzleBoard.btnSolve.Enabled = False
                 frmAudio.playRSTLNE(False)
                 enableVowels(False)
                 My.Computer.Audio.Play(My.Resources.choose_letters_new, AudioPlayMode.BackgroundLoop)
                 frmPuzzleBoard.lblChosenLetters.Text = ""
                 frmPuzzleBoard.lblChosenLetters.Show()
                 If virtualHost = True Then
-
                     SAPI.Speak("Now, we are going to need three consonants and a vowel.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
                 End If
             End If
@@ -2864,7 +3141,7 @@ Public MustInherit Class WheelController
 #End Region
 #Region "Solve Puzzle"
     Public Shared Sub solvePuzzle(preview As Boolean)
-        If solveMode = False And revealed = False And typeToSolve = True And solved = False And bonusSolved = True Then
+        If solveMode = False And revealed = False And typeToSolve = True And solved = False And tossUpSolved = False And bonusSolved = True Then
             If round = PuzzleType.BR Then
                 frmScore.wmpBonus.Ctlcontrols.pause()
                 frmPuzzleBoard.tmrBonus.Stop()
@@ -2886,7 +3163,17 @@ Public MustInherit Class WheelController
             currentSolveLetter = 0
             solveMode = False
             lastLetter = 0
-            If removePunctuation(solveAttempt.Replace(" ", "")) = removePunctuation(puzzle.Replace(" ", "")) Or typeToSolve = False Or bonusSolved = False Then
+            If removePunctuation(solveAttempt.Replace(" ", "")) = removePunctuation(puzzle.Replace(" ", "")) Or typeToSolve = False Or bonusSolved = False Or tossUpSolved = False Then
+                If removePunctuation(solveAttempt.Replace(" ", "")) = removePunctuation(puzzle.Replace(" ", "")) Then
+                    tossUpSolved = True
+                Else
+                    tossUpSolved = False
+                    If player1RingIn = True And player2RingIn = True And player3RingIn = True Or revealed = True Then
+                    Else
+                        cancelSolve()
+                        Exit Sub
+                    End If
+                End If
                 frmScore.wmpBonus.Ctlcontrols.stop()
                 solved = False
                 puzzleSolver = currentPlayer
@@ -2919,22 +3206,42 @@ Public MustInherit Class WheelController
                 If preview = False Then
                     frmPuzzleBoard.btnSpinner.Enabled = True
                     If revealed = False Then
-                        For Each lettersControls As Control In frmPuzzleBoard.Controls(puzzleBoardName).Controls
-                            If lettersControls.GetType() Is GetType(PuzzleBoardLetter) Then
-                                CType(lettersControls, PuzzleBoardLetter).revealLetter()
-                                'CType(lettersControls, PuzzleBoardLetter).tossUpStatus = False
+                        If bonusSolved <> False Then
+                            For Each lettersControls As Control In frmPuzzleBoard.Controls(puzzleBoardName).Controls
+                                If lettersControls.GetType() Is GetType(PuzzleBoardLetter) Then
+                                    CType(lettersControls, PuzzleBoardLetter).revealLetter()
+                                    'CType(lettersControls, PuzzleBoardLetter).tossUpStatus = False
+                                End If
+                            Next
+                        ElseIf round = PuzzleType.BR And bonusSolved = False Then
+                            frmAudio.playAudDisapp(True)
+                            startTossUp()
+                                'For Each lettersControls As Control In frmPuzzleBoard.Controls(puzzleBoardName).Controls
+                                '    If lettersControls.GetType() Is GetType(PuzzleBoardLetter) And CType(lettersControls, PuzzleBoardLetter).letterRevealed = False And Not String.IsNullOrEmpty(CType(lettersControls, PuzzleBoardLetter).letterBehind) And puzzleString.Contains(CType(lettersControls, PuzzleBoardLetter).letterBehind) Then
+                                '        letterControlList.Add(lettersControls.Name.Replace("PuzzleBoardLetter", ""))
+                                '        letterControlTappedList.Add(lettersControls.Name.Replace("PuzzleBoardLetter", ""))
+                                '        solveTypedList.Remove(lettersControls.Name.Replace("PuzzleBoardLetter", ""))
+                                '        'CType(lettersControls, PuzzleBoardLetter).tossUpStatus = False
+                                '    End If
+                                'Next
+                                timeStart = DateTime.Now.Second
+                                frmScore.tmrLetterReveal.Start()
                             End If
-                        Next
                         If round = PuzzleType.TU1 Or round = PuzzleType.TBTU Then
                             'If currentPlayer = 1 Then
-                            If currentPlayerObject IsNot Nothing Then
+                            If currentPlayerObject IsNot Nothing And tossUpSolved = True Then
                                 Dim currentValue = frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text
                                 If currentValue = "" Then
                                     currentValue = 0
                                     currentValue += 1000
                                 End If
                                 frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text = FormatCurrency(currentValue, 0)
-                                currentPlayerObject.total += 1000
+                                For Each myPlayer As Player In currentPlayerObject
+                                    myPlayer.total += 1000
+                                Next
+                            Else
+                                My.Computer.Audio.Play(My.Resources.Buzzer, AudioPlayMode.Background)
+                                frmAudio.playAudDisapp(True)
                             End If
                             'ElseIf currentPlayer = 2 Then
                             '    player2.total += 1000
@@ -2942,49 +3249,57 @@ Public MustInherit Class WheelController
                             '    player3.total += 1000
                             'End If
                         ElseIf round = PuzzleType.TU2 Then
-                            If currentPlayerObject IsNot Nothing Then
+                            If currentPlayerObject IsNot Nothing And tossUpSolved = True Then
                                 Dim currentValue = frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text
                                 If currentValue = "" Then
                                     currentValue = 0
                                     currentValue += 2000
                                 End If
                                 frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text = FormatCurrency(currentValue, 0)
-                                currentPlayerObject.total += 2000
+                                For Each myPlayer As Player In currentPlayerObject
+                                    myPlayer.total += 2000
+                                Next
                                 'ElseIf currentPlayer = 2 Then
                                 '    player2.total += 2000
                                 'ElseIf currentPlayer = 3 Then
                                 '    player3.total += 2000
                             Else
+                                My.Computer.Audio.Play(My.Resources.Buzzer, AudioPlayMode.Background)
+                                frmAudio.playAudDisapp(True)
                                 currentPlayer = GetRandomPlayer(1, numberOfPlayers + 1)
                                 If currentPlayer = 1 Then
-                                    currentPlayerObject = player1
+                                    currentPlayerObject = Player1List
                                 ElseIf currentPlayer = 2 Then
-                                    currentPlayerObject = player2
+                                    currentPlayerObject = Player2List
                                 ElseIf currentPlayer = 3 Then
-                                    currentPlayerObject = player3
+                                    currentPlayerObject = Player3List
                                 End If
                             End If
                         ElseIf round = PuzzleType.TU3 Then
-                            If currentPlayerObject IsNot Nothing Then
+                            If currentPlayerObject IsNot Nothing And tossUpSolved = True Then
                                 Dim currentValue = frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text
                                 If currentValue = "" Then
                                     currentValue = 0
                                     currentValue += 3000
                                 End If
                                 frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text = FormatCurrency(currentValue, 0)
-                                currentPlayerObject.total += 3000
+                                For Each myPlayer As Player In currentPlayerObject
+                                    myPlayer.total += 3000
+                                Next
                                 'ElseIf currentPlayer = 2 Then
                                 '    player2.total += 3000
                                 'ElseIf currentPlayer = 3 Then
                                 '    player3.total += 3000
                             Else
+                                My.Computer.Audio.Play(My.Resources.Buzzer, AudioPlayMode.Background)
+                                frmAudio.playAudDisapp(True)
                                 currentPlayer = GetRandomPlayer(1, numberOfPlayers + 1)
                                 If currentPlayer = 1 Then
-                                    currentPlayerObject = player1
+                                    currentPlayerObject = Player1List
                                 ElseIf currentPlayer = 2 Then
-                                    currentPlayerObject = player2
+                                    currentPlayerObject = Player2List
                                 ElseIf currentPlayer = 3 Then
-                                    currentPlayerObject = player3
+                                    currentPlayerObject = Player3List
                                 End If
                             End If
                         ElseIf round = PuzzleType.BR Then
@@ -2995,14 +3310,25 @@ Public MustInherit Class WheelController
                         Else
 
                         End If
-                        Dim player1Score As Integer = WheelController.player1Score
-                        Dim player2Score As Integer = WheelController.player2Score
-                        Dim player3Score As Integer = WheelController.player3Score
+                        Dim player1Score As Integer
+                        Dim player2Score As Integer
+                        Dim player3Score As Integer
+                        If Player1List.Count > 0 Then
+                            player1Score = Player1List(0).currentScore
+                        End If
+                        If Player2List.Count > 0 Then
+                            player2Score = Player2List(0).currentScore
+                        End If
+                        If Player3List.Count > 0 Then
+                            player3Score = Player3List(0).currentScore
+                        End If
                         If numberOfTurns > 0 And round <> PuzzleType.TU1 And round <> PuzzleType.TU2 And round <> PuzzleType.TU3 And round <> PuzzleType.TBTU And round <> PuzzleType.BR Then
                             If currentPlayer = 1 Then
                                 If teams = False Then
                                     If player1Score > 1000 Then
-                                        player1.total += player1Score
+                                        For Each myPlayer As Player In Player1List
+                                            myPlayer.total += player1Score
+                                        Next
                                         houseMinimumMet = True
                                     Else
                                         Dim currentValue = frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text
@@ -3011,12 +3337,16 @@ Public MustInherit Class WheelController
                                             currentValue = currentValue + 1000
                                         End If
                                         frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text = FormatCurrency(currentValue, 0)
-                                        player1.total += 1000
+                                        For Each myPlayer As Player In Player1List
+                                            myPlayer.total += 1000
+                                        Next
                                         houseMinimumMet = False
                                     End If
                                 Else
                                     If player1Score > 2000 Then
-                                        player1.total += player1Score
+                                        For Each myPlayer As Player In Player1List
+                                            myPlayer.total += player1Score
+                                        Next
                                         houseMinimumMet = True
                                     Else
                                         Dim currentValue = frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text
@@ -3025,14 +3355,18 @@ Public MustInherit Class WheelController
                                             currentValue = currentValue + 2000
                                         End If
                                         frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text = FormatCurrency(currentValue, 0)
-                                        player1.total += 2000
+                                        For Each myPlayer As Player In Player1List
+                                            myPlayer.total += 2000
+                                        Next
                                         houseMinimumMet = False
                                     End If
                                 End If
                             ElseIf currentPlayer = 2 Then
                                 If teams = False Then
                                     If player2Score > 1000 Then
-                                        player2.total += player2Score
+                                        For Each myPlayer As Player In Player2List
+                                            myPlayer.total += player2Score
+                                        Next
                                         houseMinimumMet = True
                                     Else
                                         Dim currentValue = frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text
@@ -3041,12 +3375,16 @@ Public MustInherit Class WheelController
                                             currentValue = currentValue + 1000
                                         End If
                                         frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text = FormatCurrency(currentValue, 0)
-                                        player2.total += 1000
+                                        For Each myPlayer As Player In Player2List
+                                            myPlayer.total += 1000
+                                        Next
                                         houseMinimumMet = False
                                     End If
                                 Else
                                     If player2Score > 2000 Then
-                                        player2.total += player2Score
+                                        For Each myPlayer As Player In Player2List
+                                            myPlayer.total += player2Score
+                                        Next
                                         houseMinimumMet = True
                                     Else
                                         Dim currentValue = frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text
@@ -3056,14 +3394,18 @@ Public MustInherit Class WheelController
                                             currentValue = CInt(frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text) + 2000
                                         End If
                                         frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text = FormatCurrency(currentValue, 0)
-                                        player2.total += 2000
+                                        For Each myPlayer As Player In Player2List
+                                            myPlayer.total += 2000
+                                        Next
                                         houseMinimumMet = False
                                     End If
                                 End If
                             ElseIf currentPlayer = 3 Then
                                 If teams = False Then
                                     If player3Score > 1000 Then
-                                        player3.total += player3Score
+                                        For Each myPlayer As Player In Player3List
+                                            myPlayer.total += player3Score
+                                        Next
                                         houseMinimumMet = True
                                     Else
                                         Dim currentValue = frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text
@@ -3073,12 +3415,16 @@ Public MustInherit Class WheelController
                                             currentValue = CInt(frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text) + 1000
                                         End If
                                         frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text = FormatCurrency(currentValue, 0)
-                                        player3.total += 1000
+                                        For Each myPlayer As Player In Player3List
+                                            myPlayer.total += 1000
+                                        Next
                                         houseMinimumMet = False
                                     End If
                                 Else
                                     If player3Score > 2000 Then
-                                        player3.total += player3Score
+                                        For Each myPlayer As Player In Player3List
+                                            myPlayer.total += player3Score
+                                        Next
                                         houseMinimumMet = True
                                     Else
                                         Dim currentValue = frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text
@@ -3088,19 +3434,25 @@ Public MustInherit Class WheelController
                                             currentValue = CInt(frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text) + 2000
                                         End If
                                         frmScore.pnlScore.Controls("lblPlayer" & currentPlayer).Text = FormatCurrency(currentValue, 0)
-                                        player3.total += 2000
+                                        For Each myPlayer As Player In Player3List
+                                            myPlayer.total += 2000
+                                        Next
                                         houseMinimumMet = False
                                     End If
                                 End If
                             End If
                         End If
+                        Dim playDisapp = True
                         If round = PuzzleType.TU1 Or round = PuzzleType.TU2 Or round = PuzzleType.TU3 Then
                             If tossUpLetterControlList.Count = 0 Or allRungIn = True Then
                                 'My.Computer.Audio.Play(My.Resources.double_buzz, AudioPlayMode.Background)
                                 'resetPuzzle()
                                 'reEnableLetters()
                             Else
-                                My.Computer.Audio.Play(My.Resources.toss_up_solved, AudioPlayMode.WaitToComplete)
+                                If tossUpSolved = True Then
+                                    My.Computer.Audio.Play(My.Resources.toss_up_solved, AudioPlayMode.WaitToComplete)
+                                    playDisapp = False
+                                End If
                                 resetPuzzle()
                                 reEnableLetters()
                             End If
@@ -3109,6 +3461,7 @@ Public MustInherit Class WheelController
                                 'frmScore.BonusCardEnvelope1.Show()
                                 My.Computer.Audio.Play(My.Resources.music_bonus_lose_vamp, AudioPlayMode.Background)
                                 bonusPuzzleRevealed = True
+                                frmPuzzleBoard.wheelTilt.Enabled = False
                             Else
                                 My.Computer.Audio.Play(My.Resources.music_bonus_win_vamp_new, AudioPlayMode.Background)
                                 If virtualHost = True Then
@@ -3118,9 +3471,7 @@ Public MustInherit Class WheelController
                                 reEnableLetters()
                                 'frmScore.BonusCardEnvelope1.Show()
                                 bonusPuzzleRevealed = True
-                            End If
-                            If gameID <> 0 Then
-                                saveToDB()
+                                frmPuzzleBoard.wheelTilt.Enabled = False
                             End If
                         ElseIf numberOfTurns = 0 Then
                             My.Computer.Audio.Play(My.Resources.bankrupt, AudioPlayMode.WaitToComplete)
@@ -3138,16 +3489,17 @@ Public MustInherit Class WheelController
                         Else
                             frmAudio.playAudClap(True)
                             My.Computer.Audio.Play(My.Resources.puzzle_solved_new, AudioPlayMode.WaitToComplete)
+                            playDisapp = False
                             resetPuzzle()
                             reEnableLetters()
                             currentPlayer = GetRandomPlayer(1, numberOfPlayers + 1)
                         End If
                         If currentPlayer = 1 Then
-                            currentPlayerObject = player1
+                            currentPlayerObject = Player1List
                         ElseIf currentPlayer = 2 Then
-                            currentPlayerObject = player2
+                            currentPlayerObject = Player2List
                         ElseIf currentPlayer = 3 Then
-                            currentPlayerObject = player3
+                            currentPlayerObject = Player3List
                         End If
                         player1RingIn = False
                         player2RingIn = False
@@ -3186,6 +3538,7 @@ Public MustInherit Class WheelController
                                 currentPlayer = Nothing
                                 currentPlayerObject = Nothing
                                 frmScore.tmrCheckVowels.Stop()
+                                checkVowelRunning = False
                             ElseIf round = PuzzleType.TU2 Then
                                 tossUpLetterControlList.Clear()
                                 frmPuzzleBoard.tmrTossUpRingIn.Stop()
@@ -3247,9 +3600,10 @@ Public MustInherit Class WheelController
                                         frmPuzzleBoard.btnWild.Hide()
                                         frmPuzzleBoard.logoExpress.Hide()
                                         frmScore.tmrCheckVowels.Stop()
-                                        frmPuzzleBoard.btnRedRingIn.Enabled = True
-                                        frmPuzzleBoard.btnYellowRingIn.Enabled = True
-                                        frmPuzzleBoard.btnBlueRingIn.Enabled = True
+                                        checkVowelRunning = False
+                                        frmPuzzleBoard.btnRedRingIn.Enabled = False
+                                        frmPuzzleBoard.btnYellowRingIn.Enabled = False
+                                        frmPuzzleBoard.btnBlueRingIn.Enabled = False
                                     Else
                                         checkBonusRoundWinner()
                                     End If
@@ -3264,9 +3618,9 @@ Public MustInherit Class WheelController
                                         round = PuzzleType.R4
                                         wheelLoad(PuzzleType.R4)
                                         loadPuzzle(PuzzleType.R4, puzzleMode, False)
-                                        frmScore.lblPlayer1Total.Text = FormatCurrency(player1.total, 0)
-                                        frmScore.lblPlayer2Total.Text = FormatCurrency(player2.total, 0)
-                                        frmScore.lblPlayer3Total.Text = FormatCurrency(player3.total, 0)
+                                        frmScore.lblPlayer1Total.Text = FormatCurrency(Player1List(0).total, 0)
+                                        frmScore.lblPlayer2Total.Text = FormatCurrency(Player2List(0).total, 0)
+                                        frmScore.lblPlayer3Total.Text = FormatCurrency(Player3List(0).total, 0)
                                         tossUpStarted = True
                                         frmScore.usedLetterBoard.Enabled = True
                                         frmPuzzleBoard.wheelTilt.Enabled = True
@@ -3276,84 +3630,88 @@ Public MustInherit Class WheelController
                                     End If
                                 End If
 
-                                    ElseIf round = PuzzleType.TU3 Then
-                                    tossUpLetterControlList.Clear()
+                            ElseIf round = PuzzleType.TU3 Then
+                                tossUpLetterControlList.Clear()
+                                puzzleSolved = False
+                                frmPuzzleBoard.tmrTossUpRingIn.Stop()
+                                'frmPuzzleBoard.btnRedRingIn.Hide()
+                                'frmPuzzleBoard.btnYellowRingIn.Hide()
+                                'frmPuzzleBoard.btnBlueRingIn.Hide()
+                                round = PuzzleType.R4
+                                wheelLoad(PuzzleType.R4)
+                                loadPuzzle(PuzzleType.R4, puzzleMode, False)
+                                If Player1List.Count > 0 Then
+                                    frmScore.lblPlayer1Total.Text = FormatCurrency(Player1List(0).total, 0)
+                                End If
+                                If Player2List.Count > 0 Then
+                                    frmScore.lblPlayer2Total.Text = FormatCurrency(Player2List(0).total, 0)
+                                End If
+                                If Player3List.Count > 0 Then
+                                    frmScore.lblPlayer3Total.Text = FormatCurrency(Player3List(0).total, 0)
+                                End If
+                                tossUpStarted = True
+                                frmScore.usedLetterBoard.Enabled = True
+                                frmPuzzleBoard.wheelTilt.Enabled = True
+                                frmScore.tmrCheckVowels.Start()
+                            ElseIf round = PuzzleType.R4 Then
+                                If finalSpin = False Then
                                     puzzleSolved = False
-                                    frmPuzzleBoard.tmrTossUpRingIn.Stop()
-                                    'frmPuzzleBoard.btnRedRingIn.Hide()
-                                    'frmPuzzleBoard.btnYellowRingIn.Hide()
-                                    'frmPuzzleBoard.btnBlueRingIn.Hide()
-                                    round = PuzzleType.R4
-                                    wheelLoad(PuzzleType.R4)
-                                    loadPuzzle(PuzzleType.R4, puzzleMode, False)
-                                    frmScore.lblPlayer1Total.Text = FormatCurrency(player1.total, 0)
-                                    frmScore.lblPlayer2Total.Text = FormatCurrency(player2.total, 0)
-                                    frmScore.lblPlayer3Total.Text = FormatCurrency(player3.total, 0)
-                                    tossUpStarted = True
-                                    frmScore.usedLetterBoard.Enabled = True
-                                    frmPuzzleBoard.wheelTilt.Enabled = True
+                                    round = PuzzleType.R5
+                                    wheelLoad(PuzzleType.R5)
+                                    loadPuzzle(PuzzleType.R5, puzzleMode, False)
                                     frmScore.tmrCheckVowels.Start()
-                                ElseIf round = PuzzleType.R4 Then
-                                    If finalSpin = False Then
-                                        puzzleSolved = False
-                                        round = PuzzleType.R5
-                                        wheelLoad(PuzzleType.R5)
-                                        loadPuzzle(PuzzleType.R5, puzzleMode, False)
-                                        frmScore.tmrCheckVowels.Start()
-                                        frmPuzzleBoard.wheelTilt.Enabled = True
-                                    Else
-                                        checkBonusRoundWinner()
-                                    End If
-                                ElseIf round = PuzzleType.R5 Then
-                                    If finalSpin = False Then
-                                        puzzleSolved = False
-                                        round = PuzzleType.R6
-                                        wheelLoad(PuzzleType.R6)
-                                        loadPuzzle(PuzzleType.R6, puzzleMode, False)
-                                        frmScore.tmrCheckVowels.Start()
-                                        frmPuzzleBoard.wheelTilt.Enabled = True
-                                    Else
-                                        checkBonusRoundWinner()
-                                    End If
-                                ElseIf round = PuzzleType.R6 Then
-                                    If finalSpin = False Then
-                                        puzzleSolved = False
-                                        round = PuzzleType.R7
-                                        wheelLoad(PuzzleType.R7)
-                                        loadPuzzle(PuzzleType.R7, puzzleMode, False)
-                                        frmScore.tmrCheckVowels.Start()
                                     frmPuzzleBoard.wheelTilt.Enabled = True
                                 Else
-                                        checkBonusRoundWinner()
-                                    End If
-                                ElseIf round = PuzzleType.R7 Then
-                                    If finalSpin = False Then
-                                        puzzleSolved = False
-                                        round = PuzzleType.R8
-                                        wheelLoad(PuzzleType.R8)
-                                        loadPuzzle(PuzzleType.R8, puzzleMode, False)
-                                        frmScore.tmrCheckVowels.Start()
-                                        frmPuzzleBoard.wheelTilt.Enabled = True
-
-                                    Else
-                                        checkBonusRoundWinner()
-                                    End If
-                                ElseIf round = PuzzleType.R8 Then
-                                    If finalSpin = False Then
-                                        puzzleSolved = False
-                                        round = PuzzleType.R9
-                                        wheelLoad(PuzzleType.R9)
-                                        loadPuzzle(PuzzleType.R9, puzzleMode, False)
-                                        frmScore.tmrCheckVowels.Start()
-                                        frmPuzzleBoard.wheelTilt.Enabled = True
-
-                                    Else
-                                        checkBonusRoundWinner()
-                                    End If
-                                ElseIf round = PuzzleType.R9 Then
                                     checkBonusRoundWinner()
-                                ElseIf round = PuzzleType.TBTU Then
-                                    checkBonusRound()
+                                End If
+                            ElseIf round = PuzzleType.R5 Then
+                                If finalSpin = False Then
+                                    puzzleSolved = False
+                                    round = PuzzleType.R6
+                                    wheelLoad(PuzzleType.R6)
+                                    loadPuzzle(PuzzleType.R6, puzzleMode, False)
+                                    frmScore.tmrCheckVowels.Start()
+                                    frmPuzzleBoard.wheelTilt.Enabled = True
+                                Else
+                                    checkBonusRoundWinner()
+                                End If
+                            ElseIf round = PuzzleType.R6 Then
+                                If finalSpin = False Then
+                                    puzzleSolved = False
+                                    round = PuzzleType.R7
+                                    wheelLoad(PuzzleType.R7)
+                                    loadPuzzle(PuzzleType.R7, puzzleMode, False)
+                                    frmScore.tmrCheckVowels.Start()
+                                    frmPuzzleBoard.wheelTilt.Enabled = True
+                                Else
+                                    checkBonusRoundWinner()
+                                End If
+                            ElseIf round = PuzzleType.R7 Then
+                                If finalSpin = False Then
+                                    puzzleSolved = False
+                                    round = PuzzleType.R8
+                                    wheelLoad(PuzzleType.R8)
+                                    loadPuzzle(PuzzleType.R8, puzzleMode, False)
+                                    frmScore.tmrCheckVowels.Start()
+                                    frmPuzzleBoard.wheelTilt.Enabled = True
+                                Else
+                                    checkBonusRoundWinner()
+                                End If
+                            ElseIf round = PuzzleType.R8 Then
+                                If finalSpin = False Then
+                                    puzzleSolved = False
+                                    round = PuzzleType.R9
+                                    wheelLoad(PuzzleType.R9)
+                                    loadPuzzle(PuzzleType.R9, puzzleMode, False)
+                                    frmScore.tmrCheckVowels.Start()
+                                    frmPuzzleBoard.wheelTilt.Enabled = True
+                                Else
+                                    checkBonusRoundWinner()
+                                End If
+                            ElseIf round = PuzzleType.R9 Then
+                                checkBonusRoundWinner()
+                            ElseIf round = PuzzleType.TBTU Then
+                                checkBonusRound()
                             End If
                             For Each lettersControls As Control In frmPuzzleBoard.Controls(puzzleBoardName).Controls
                                 If lettersControls.GetType() Is GetType(PuzzleBoardLetter) Then
@@ -3383,14 +3741,17 @@ Public MustInherit Class WheelController
                             End If
                             revealed = False
                         End If
-                    End If
-                ElseIf preview = True Then
+                        'puzzleString = ""
+                        If quickGame = False Then
+                                saveToDB()
+                            End If
+                        End If
+                        ElseIf preview = True Then
                     For Each lettersControls As Control In frmPuzzleBoard.Controls(puzzleBoardName).Controls
                         If lettersControls.GetType() Is GetType(PuzzleBoardLetter) Then
                             CType(lettersControls, PuzzleBoardLetter).revealLetter()
                         End If
                     Next
-
                     If revealed = True And previewPlay = True Then
                         currentPlayer = Nothing
                         currentPlayerObject = Nothing
@@ -3404,6 +3765,7 @@ Public MustInherit Class WheelController
                             reEnableLetters()
                         ElseIf round = PuzzleType.BR Then
                             My.Computer.Audio.Play(My.Resources.music_bonus_win_vamp_new, AudioPlayMode.BackgroundLoop)
+                            frmPuzzleBoard.wheelTilt.Enabled = False
                             resetPuzzle()
                             reEnableLetters()
                         Else
@@ -3598,24 +3960,51 @@ Public MustInherit Class WheelController
         Return underscoreString
     End Function
     Public Shared Sub checkBonusRoundWinner()
-        If CInt(player1.total) = 0 Then
-            player1.total += 1000
-        ElseIf CInt(player2.total) = 0 Then
-            player2.total += 1000
-        ElseIf CInt(player3.total) = 0 Then
-            player3.total += 1000
+        Dim player1Total As Integer
+        Dim player2Total As Integer
+        Dim player3Total As Integer
+        If Player1List.Count > 0 Then
+            player1Total = Player1List(0).total
+            If CInt(Player1List(0).total) = 0 Then
+                For Each myPlayer In Player1List
+                    myPlayer.total += 1000
+                Next
+            End If
+        Else
+            player1Total = 0
         End If
-        If CInt(player1.total) > CInt(player2.total) And CInt(player1.total) > CInt(player3.total) Then
+        If Player2List.Count > 0 Then
+            player2Total = Player2List(0).total
+            If CInt(Player2List(0).total) = 0 Then
+                For Each myPlayer In Player2List
+                    myPlayer.total += 1000
+                Next
+            End If
+        Else
+            player2Total = 0
+        End If
+        If Player3List.Count > 0 Then
+            player3Total = Player3List(0).total
+            If CInt(Player3List(0).total) = 0 Then
+                For Each myPlayer In Player3List
+                    myPlayer.total += 1000
+                Next
+            End If
+        Else
+            player3Total = 0
+        End If
+
+        If player1Total > player2Total And player1Total > player3Total Then
             currentPlayer = 1
-            bonusRoundPlayer = player1
+            bonusRoundPlayer = Player1List
             checkBonusRound()
-        ElseIf CInt(player2.total) > CInt(player1.total) And CInt(player2.total) > CInt(player3.total) Then
+        ElseIf player2Total > player1Total And player2Total > player3Total Then
             currentPlayer = 2
-            bonusRoundPlayer = player2
+            bonusRoundPlayer = Player2List
             checkBonusRound()
-        ElseIf CInt(player3.total) > CInt(player1.total) And CInt(player3.total) > CInt(player2.total) Then
+        ElseIf player3Total > player1Total And player3Total > player2Total Then
             currentPlayer = 3
-            bonusRoundPlayer = player3
+            bonusRoundPlayer = Player3List
             checkBonusRound()
         Else
             'If spun = True Then
@@ -3638,9 +4027,7 @@ Public MustInherit Class WheelController
             tossUpStarted = False
             currentPlayer = Nothing
             frmScore.tmrCheckVowels.Stop()
-            Exit Sub
-            'Else
-            'End If
+            checkVowelRunning = False
         End If
     End Sub
     Public Shared Sub checkBonusRound()
@@ -3669,6 +4056,7 @@ Public MustInherit Class WheelController
             frmScore.flpBonusCategories.Show()
         End If
         frmScore.lblNumberOfTurns.Hide()
+        frmPuzzleBoard.btnSolve.Enabled = False
         frmPuzzleBoard.wheelTilt.Enabled = True
         frmPuzzleBoard.btnRedRingIn.Hide()
         frmPuzzleBoard.btnYellowRingIn.Hide()
@@ -3687,6 +4075,7 @@ Public MustInherit Class WheelController
         frmPuzzleBoard.WheelSpinControl1.firstSpin = True
         frmPuzzleBoard.WheelSpinControl1.wmpWheel.Ctlcontrols.stop()
         frmScore.tmrCheckVowels.Stop()
+        checkVowelRunning = False
         frmScore.tmrFinalSpin.Stop()
         finalSpin = False
         finalSpinSpun = False
@@ -3702,7 +4091,7 @@ Public MustInherit Class WheelController
                 SAPI.Speak("Congratulations, " & CType(frmScore.Controls("NameTag" & currentPlayer), NameTag).lblName.Text & " You're the big winner. You'll be moving on to the bonus round.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
             End If
         End If
-            If virtualHost = True Then
+        If virtualHost = True Then
             For i As Integer = 0 To 2
                 SAPI.Speak(CType(frmScore.flpBonusCategories.Controls("CategoryStrip" & (i + 1)), CategoryStrip).lblCategory.Text, SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
             Next
@@ -3771,12 +4160,19 @@ Public MustInherit Class WheelController
                 finalSpin = 1
             End If
         End If
-        Dim connPuzzle As SqlConnection
-        connPuzzle = New SqlConnection("Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" & Application.StartupPath & "\WheelPuzzles.mdf;Integrated Security=True")
+        Dim connPuzzle As SqlConnection = New SqlConnection("Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" & Application.StartupPath & "\WheelPuzzles.mdf;Integrated Security=True")
         Dim strSQL As String
-        strSQL = "Update GAMES Set PackName = @PackName, VirtualHost = @VirtualHost, TypeToSolve = @TypeToSolve, RoundNumber = @RoundNumber, Puzzle = @Puzzle, Team = @Teams WHERE Id = @GameId"
+        strSQL = "Update GAMES Set PackName = @PackName, VirtualHost = @VirtualHost, TypeToSolve = @TypeToSolve, Round = @RoundNumber, PuzzleID = @Puzzle, PuzzleString = @PuzzleString, Teams = @Teams, Final = @Final, CurrentPlayer = @CurrentPlayer, finalSpinTime = @finalSpinTime WHERE Id = @GameId"
         Dim cmd As SqlCommand
-        Dim puzzleParam As SqlParameter = New SqlParameter("@Puzzle", "")
+        Dim puzzleParam As SqlParameter = New SqlParameter("@Puzzle", puzzleID)
+        Dim puzzleStringParam As SqlParameter = New SqlParameter("@PuzzleString", puzzleString)
+        Dim finalSpinParam As SqlParameter = New SqlParameter("@finalSpinTime", timeLeft)
+        Dim finalParam As SqlParameter
+        If round = PuzzleType.BR Then
+            finalParam = New SqlParameter("@Final", 1)
+        Else
+            finalParam = New SqlParameter("@Final", 0)
+        End If
         Dim virtualHostParam As SqlParameter
         If virtualHost = False Then
             virtualHostParam = New SqlParameter("@VirtualHost", 0)
@@ -3795,7 +4191,8 @@ Public MustInherit Class WheelController
         Else
             teamsParam = New SqlParameter("@Teams", 1)
         End If
-        Dim roundNumberParam As SqlParameter = New SqlParameter("@RoundNumber", "TU1")
+        Dim currentPlayerParam As SqlParameter = New SqlParameter("@CurrentPlayer", currentPlayer)
+        Dim roundNumberParam As SqlParameter = New SqlParameter("@RoundNumber", round.ToString())
         Dim packNameParam As SqlParameter = New SqlParameter("@PackName", packName)
         Dim gameIDParam As SqlParameter = New SqlParameter("@GameId", gameID)
         connPuzzle.Open()
@@ -3806,65 +4203,30 @@ Public MustInherit Class WheelController
         cmd.Parameters.Add(roundNumberParam)
         cmd.Parameters.Add(teamsParam)
         cmd.Parameters.Add(puzzleParam)
+        cmd.Parameters.Add(puzzleStringParam)
+        cmd.Parameters.Add(currentPlayerParam)
         cmd.Parameters.Add(gameIDParam)
+        cmd.Parameters.Add(finalParam)
+        cmd.Parameters.Add(finalSpinParam)
         cmd.CommandType = CommandType.Text
+        cmd.ExecuteNonQuery()
         'Dim gameID = Integer.Parse(cmd.ExecuteScalar())
         connPuzzle.Close()
-        For i As Integer = 1 To 3
-            Dim strNewSQL As String
-            strNewSQL = "UPDATE GamePlayer Set Total = @total, RoundWinnings = @RoundWinnings WHERE Contestant_ID = @Contestant_ID and Game_ID = @Game_ID"
-            Dim contestantcmd As SqlCommand
-            Dim contestantIDParam As SqlParameter
-            Dim totalParam As SqlParameter
-            Dim roundWinningsParam As SqlParameter
-            Dim gameParam As SqlParameter = New SqlParameter("@Game_ID", gameID)
-            If i = 1 Then
-                contestantIDParam = New SqlParameter("@Contestant_ID", player1.ContestantID)
-                totalParam = New SqlParameter("@total", player1.total)
-                roundWinningsParam = New SqlParameter("@RoundWinnings", player1Score)
-            ElseIf i = 2 Then
-                contestantIDParam = New SqlParameter("@Contestant_ID", player2.ContestantID)
-                totalParam = New SqlParameter("@total", player2.total)
-                roundWinningsParam = New SqlParameter("@RoundWinnings", player2Score)
-            ElseIf i = 3 Then
-                contestantIDParam = New SqlParameter("@Contestant_ID", player3.ContestantID)
-                totalParam = New SqlParameter("@total", player3.total)
-                roundWinningsParam = New SqlParameter("@RoundWinnings", player3Score)
-            End If
-            connPuzzle.Open()
-            contestantcmd = New SqlCommand(strNewSQL, connPuzzle)
-            contestantcmd.Parameters.Add(contestantIDParam)
-            contestantcmd.Parameters.Add(gameParam)
-            contestantcmd.Parameters.Add(totalParam)
-            contestantcmd.Parameters.Add(roundWinningsParam)
-            contestantcmd.CommandType = CommandType.Text
-            contestantcmd.ExecuteNonQuery()
-            connPuzzle.Close()
-            If round = PuzzleType.BR Then
-                Dim strContestantSQL As String
-                strContestantSQL = "UPDATE Contestant Set Winnings += @Winnings WHERE Id = @Contestant_ID"
-                Dim contestantFinalcmd As SqlCommand
-                Dim contestantIDFinalParam As SqlParameter
-                Dim winningsParam As SqlParameter
-                If i = 1 Then
-                    contestantIDFinalParam = New SqlParameter("@Contestant_ID", player1.ContestantID)
-                    winningsParam = New SqlParameter("@Winnings", player1.total)
-                ElseIf i = 2 Then
-                    contestantIDFinalParam = New SqlParameter("@Contestant_ID", player2.ContestantID)
-                    winningsParam = New SqlParameter("@Winnings", player2.total)
-                ElseIf i = 3 Then
-                    contestantIDFinalParam = New SqlParameter("@Contestant_ID", player3.ContestantID)
-                    winningsParam = New SqlParameter("@Winnings", player3.total)
-                End If
-                connPuzzle.Open()
-                contestantFinalcmd = New SqlCommand(strContestantSQL, connPuzzle)
-                contestantFinalcmd.Parameters.Add(contestantIDFinalParam)
-                contestantFinalcmd.Parameters.Add(winningsParam)
-                contestantFinalcmd.CommandType = CommandType.Text
-                contestantFinalcmd.ExecuteNonQuery()
-                connPuzzle.Close()
-            End If
-        Next
+        If Player1List.Count > 0 Then
+            For Each myPlayer As Player In Player1List
+                myPlayer.savePlayer()
+            Next
+        End If
+        If Player2List.Count > 0 Then
+            For Each myPlayer As Player In Player2List
+                myPlayer.savePlayer()
+            Next
+        End If
+        If Player3List.Count > 0 Then
+            For Each myPlayer As Player In Player3List
+                myPlayer.savePlayer()
+            Next
+        End If
     End Sub
 #End Region
 #Region "Random Number Generator Toss-Up"
@@ -3942,7 +4304,9 @@ Public MustInherit Class WheelController
 #End Region
 #Region "Load Letters in Toss-Up"
     Public Shared Sub startTossUp()
-        My.Computer.Audio.Play(My.Resources.toss_up_new, AudioPlayMode.BackgroundLoop)
+        If round <> PuzzleType.BR Then
+            My.Computer.Audio.Play(My.Resources.toss_up_new, AudioPlayMode.BackgroundLoop)
+        End If
         'Dim letterInTossUp As Integer = 1
         If tossUpLetters.Count > 0 Then
             tossUpLetters.Clear()
@@ -3951,7 +4315,7 @@ Public MustInherit Class WheelController
             For Each item As Control In frmPuzzleBoard.PuzzleBoard1.Controls
                 'If letterControl.GetType() Is GetType(PuzzleBoardLetter) Then
                 '    If CType(letterControl, PuzzleBoardLetter).letterBehind <> "" Then
-                If item.Visible = True And checkForSymbols(CType(item, PuzzleBoardLetter).letterBehind) = False And CType(item, PuzzleBoardLetter).letterBehind <> " " Then
+                If item.Visible = True And checkForSymbols(CType(item, PuzzleBoardLetter).letterBehind) = False And CType(item, PuzzleBoardLetter).letterBehind <> " " And CType(item, PuzzleBoardLetter).letterRevealed = False Then
                     tossUpLetterControlList.Add(item.Name.ToString.Replace("PuzzleBoardLetter", ""))
                 End If
                 '    End If
@@ -4130,31 +4494,37 @@ Public MustInherit Class WheelController
         End If
             If currentPlayer = 1 Then
             frmScore.lblPlayer1.Text = ""
-            player1.addCardsOrWedges(Player.Wedges.Gift, False)
-            player1.addCardsOrWedges(Player.Wedges.HalfCar1, False)
-            player1.addCardsOrWedges(Player.Wedges.HalfCar2, False)
-            player1.addCardsOrWedges(Player.Wedges.Million, False)
-            player1.addCardsOrWedges(Player.Wedges.Mystery, False)
-            player1.addCardsOrWedges(Player.Wedges.Prize, False)
-            player1.addCardsOrWedges(Player.Wedges.Wild, False)
+            For Each myPlayer In Player1List
+                myPlayer.addCardsOrWedges(Player.Wedges.Gift, False)
+                myPlayer.addCardsOrWedges(Player.Wedges.HalfCar1, False)
+                myPlayer.addCardsOrWedges(Player.Wedges.HalfCar2, False)
+                myPlayer.addCardsOrWedges(Player.Wedges.Million, False)
+                myPlayer.addCardsOrWedges(Player.Wedges.Mystery, False)
+                myPlayer.addCardsOrWedges(Player.Wedges.Prize, False)
+                myPlayer.addCardsOrWedges(Player.Wedges.Wild, False)
+            Next
         ElseIf currentPlayer = 2 Then
             frmScore.lblPlayer2.Text = ""
-            player2.addCardsOrWedges(Player.Wedges.Gift, False)
-            player2.addCardsOrWedges(Player.Wedges.HalfCar1, False)
-            player2.addCardsOrWedges(Player.Wedges.HalfCar2, False)
-            player2.addCardsOrWedges(Player.Wedges.Million, False)
-            player2.addCardsOrWedges(Player.Wedges.Mystery, False)
-            player2.addCardsOrWedges(Player.Wedges.Prize, False)
-            player2.addCardsOrWedges(Player.Wedges.Wild, False)
+            For Each myPlayer In Player2List
+                myPlayer.addCardsOrWedges(Player.Wedges.Gift, False)
+                myPlayer.addCardsOrWedges(Player.Wedges.HalfCar1, False)
+                myPlayer.addCardsOrWedges(Player.Wedges.HalfCar2, False)
+                myPlayer.addCardsOrWedges(Player.Wedges.Million, False)
+                myPlayer.addCardsOrWedges(Player.Wedges.Mystery, False)
+                myPlayer.addCardsOrWedges(Player.Wedges.Prize, False)
+                myPlayer.addCardsOrWedges(Player.Wedges.Wild, False)
+            Next
         ElseIf currentPlayer = 3 Then
-            frmScore.lblPlayer3.Text = ""
-            player3.addCardsOrWedges(Player.Wedges.Gift, False)
-            player3.addCardsOrWedges(Player.Wedges.HalfCar1, False)
-            player3.addCardsOrWedges(Player.Wedges.HalfCar2, False)
-            player3.addCardsOrWedges(Player.Wedges.Million, False)
-            player3.addCardsOrWedges(Player.Wedges.Mystery, False)
-            player3.addCardsOrWedges(Player.Wedges.Prize, False)
-            player3.addCardsOrWedges(Player.Wedges.Wild, False)
+                frmScore.lblPlayer3.Text = ""
+            For Each myPlayer In Player3List
+                myPlayer.addCardsOrWedges(Player.Wedges.Gift, False)
+                myPlayer.addCardsOrWedges(Player.Wedges.HalfCar1, False)
+                myPlayer.addCardsOrWedges(Player.Wedges.HalfCar2, False)
+                myPlayer.addCardsOrWedges(Player.Wedges.Million, False)
+                myPlayer.addCardsOrWedges(Player.Wedges.Mystery, False)
+                myPlayer.addCardsOrWedges(Player.Wedges.Prize, False)
+                myPlayer.addCardsOrWedges(Player.Wedges.Wild, False)
+            Next
         End If
         LoseATurn()
     End Sub
@@ -4214,17 +4584,17 @@ Public MustInherit Class WheelController
         If currentPlayer <= 2 And numberOfPlayers <> 1 Then
             If currentPlayer = 2 And numberOfPlayers = 2 Then
                 currentPlayer = 1
-                currentPlayerObject = player1
+                currentPlayerObject = Player1List
             ElseIf currentPlayer = 1 Then
                 currentPlayer = 2
-                currentPlayerObject = player2
+                currentPlayerObject = Player2List
             ElseIf currentPlayer = 2 And numberOfPlayers = 3 Then
                 currentPlayer = 3
-                currentPlayerObject = player3
+                currentPlayerObject = Player3List
             End If
         ElseIf currentPlayer > 2 And numberOfPlayers <> 1 Then
             currentPlayer = 1
-            currentPlayerObject = player1
+            currentPlayerObject = Player1List
         ElseIf numberOfPlayers = 1 Then
             If numberOfTurns >= 1 Then
                 numberOfTurns -= 1
@@ -4690,7 +5060,7 @@ Public MustInherit Class WheelController
             For i As Integer = 0 To 47 Step 2
                 Dim currentWedge = GetRandomBonusWheel(0, bonusWheel.IndexOf(bonusWheel.Last))
                 If currentWedge = "100000" Then
-                    If player1.getWedges(Player.Wedges.Million) Or player2.getWedges(Player.Wedges.Million) Or player3.getWedges(Player.Wedges.Million) Then
+                    If Player1List(0).getWedges(Player.Wedges.Million) Or Player2List(0).getWedges(Player.Wedges.Million) Or Player3List(0).getWedges(Player.Wedges.Million) Then
                         wheelWedges.Add(i, "1000000")
                         wheelWedges.Add(i + 1, "1000000")
                     Else
@@ -4878,6 +5248,19 @@ Public MustInherit Class WheelController
             Exit Function
         End Try
         Return True
+    End Function
+#End Region
+#Region "Check If Two Letter Word Present in List"
+    Private Shared Function checkTwoLetterWord(wordList As List(Of String)) As Boolean
+        For Each word As String In wordList
+            If word = wordList.First() Then
+                Continue For
+            End If
+            If word.Trim().Length <= 2 Then
+                Return True
+            End If
+        Next
+        Return False
     End Function
 #End Region
 End Class

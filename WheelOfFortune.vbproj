@@ -196,6 +196,12 @@
     <Compile Include="frmCompendium.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmLoadGame.Designer.vb">
+      <DependentUpon>frmLoadGame.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmLoadGame.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmNewGame.Designer.vb">
       <DependentUpon>frmNewGame.vb</DependentUpon>
     </Compile>
@@ -320,6 +326,12 @@
     <Compile Include="StatsControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="TeamDisplay.Designer.vb">
+      <DependentUpon>TeamDisplay.vb</DependentUpon>
+    </Compile>
+    <Compile Include="TeamDisplay.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="VariableTesting.Designer.vb">
       <DependentUpon>VariableTesting.vb</DependentUpon>
     </Compile>
@@ -386,6 +398,9 @@
     <EmbeddedResource Include="frmCompendium.resx">
       <DependentUpon>frmCompendium.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmLoadGame.resx">
+      <DependentUpon>frmLoadGame.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmNewGame.resx">
       <DependentUpon>frmNewGame.vb</DependentUpon>
     </EmbeddedResource>
@@ -445,6 +460,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StatsControl.resx">
       <DependentUpon>StatsControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TeamDisplay.resx">
+      <DependentUpon>TeamDisplay.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VariableTesting.resx">
       <DependentUpon>VariableTesting.vb</DependentUpon>

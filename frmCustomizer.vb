@@ -19,6 +19,9 @@ Public Class frmCustomizer
         frmPuzzleBoard.wheelTilt.Hide()
     End Sub
     Private Sub btnPlay_Click(sender As Object, e As EventArgs) Handles btnPlay.Click
+        Dim newPlayer As New Player(1, "PLAYER 1")
+        WheelController.Player1List.Add(newPlayer)
+        WheelController.bonusRoundPlayer = WheelController.Player1List
         preview()
         If cboRound.SelectedItem = Nothing Then
             Exit Sub
@@ -28,7 +31,6 @@ Public Class frmCustomizer
         WheelController.previewMode = True
         WheelController.previewPlay = True
         frmPuzzleBoard.btnPreview.Show()
-        VariableTesting.Show()
         'frmPuzzleBoard.CategoryStrip1.Show()
     End Sub
     Private Sub preview()

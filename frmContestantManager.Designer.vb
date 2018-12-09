@@ -24,6 +24,7 @@ Partial Class frmContestantManager
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmContestantManager))
         Me.pnlSettings = New System.Windows.Forms.Panel()
+        Me.chkDemo = New System.Windows.Forms.CheckBox()
         Me.lblSelectContestant = New System.Windows.Forms.Label()
         Me.lblNoGames = New System.Windows.Forms.Label()
         Me.lblNewContestant = New System.Windows.Forms.Label()
@@ -51,6 +52,7 @@ Partial Class frmContestantManager
         'pnlSettings
         '
         Me.pnlSettings.BackColor = System.Drawing.Color.Black
+        Me.pnlSettings.Controls.Add(Me.chkDemo)
         Me.pnlSettings.Controls.Add(Me.lblSelectContestant)
         Me.pnlSettings.Controls.Add(Me.lblNoGames)
         Me.pnlSettings.Controls.Add(Me.lblNewContestant)
@@ -61,6 +63,18 @@ Partial Class frmContestantManager
         Me.pnlSettings.Name = "pnlSettings"
         Me.pnlSettings.Size = New System.Drawing.Size(1538, 884)
         Me.pnlSettings.TabIndex = 1
+        '
+        'chkDemo
+        '
+        Me.chkDemo.AutoSize = True
+        Me.chkDemo.Font = New System.Drawing.Font("Gotham Bold", 12.0!)
+        Me.chkDemo.ForeColor = System.Drawing.Color.White
+        Me.chkDemo.Location = New System.Drawing.Point(306, 74)
+        Me.chkDemo.Name = "chkDemo"
+        Me.chkDemo.Size = New System.Drawing.Size(95, 27)
+        Me.chkDemo.TabIndex = 23
+        Me.chkDemo.Text = "DEMO"
+        Me.chkDemo.UseVisualStyleBackColor = True
         '
         'lblSelectContestant
         '
@@ -259,4 +273,5 @@ Partial Class frmContestantManager
     Friend WithEvents lblPackName As Label
     Friend WithEvents lblNewContestant As Label
     Friend WithEvents lblSelectContestant As Label
+    Friend WithEvents chkDemo As CheckBox
 End Class

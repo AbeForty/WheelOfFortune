@@ -1,5 +1,7 @@
 ﻿Public Class NameTag
     Public Property contestantID As Integer
+    Public Property score As Integer
+    Public Property enableClick As Boolean = True
     Public Property contestantName As String
         Get
             Return lblName.Text
@@ -59,9 +61,13 @@
         ElseIf ParentForm Is ContestantControl Then
             ContestantControl.contestantID = contestantID
             ContestantControl.contestantName = contestantName
+            ContestantControl.score = score
             ContestantControl.DialogResult = DialogResult.OK
         ElseIf TypeOf (Parent) Is ContestantDisplay Then
             OnClick(e)
         End If
+    End Sub
+    Private Sub lblName_DoubleClick(sender As Object, e As EventArgs) Handles lblName.DoubleClick
+        OnDoubleClick(e)
     End Sub
 End Class

@@ -30,6 +30,7 @@ Partial Class VariableTesting
         Me.lblTimeLeft = New System.Windows.Forms.Label()
         Me.lblTimeToStop = New System.Windows.Forms.Label()
         Me.lblPlayState = New System.Windows.Forms.Label()
+        Me.lblCheckVowel = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'tmrCheckVariables
@@ -80,11 +81,21 @@ Partial Class VariableTesting
         Me.lblPlayState.TabIndex = 4
         Me.lblPlayState.Text = "[playState]"
         '
+        'lblCheckVowel
+        '
+        Me.lblCheckVowel.AutoSize = True
+        Me.lblCheckVowel.Location = New System.Drawing.Point(22, 231)
+        Me.lblCheckVowel.Name = "lblCheckVowel"
+        Me.lblCheckVowel.Size = New System.Drawing.Size(90, 17)
+        Me.lblCheckVowel.TabIndex = 5
+        Me.lblCheckVowel.Text = "[checkVowel]"
+        '
         'VariableTesting
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(288, 244)
+        Me.ClientSize = New System.Drawing.Size(288, 263)
+        Me.Controls.Add(Me.lblCheckVowel)
         Me.Controls.Add(Me.lblPlayState)
         Me.Controls.Add(Me.lblTimeToStop)
         Me.Controls.Add(Me.lblTimeLeft)
@@ -108,4 +119,5 @@ Partial Class VariableTesting
     Friend WithEvents lblTimeLeft As Label
     Friend WithEvents lblTimeToStop As Label
     Friend WithEvents lblPlayState As Label
+    Friend WithEvents lblCheckVowel As Label
 End Class

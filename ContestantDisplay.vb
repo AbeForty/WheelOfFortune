@@ -12,7 +12,7 @@ Public Class ContestantDisplay
     End Property
     Public Property Total As Integer
         Get
-            Return Integer.Parse(lblTotal.Text.Replace("$", ""))
+            Return Integer.Parse(lblTotal.Text.Replace("$", "").Replace(",", ""))
         End Get
         Set(value As Integer)
             lblTotal.Text = FormatCurrency(value, 0)
@@ -26,7 +26,7 @@ Public Class ContestantDisplay
                 Dim connPuzzle As SqlConnection
                 connPuzzle = New SqlConnection("Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" & Application.StartupPath & "\WheelPuzzles.mdf;Integrated Security=True")
                 Dim strSQL As String
-                strSQL = "INSERT INTO Contestant VALUES (@Name, @Winnings)"
+                strSQL = "INSERT INTO Contestant VALUES (@Name, @Winnings, 0)"
                 Dim cmd As SqlCommand
                 Dim nameParam As SqlParameter = New SqlParameter("@Name", ContestantName)
                 Dim winningsParam As SqlParameter = New SqlParameter("@Winnings", 0)
@@ -67,7 +67,7 @@ Public Class ContestantDisplay
         If NameTag1.lblName.Text = "NAME" Then
             txtPlayer.Show()
         End If
-        If ParentForm Is frmContestantManager Then
+        If ParentForm Is frmContestantManager Or TypeOf (Parent.Parent) Is TeamDisplay Then
             btnDelete.Show()
         End If
     End Sub
@@ -109,6 +109,7 @@ Public Class ContestantDisplay
             ContestantControl.DialogResult = DialogResult.OK
             ContestantControl.contestantID = ContestantID
             ContestantControl.contestantName = ContestantName
+            ContestantControl.score = Total
         End If
     End Sub
     Private Sub lblTotalContestantDisplay_Click(sender As Object, e As EventArgs) Handles lblTotal.Click, NameTag1.Click, Me.Click
@@ -144,11 +145,23 @@ Public Class ContestantDisplay
         End If
     End Sub
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
-        Dim result As Integer = MessageBox.Show("Are you sure you want to delete this contestant? All winnings will be lost and any current games with this contestant will be deleted. This action cannot be undone.", "Wheel of Fortune", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-        If result = DialogResult.No Then
-            Exit Sub
-        ElseIf result = DialogResult.Yes Then
-            deleteContestant()
+        If ParentForm Is frmContestantManager Then
+            Dim result As Integer = MessageBox.Show("Are you sure you want to delete this contestant? All winnings will be lost and any current games with this contestant will be deleted. This action cannot be undone.", "WHEEL OF FORTUNE", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            If result = DialogResult.No Then
+                Exit Sub
+            ElseIf result = DialogResult.Yes Then
+                deleteContestant()
+            End If
+        ElseIf TypeOf (Parent.Parent) Is TeamDisplay Then
+            WheelController.removeByID(ContestantID)
+            CType(Parent.Parent, TeamDisplay).flpContestants.Controls.Remove(Me)
+            WheelController.numberOfPlayers -= 1
+            If WheelController.numberOfPlayers = 0 Then
+                'frmNewGame.lblQuickGame.Show()
+                frmNewGame.txtPlayer1.Show()
+                frmNewGame.txtPlayer2.Show()
+                frmNewGame.txtPlayer3.Show()
+            End If
         End If
     End Sub
 End Class

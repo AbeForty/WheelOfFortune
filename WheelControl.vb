@@ -294,7 +294,7 @@ Public Class WheelSpinControl
                     If WheelController.virtualHost = True Then
                         Dim SAPI
                         SAPI = CreateObject("SAPI.spvoice")
-                        If WheelController.bonusRoundPlayer.getWedges(Player.Wedges.Million) = False Then
+                        If WheelController.bonusRoundPlayer(0).getWedges(Player.Wedges.Million) = False Then
                             SAPI.Speak(CType(frmScore.Controls("NameTag" & WheelController.currentPlayer), NameTag).lblName.Text & " Go ahead and spin the wheel.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
                         Else
                             SAPI.Speak(CType(frmScore.Controls("NameTag" & WheelController.currentPlayer), NameTag).lblName.Text & " Because you have this million dollar wedge, we replaced the 100,000 dollar envelope with the million dollars. Go ahead and spin the wheel.", SpeechLib.SpeechVoiceSpeakFlags.SVSFlagsAsync)
@@ -304,7 +304,7 @@ Public Class WheelSpinControl
                     wmpWheel.Ctlcontrols.pause()
                     firstSpin = False
                 Else
-                    If WheelController.bonusRoundPlayer.getWedges(Player.Wedges.Million) = True Then
+                    If WheelController.bonusRoundPlayer(0).getWedges(Player.Wedges.Million) = True Then
                         If WheelController.virtualHost = True Then
                             Dim SAPI
                             SAPI = CreateObject("SAPI.spvoice")

@@ -197,16 +197,18 @@ Public Class PuzzleBoardLetter
             If WheelController.letterControlTappedList.Count = 0 Then
                 'If finalSpin = True Then
                 'Else
-                frmPuzzleBoard.btnSolve.Enabled = True
-                frmScore.usedLetterBoard.Enabled = True
-                'End If
-                If WheelController.finalSpinSpun = True Then
-                    WheelController.timeStart = DateTime.Now.Second
-                    frmScore.tmrFinalSpin.Start()
+                If WheelController.round <> WheelController.PuzzleType.BR Then
+                    frmPuzzleBoard.btnSolve.Enabled = True
                 End If
-            End If
+                frmScore.usedLetterBoard.Enabled = True
+                    'End If
+                    If WheelController.finalSpinSpun = True Then
+                        WheelController.timeStart = DateTime.Now.Second
+                        frmScore.tmrFinalSpin.Start()
+                    End If
+                End If
 
-        ElseIf WheelController.round = WheelController.PuzzleType.TU1 And isTossUpButton = True Or WheelController.round = WheelController.PuzzleType.TU2 And isTossUpButton = True Or WheelController.round = WheelController.PuzzleType.TU3 And isTossUpButton = True Or WheelController.round = WheelController.PuzzleType.TBTU And isTossUpButton = True Then
+            ElseIf WheelController.round = WheelController.PuzzleType.TU1 And isTossUpButton = True Or WheelController.round = WheelController.PuzzleType.TU2 And isTossUpButton = True Or WheelController.round = WheelController.PuzzleType.TU3 And isTossUpButton = True Or WheelController.round = WheelController.PuzzleType.TBTU And isTossUpButton = True Then
             If WheelController.round = WheelController.PuzzleType.TU1 Then
                 WheelController.startTime = DateTime.Now.Minute
                 frmPuzzleBoard.tmrCheckFinalSpin.Start()

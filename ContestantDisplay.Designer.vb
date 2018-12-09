@@ -37,8 +37,10 @@ Partial Class ContestantDisplay
         Me.NameTag1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.NameTag1.contestantID = 0
         Me.NameTag1.contestantName = "NAME"
+        Me.NameTag1.enableClick = True
         Me.NameTag1.Location = New System.Drawing.Point(13, 21)
         Me.NameTag1.Name = "NameTag1"
+        Me.NameTag1.score = 0
         Me.NameTag1.Size = New System.Drawing.Size(150, 48)
         Me.NameTag1.TabIndex = 0
         '

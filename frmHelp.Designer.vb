@@ -524,8 +524,8 @@ Partial Class frmHelp
         'btnClose
         '
         Me.btnClose.BackColor = System.Drawing.Color.White
-        Me.btnClose.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.HotTrack
-        Me.btnClose.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.HotTrack
+        Me.btnClose.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnClose.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(19, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnClose.Font = New System.Drawing.Font("Open Sans", 16.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnClose.Location = New System.Drawing.Point(486, 629)

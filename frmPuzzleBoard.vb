@@ -5,47 +5,54 @@
                 CType(letterController, PuzzleBoardLetter).Hide()
             End If
         Next
-        WheelController.resetPlayers()
         'MsgBox(pboxTossUp.Parent.Name)
         If WheelController.previewMode = False Then
-            WheelController.resetPuzzle()
-            WheelController.previewPlay = False
-            'btnRedRingIn.Show()
-            'btnYellowRingIn.Show()
-            'btnBlueRingIn.Show()
-            WheelController.loadTossUp()
-            If WheelController.season >= 18 Then
-                WheelController.wheelLoad(WheelController.PuzzleType.TU1)
-                WheelController.round = WheelController.PuzzleType.TU1
-                frmScore.usedLetterBoard.Enabled = False
-                wheelTilt.Enabled = False
+            If WheelController.currentLoadGame = True Then
+                WheelController.loadLettersFromPuzzleString()
+                WheelController.wheelLoad(WheelController.round)
+                frmScore.tmrCheckVowels.Start()
             Else
-                WheelController.wheelLoad(WheelController.PuzzleType.R1)
-                WheelController.round = WheelController.PuzzleType.R1
-                WheelController.currentPlayer = 1
+                WheelController.resetPlayers()
+                WheelController.resetPuzzle()
+                WheelController.previewPlay = False
+                'btnRedRingIn.Show()
+                'btnYellowRingIn.Show()
+                'btnBlueRingIn.Show()
+                WheelController.loadTossUp()
+                If WheelController.season >= 18 Then
+                    WheelController.wheelLoad(WheelController.PuzzleType.TU1)
+                    WheelController.round = WheelController.PuzzleType.TU1
+                    frmScore.usedLetterBoard.Enabled = False
+                    wheelTilt.Enabled = False
+                Else
+                    WheelController.wheelLoad(WheelController.PuzzleType.R1)
+                    WheelController.round = WheelController.PuzzleType.R1
+                    WheelController.currentPlayer = 1
+                End If
             End If
             If WheelController.numberOfPlayers = 2 Then
-                    btnBlueRingIn.Hide()
-                    WheelController.player3RingIn = True
-                ElseIf WheelController.numberOfPlayers = 1 Then
-                    frmScore.lblNumberOfTurns.Show()
-                    tmrCheckTurns.Start()
-                    btnYellowRingIn.Hide()
-                    WheelController.player2RingIn = True
-                    btnBlueRingIn.Hide()
-                    WheelController.player3RingIn = True
-                End If
-                If WheelController.round <> WheelController.PuzzleType.BR Then
-                    frmScore.Show()
+                btnBlueRingIn.Hide()
+                WheelController.player3RingIn = True
+            ElseIf WheelController.numberOfPlayers = 1 Then
+                frmScore.lblNumberOfTurns.Show()
+                tmrCheckTurns.Start()
+                btnYellowRingIn.Hide()
+                WheelController.player2RingIn = True
+                btnBlueRingIn.Hide()
+                WheelController.player3RingIn = True
+            End If
+            If WheelController.round <> WheelController.PuzzleType.BR Then
+                frmScore.Show()
+                If WheelController.currentLoadGame = False Then
                     WheelController.loadPuzzle(WheelController.round, WheelController.puzzleMode, False)
-                    'My.Computer.Audio.Play(My.Resources.puzzle_reveal, AudioPlayMode.Background)
-                    CategoryStrip1.lblCategory.Text = WheelController.category
-                Else
-                    CategoryStrip1.lblCategory.Text = ""
                 End If
-
+                'My.Computer.Audio.Play(My.Resources.puzzle_reveal, AudioPlayMode.Background)
+                CategoryStrip1.lblCategory.Text = WheelController.category
+            Else
+                CategoryStrip1.lblCategory.Text = ""
+            End If
         Else
-                WheelController.wheelLoad(frmCustomizer.currentRound)
+            WheelController.wheelLoad(frmCustomizer.currentRound)
             WheelController.round = frmCustomizer.currentRound
             If WheelController.round <> WheelController.PuzzleType.BR Then
                 WheelController.loadPuzzle(frmCustomizer.currentRound, WheelController.puzzleMode, True)
@@ -54,21 +61,23 @@
             Else
                 frmScore.lblControllerSpinResult.Hide()
                 frmScore.lblCurrentValue.Hide()
-                WheelController.loadPuzzle(frmCustomizer.currentRound, WheelController.puzzleMode, True)
-                WheelController.bonusRoundPlayer = WheelController.player1
+                WheelController.loadPuzzle(WheelController.PuzzleType.BR, WheelController.puzzleMode, True)
+                WheelController.bonusRoundPlayer = WheelController.Player1List
                 'My.Computer.Audio.Play(My.Resources.puzzle_reveal, AudioPlayMode.Background)
                 CategoryStrip1.lblCategory.Text = WheelController.category
+                WheelController.revealBonusRound()
             End If
             If WheelController.previewPlay = False Then
                 WheelController.solvePuzzle(True)
             Else
                 frmScore.Show()
                 WheelController.currentPlayer = 1
-                WheelController.currentPlayerObject = WheelController.player1
+                WheelController.currentPlayerObject = WheelController.Player1List
                 WheelController.wheelLoad(frmCustomizer.currentRound)
                 frmScore.tmrCheckVowels.Start()
             End If
         End If
+        WheelController.currentLoadGame = False
     End Sub
     Private Sub frmPuzzleBoard_FormClosing(sender As Object, e As EventArgs) Handles MyBase.FormClosing
         My.Computer.Audio.Stop()
@@ -122,9 +131,15 @@
         WheelController.wildUsed = True
         WheelController.spun = True
         btnWild.Hide()
-        WheelController.player1.addCardsOrWedges(Player.Wedges.Wild, False)
-        WheelController.player2.addCardsOrWedges(Player.Wedges.Wild, False)
-        WheelController.player3.addCardsOrWedges(Player.Wedges.Wild, False)
+        For Each myPlayer As Player In WheelController.Player1List
+            myPlayer.addCardsOrWedges(Player.Wedges.Wild, False)
+        Next
+        For Each myPlayer As Player In WheelController.Player2List
+            myPlayer.addCardsOrWedges(Player.Wedges.Wild, False)
+        Next
+        For Each myPlayer As Player In WheelController.Player3List
+            myPlayer.addCardsOrWedges(Player.Wedges.Wild, False)
+        Next
     End Sub
 
     Private Sub btnSolve_Click(sender As Object, e As EventArgs) Handles btnSolve.Click
@@ -160,9 +175,12 @@
     End Sub
 
     Private Sub btnPreview_Click(sender As Object, e As EventArgs) Handles btnPreview.Click
+        WheelController.Player1List.Clear()
+        WheelController.bonusRoundPlayer = Nothing
         WheelController.currentPlayer = Nothing
         WheelController.currentPlayerObject = Nothing
         frmScore.tmrCheckVowels.Stop()
+        WheelController.checkVowelRunning = False
         frmCustomizer.Show()
         frmScore.Close()
         Me.Close()
@@ -189,10 +207,12 @@
                 WheelController.solveTypedList.Remove(randomNumber)
             End If
         Next
-        If WheelController.tossUpLetterControlList.Count = 0 Or WheelController.allRungIn = True Then
-            tmrTossUp.Stop()
-            My.Computer.Audio.Play(My.Resources.double_buzz, AudioPlayMode.Background)
-            WheelController.solveAttempt = WheelController.puzzle
+        If WheelController.round <> WheelController.PuzzleType.BR Then
+            If WheelController.tossUpLetterControlList.Count = 0 Or WheelController.allRungIn = True Then
+                tmrTossUp.Stop()
+                My.Computer.Audio.Play(My.Resources.double_buzz, AudioPlayMode.Background)
+                WheelController.solveAttempt = WheelController.puzzle
+            End If
         End If
     End Sub
     Private Sub tmrTossUpReveal_Tick(sender As Object, e As EventArgs) Handles tmrTossUpReveal.Tick
@@ -231,7 +251,7 @@
                     WheelController.cancelSolve()
                 End If
             Else
-                    WheelController.allRungIn = True
+                WheelController.allRungIn = True
                 For Each lettersControls As Control In Controls(WheelController.puzzleBoardName).Controls
                     If lettersControls.GetType() Is GetType(PuzzleBoardLetter) Then
                         CType(lettersControls, PuzzleBoardLetter).revealLetter()
@@ -250,7 +270,7 @@
             End If
             WheelController.player1RingIn = True
             WheelController.currentPlayer = 1
-            WheelController.currentPlayerObject = WheelController.player1
+            WheelController.currentPlayerObject = WheelController.Player1List
             btnYellowRingIn.Enabled = False
             btnBlueRingIn.Enabled = False
             tmrTossUpRingIn.Stop()
@@ -275,7 +295,7 @@
                 End If
             Else
                 WheelController.cancelSolve()
-        End If
+            End If
         ElseIf WheelController.player2RingIn = False Then
             My.Computer.Audio.Play(My.Resources.Ding, AudioPlayMode.Background)
             If WheelController.virtualHost = True Then
@@ -285,7 +305,7 @@
             End If
             WheelController.player2RingIn = True
             WheelController.currentPlayer = 2
-            WheelController.currentPlayerObject = WheelController.player2
+            WheelController.currentPlayerObject = WheelController.Player2List
             btnRedRingIn.Enabled = False
             btnBlueRingIn.Enabled = False
             tmrTossUpRingIn.Stop()
@@ -310,7 +330,7 @@
                 End If
             Else
                 WheelController.cancelSolve()
-        End If
+            End If
         ElseIf WheelController.player3RingIn = False Then
             WheelController.player3RingIn = True
             My.Computer.Audio.Play(My.Resources.Ding, AudioPlayMode.Background)
@@ -320,7 +340,7 @@
                 SAPI.Speak(frmScore.NameTag3.lblName.Text)
             End If
             WheelController.currentPlayer = 3
-            WheelController.currentPlayerObject = WheelController.player3
+            WheelController.currentPlayerObject = WheelController.Player3List
             btnYellowRingIn.Enabled = False
             btnRedRingIn.Enabled = False
             tmrTossUpRingIn.Stop()

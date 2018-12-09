@@ -1,20 +1,22 @@
 ﻿Public Class frmScore
 
     Private Sub frmScore_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        NameTag1.contestantName = WheelController.player1Name
-        NameTag2.contestantName = WheelController.player2Name
-        NameTag3.contestantName = WheelController.player3Name
-        If WheelController.numberOfPlayers = 3 Then
+        If WheelController.Player1List.Count > 0 Then
+            NameTag1.contestantName = WheelController.Player1List(0).contestantName
             NameTag1.Show()
-            NameTag2.Show()
-            NameTag3.Show()
-        ElseIf WheelController.numberOfPlayers = 2 Then
-            NameTag1.Show()
-            NameTag2.Show()
-            NameTag3.Hide()
         Else
-            NameTag1.Show()
+            NameTag1.Hide()
+        End If
+        If WheelController.Player2List.Count > 0 Then
+            NameTag2.contestantName = WheelController.Player2List(0).contestantName
+            NameTag2.Show()
+        Else
             NameTag2.Hide()
+        End If
+        If WheelController.Player3List.Count > 0 Then
+            NameTag3.contestantName = WheelController.Player3List(0).contestantName
+            NameTag3.Show()
+        Else
             NameTag3.Hide()
         End If
         tmrCheckPlayer.Start()
@@ -65,61 +67,6 @@
     End Sub
     Private Sub btnLetter_Click(sender As Object, e As EventArgs) Handles btnA.Click, btnB.Click, btnC.Click, btnD.Click, btnE.Click, btnF.Click, btnG.Click, btnH.Click, btnI.Click, btnJ.Click, btnK.Click, btnL.Click, btnM.Click, btnN.Click, btnO.Click, btnP.Click, btnQ.Click, btnR.Click, btnS.Click, btnT.Click, btnU.Click, btnV.Click, btnW.Click, btnX.Click, btnY.Click, btnZ.Click
         WheelController.loadLetters(CType(sender, Button))
-        'If wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkWheel.Value) = "1/2 Car" Then
-        'If frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 7 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 8 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 9 Then
-        '        If halfCar1Status = True Then
-        '            wheelWedges(7) = "500"
-        '            wheelWedges(8) = "500"
-        '            wheelWedges(9) = "500"
-        '        Else
-        '        End If
-        '    ElseIf frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 37 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 38 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 39 Then
-        '        If halfCar2Status = True Then
-        '            wheelWedges(37) = "500"
-        '            wheelWedges(38) = "500"
-        '            wheelWedges(39) = "500"
-        '        Else
-        '        End If
-        '    End If
-        'ElseIf wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkWheel.Value) = "Gift" Then
-        '    If frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 52 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 53 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 54 Then
-        '        If giftStatus = True Then
-        '            wheelWedges(52) = "500"
-        '            wheelWedges(53) = "500"
-        '            wheelWedges(54) = "500"
-        '        Else
-        '        End If
-        '    End If
-        'ElseIf wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkWheel.Value) = "Prize" Then
-        '    If frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 13 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 14 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 15 Then
-        '        If prizeStatus = True Then
-        '            wheelWedges(13) = "500"
-        '            wheelWedges(14) = "500"
-        '            wheelWedges(15) = "500"
-        '        Else
-        '        End If
-        '    End If
-        'ElseIf wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkWheel.Value) = "Million" Then
-        '    If frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 47 Then
-        '        If millionStatus = True Then
-        '            wheelWedges(46) = "500"
-        '            wheelWedges(47) = "500"
-        '            wheelWedges(48) = "500"
-        '        Else
-        '        End If
-
-        '    End If
-        'ElseIf wheelWedges.Item(frmPuzzleBoard.WheelSpinControl1.trkWheel.Value) = "Wild" Then
-        '    If frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 67 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 68 Or frmPuzzleBoard.WheelSpinControl1.trkWheel.Value = 69 Then
-        '        If wildCardStatus = True Then
-        '            wheelWedges(67) = "500"
-        '            wheelWedges(68) = "500"
-        '            wheelWedges(69) = "500"
-        '        Else
-        '        End If
-        '    End If
-        'End If
-
     End Sub
     Private Sub tmrCheckPlayer_Tick(sender As Object, e As EventArgs) Handles tmrCheckPlayer.Tick
         WheelController.checkPlayer()
@@ -136,12 +83,6 @@
                 End If
             End If
         Next
-        'timeStart = DateTime.Now.Second
-        'For Each lettersControls As Control In frmPuzzleBoard.Instance.Controls
-        '    If lettersControls.GetType() Is GetType(PuzzleBoardLetter) Then
-        '        CType(lettersControls, PuzzleBoardLetter).revealLetter()
-        '    End If
-        'Next
     End Sub
 
     Private Sub btnBonusTimerStart_Click(sender As Object, e As EventArgs) Handles btnBonusTimerStart.Click
@@ -242,23 +183,68 @@
 
     Private Sub lblPlayer1_TextChanged(sender As Object, e As EventArgs) Handles lblPlayer1.TextChanged
         If lblPlayer1.Text <> "" Then
-            WheelController.player1Score = CInt(lblPlayer1.Text.Replace("$", ""))
+            For Each myPlayer As Player In WheelController.Player1List
+                myPlayer.currentScore = CInt(lblPlayer1.Text.Replace("$", ""))
+            Next
         Else
-            WheelController.player1Score = 0
+            For Each myPlayer As Player In WheelController.Player1List
+                myPlayer.currentScore = 0
+            Next
         End If
     End Sub
     Private Sub lblPlayer2_TextChanged(sender As Object, e As EventArgs) Handles lblPlayer2.TextChanged
         If lblPlayer2.Text <> "" Then
-            WheelController.player2Score = CInt(lblPlayer2.Text.Replace("$", ""))
+            For Each myPlayer As Player In WheelController.Player2List
+                myPlayer.currentScore = CInt(lblPlayer2.Text.Replace("$", ""))
+            Next
         Else
-            WheelController.player2Score = 0
+            For Each myPlayer As Player In WheelController.Player2List
+                myPlayer.currentScore = 0
+            Next
         End If
     End Sub
     Private Sub lblPlayer3_TextChanged(sender As Object, e As EventArgs) Handles lblPlayer3.TextChanged
         If lblPlayer3.Text <> "" Then
-            WheelController.player3Score = CInt(lblPlayer3.Text.Replace("$", ""))
+            For Each myPlayer As Player In WheelController.Player3List
+                myPlayer.currentScore = CInt(lblPlayer3.Text.Replace("$", ""))
+            Next
         Else
-            WheelController.player3Score = 0
+            For Each myPlayer As Player In WheelController.Player3List
+                myPlayer.currentScore = 0
+            Next
+        End If
+    End Sub
+    Private Sub lblPlayer1Total_TextChanged(sender As Object, e As EventArgs) Handles lblPlayer1Total.TextChanged
+        If lblPlayer1Total.Text <> "" Then
+            For Each myPlayer As Player In WheelController.Player1List
+                myPlayer.total = CInt(lblPlayer1Total.Text.Replace("$", ""))
+            Next
+        Else
+            For Each myPlayer As Player In WheelController.Player1List
+                myPlayer.total = 0
+            Next
+        End If
+    End Sub
+    Private Sub lblPlayer2Total_TextChanged(sender As Object, e As EventArgs) Handles lblPlayer2Total.TextChanged
+        If lblPlayer2Total.Text <> "" Then
+            For Each myPlayer As Player In WheelController.Player2List
+                myPlayer.total = CInt(lblPlayer2Total.Text.Replace("$", ""))
+            Next
+        Else
+            For Each myPlayer As Player In WheelController.Player2List
+                myPlayer.total = 0
+            Next
+        End If
+    End Sub
+    Private Sub lblPlayer3Total_TextChanged(sender As Object, e As EventArgs) Handles lblPlayer3Total.TextChanged
+        If lblPlayer3Total.Text <> "" Then
+            For Each myPlayer As Player In WheelController.Player3List
+                myPlayer.total = CInt(lblPlayer3Total.Text.Replace("$", ""))
+            Next
+        Else
+            For Each myPlayer As Player In WheelController.Player3List
+                myPlayer.total = 0
+            Next
         End If
     End Sub
 
@@ -292,6 +278,12 @@
         WheelController.timeLeft = (WheelController.timeLeft - (DateTime.Now.Minute - WheelController.startTime))
         frmPuzzleBoard.tmrCheckFinalSpin.Stop()
         dlgPauseMenu.ShowDialog()
+    End Sub
+
+    Private Sub lblPlayerTotal_TextChanged(sender As Object, e As EventArgs) Handles lblPlayer1Total.TextChanged, lblPlayer2Total.TextChanged, lblPlayer3Total.TextChanged
+        If CType(sender, Label).Text = "$0" Then
+            CType(sender, Label).Text = ""
+        End If
     End Sub
 
     'Public flashTimeStart As Integer

@@ -2,7 +2,7 @@
 Imports System.Data.SqlClient
 Public Class frmContestantManager
     Private Sub frmContestantManager_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        getContestantNames()
+        getContestantNames(False)
     End Sub
 
     Private Sub btnStartGame_Click(sender As Object, e As EventArgs)
@@ -29,11 +29,15 @@ Public Class frmContestantManager
             frmScore.Show()
         End If
     End Sub
-    Private Sub getContestantNames()
+    Private Sub getContestantNames(demo As Boolean)
         Dim connPuzzle As SqlConnection
         connPuzzle = New SqlConnection("Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" & Application.StartupPath & "\WheelPuzzles.mdf;Integrated Security=True")
         Dim strSQL As String
-        strSQL = "SELECT * FROM Contestant"
+        If demo = False Then
+            strSQL = "SELECT * FROM Contestant WHERE Demo = 0"
+        Else
+            strSQL = "SELECT * FROM Contestant WHERE Demo = 1"
+        End If
         Dim cmd As SqlCommand
         Dim rdr As SqlDataReader
         connPuzzle.Open()
@@ -56,5 +60,17 @@ Public Class frmContestantManager
 
     Private Sub lblNewContestant_Click(sender As Object, e As EventArgs) Handles lblNewContestant.Click
         flpContestants.Controls.Add(New ContestantDisplay)
+    End Sub
+
+    Private Sub chkDemo_CheckedChanged(sender As Object, e As EventArgs) Handles chkDemo.CheckedChanged
+        flpContestants.Controls.Clear()
+        If CType(sender, CheckBox).Checked = True Then
+            getContestantNames(True)
+        Else
+            getContestantNames(False)
+            flpStatistics.Controls.Clear()
+            lblNoGames.Show()
+            lblSelectContestant.Show()
+        End If
     End Sub
 End Class

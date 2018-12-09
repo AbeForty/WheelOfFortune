@@ -23,6 +23,9 @@ Partial Class ContestantControl
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ContestantControl))
         Me.flpContestants = New System.Windows.Forms.FlowLayoutPanel()
+        Me.btnClose = New System.Windows.Forms.PictureBox()
+        Me.lblNoContestants = New System.Windows.Forms.Label()
+        CType(Me.btnClose, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'flpContestants
@@ -35,18 +38,48 @@ Partial Class ContestantControl
         Me.flpContestants.Size = New System.Drawing.Size(413, 407)
         Me.flpContestants.TabIndex = 33
         '
+        'btnClose
+        '
+        Me.btnClose.BackColor = System.Drawing.Color.Transparent
+        Me.btnClose.Image = Global.WheelOfFortune.My.Resources.Resources.Delete
+        Me.btnClose.Location = New System.Drawing.Point(379, 2)
+        Me.btnClose.Name = "btnClose"
+        Me.btnClose.Size = New System.Drawing.Size(34, 32)
+        Me.btnClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.btnClose.TabIndex = 17
+        Me.btnClose.TabStop = False
+        '
+        'lblNoContestants
+        '
+        Me.lblNoContestants.BackColor = System.Drawing.Color.Transparent
+        Me.lblNoContestants.Font = New System.Drawing.Font("Gotham Bold", 15.0!)
+        Me.lblNoContestants.ForeColor = System.Drawing.Color.White
+        Me.lblNoContestants.Location = New System.Drawing.Point(42, 128)
+        Me.lblNoContestants.Name = "lblNoContestants"
+        Me.lblNoContestants.Size = New System.Drawing.Size(344, 152)
+        Me.lblNoContestants.TabIndex = 39
+        Me.lblNoContestants.Text = "NO CONTESTANTS HAVE BEEN CREATED YET. GO TO THE CONTESTANT MANAGER TO CREATE ONE." &
+    ""
+        Me.lblNoContestants.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        '
         'ContestantControl
         '
+        Me.BackColor = System.Drawing.Color.DarkSlateBlue
         Me.ClientSize = New System.Drawing.Size(413, 407)
+        Me.Controls.Add(Me.lblNoContestants)
+        Me.Controls.Add(Me.btnClose)
         Me.Controls.Add(Me.flpContestants)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "ContestantControl"
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
+        CType(Me.btnClose, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
 
     Friend WithEvents flpContestants As FlowLayoutPanel
+    Friend WithEvents btnClose As PictureBox
+    Friend WithEvents lblNoContestants As Label
 End Class
